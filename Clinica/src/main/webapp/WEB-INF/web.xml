@@ -9,7 +9,7 @@
 
 	<!-- Pagina Inicial -->
 	<welcome-file-list>
-		<welcome-file>pages/public/login.xhtml</welcome-file>
+		<welcome-file>paginas/public/login.xhtml</welcome-file>
 	</welcome-file-list>
 
 	<!-- Fase do Projeto -->
@@ -28,38 +28,31 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.xhtml</url-pattern>
 	</servlet-mapping>
-
-	<!-- Configuração do Shiro -->
-<!-- 	<listener> -->
-<!-- 		<listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class> -->
-<!-- 	</listener> -->
-
-<!-- 	<filter> -->
-<!-- 		<filter-name>ShiroFilter</filter-name> -->
-<!-- 		<filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class> -->
-<!-- 	</filter> -->
-
-<!-- 	<filter-mapping> -->
-<!-- 		<filter-name>ShiroFilter</filter-name> -->
-<!-- 		<url-pattern>/*</url-pattern> -->
-<!-- 		<dispatcher>REQUEST</dispatcher> -->
-<!-- 		<dispatcher>FORWARD</dispatcher> -->
-<!-- 		<dispatcher>INCLUDE</dispatcher> -->
-<!-- 		<dispatcher>ERROR</dispatcher> -->
-<!-- 	</filter-mapping> -->
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>/faces/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.jsf</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.faces</url-pattern>
+	</servlet-mapping>
 
 	<!-- Paginas de Erro -->
 	<error-page>
 		<error-code>401</error-code>
-		<location>/pages/public/access.xhtml</location>
+		<location>/paginas/public/access.xhtml</location>
 	</error-page>
 	<error-page>
 		<error-code>404</error-code>
-		<location>/pages/public/404.xhtml</location>
+		<location>/paginas/public/404.xhtml</location>
 	</error-page>
 	<error-page>
 		<error-code>500</error-code>
-		<location>/pages/public/error.xhtml</location>
+		<location>/paginas/public/error.xhtml</location>
 	</error-page>
 
 	<!-- Configuração do Thema do PimeFaces -->
