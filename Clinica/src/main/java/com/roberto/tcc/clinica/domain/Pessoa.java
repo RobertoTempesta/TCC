@@ -1,6 +1,7 @@
 package com.roberto.tcc.clinica.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,14 +41,53 @@ public class Pessoa extends GenericDomain{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataCadastro;
 	
-	@ManyToMany
+	@Column(length = 200, nullable = false)
+	private String endereco;
+	
+	@Column(length = 100, nullable = false)
+	private String bairro;
+	
+	@Column(length = 50, nullable = false)
+	private String numero;
+	
+	@ManyToOne
 	@JoinColumn(nullable = false)
-	private Endereco endereco;
+	private Cidade cidade;
 	
 	@ManyToMany
 	@JoinColumn(nullable = false)
-	private Contato telefone;
+	private List<Contato> telefone;
 	
+	public String getEndereco() {
+		return endereco;
+	}
+	public void setEndereco(String endereco) {
+		this.endereco = endereco;
+	}
+	public String getBairro() {
+		return bairro;
+	}
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
+	public String getNumero() {
+		return numero;
+	}
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+	public Cidade getCidade() {
+		return cidade;
+	}
+	public void setCidade(Cidade cidade) {
+		this.cidade = cidade;
+	}
+	public List<Contato> getTelefone() {
+		return telefone;
+	}
+	public void setTelefone(List<Contato> telefone) {
+		this.telefone = telefone;
+	}
 	@Column(length = 100, nullable = false)
 	private String email;
 	

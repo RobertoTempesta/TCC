@@ -10,7 +10,7 @@ import javax.persistence.OneToOne;
 public class Usuario extends GenericDomain{
 
 	@OneToOne
-	@JoinColumn(nullable = false)
+	@JoinColumn(nullable = false, unique = true)
 	private Pessoa pessoa;
 	
 	@Column(nullable = false)

@@ -2,19 +2,17 @@ package com.roberto.tcc.clinica.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @SuppressWarnings("serial")
 @Entity
 public class Contato extends GenericDomain{
 	
-//	@ManyToOne
-//	@JoinColumn(nullable = false)
-//	private Pessoa pessoa;
 	
 	@Column(length = 14, nullable = false)
 	private String telefone;
+	
+	@Column(length = 300)
+	private String observacoes;
 
 	public String getTelefone() {
 		return telefone;
