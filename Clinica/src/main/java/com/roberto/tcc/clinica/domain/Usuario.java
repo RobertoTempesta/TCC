@@ -10,31 +10,43 @@ import javax.persistence.OneToOne;
 public class Usuario extends GenericDomain{
 
 	@OneToOne
-	@JoinColumn(nullable = false, unique = true)
+	@JoinColumn(nullable = false)
 	private Pessoa pessoa;
 	
-	@Column(nullable = false)
+	@Column(length = 1024, nullable = false)
 	private String senha;
 	
-	@Column(nullable = false)
+	@Column(length = 1024, nullable = false)
 	private String salt;
 	
-	@Column(nullable = false)
+	@Column(length = 1)
 	private Character tipo;
 	
 	@Column(nullable = false)
 	private Boolean ativo;
 
+	public Pessoa getPessoa() {
+		return pessoa;
+	}
+
+	public void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
 	public String getSalt() {
 		return salt;
 	}
 
-	public Boolean getAtivo() {
-		return ativo;
-	}
-
-	public void setAtivo(Boolean ativo) {
-		this.ativo = ativo;
+	public void setSalt(String salt) {
+		this.salt = salt;
 	}
 
 	public Character getTipo() {
@@ -45,24 +57,11 @@ public class Usuario extends GenericDomain{
 		this.tipo = tipo;
 	}
 
-	public void setSalt(String salt) {
-		this.salt = salt;
+	public Boolean getAtivo() {
+		return ativo;
 	}
 
-	public String getSenha() {
-		return senha;
+	public void setAtivo(Boolean ativo) {
+		this.ativo = ativo;
 	}
-
-	public Pessoa getPessoa() {
-		return pessoa;
-	}
-
-	public void setPessoa(Pessoa pessoa) {
-		this.pessoa = pessoa;
-	}
-
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
-
 }
