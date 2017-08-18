@@ -21,6 +21,10 @@ public class Cidade extends GenericDomain{
 	private String CEP;
 	
 	
+	@Override
+	public String toString() {
+		return "Cidade [nome=" + nome + ", estado=" + estado + ", CEP=" + CEP + "]";
+	}
 	public String getCEP() {
 		return CEP;
 	}

@@ -10,7 +10,7 @@
 
 		<!-- Configurações de Conexão com o Banco de Dados -->
 		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-		<property name="connection.url">jdbc:mysql://127.0.0.1:3306/bdteste</property>
+		<property name="connection.url">jdbc:mysql://127.0.0.1:3306/bd_teste</property>
 		<property name="connection.username">root</property>
 		<property name="connection.password">1234</property>
 
@@ -30,14 +30,20 @@
 		<property name="show_sql">true</property>
 
 		<!-- Cria as tabelas do banco de dados -->
-		<property name="hbm2ddl.auto">create</property>
+		<property name="hbm2ddl.auto">update</property>
 
 		<!-- Mapeamento das entidades -->
+		<mapping class="com.roberto.tcc.clinica.domain.Aluno" />
+		<mapping class="com.roberto.tcc.clinica.domain.Cargo" />
 		<mapping class="com.roberto.tcc.clinica.domain.Cidade" />
-		<mapping class="com.roberto.tcc.clinica.domain.Contato" />
+		<mapping class="com.roberto.tcc.clinica.domain.Consulta" />
 		<mapping class="com.roberto.tcc.clinica.domain.Estado" />
-		<mapping class="com.roberto.tcc.clinica.domain.Endereco" />
+		<mapping class="com.roberto.tcc.clinica.domain.Paciente" />
 		<mapping class="com.roberto.tcc.clinica.domain.Pessoa" />
+		<mapping class="com.roberto.tcc.clinica.domain.Prontuario" />
+		<mapping class="com.roberto.tcc.clinica.domain.SalaAtendimento" />
+		<mapping class="com.roberto.tcc.clinica.domain.Supervisor" />
+		<mapping class="com.roberto.tcc.clinica.domain.Telefone" />
 		<mapping class="com.roberto.tcc.clinica.domain.Usuario" />
 
 	</session-factory>

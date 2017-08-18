@@ -32,7 +32,7 @@ public class Estado extends GenericDomain{
 
 	@Override
 	public String toString() {
-		return "Estado: " + nome + "Sigla: " + sigla;
+		return "Estado: " + nome + " Sigla: " + sigla;
 	}
 	
 }

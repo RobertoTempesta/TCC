@@ -19,7 +19,7 @@ public class Usuario extends GenericDomain{
 	@Column(length = 1024, nullable = false)
 	private String salt;
 	
-	@Column(length = 1)
+	@Column(length = 1, nullable = false)
 	private Character tipo;
 	
 	@Column(nullable = false)

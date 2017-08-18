@@ -1,41 +1,48 @@
 package com.roberto.tcc.clinica.domain;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @SuppressWarnings("serial")
 @Entity
-public class Paciente extends GenericDomain{
+public class Paciente extends GenericDomain {
 
 	@OneToOne
 	@JoinColumn(nullable = false)
 	private Pessoa pessoa;
-	
+
+	@Column(nullable = false)
+	@Temporal(TemporalType.DATE)
+	private Date dataCadastro;
+
 	@Column(length = 200, nullable = false)
 	private String ocupacao;
-	
+
 	@Column(length = 300)
 	private String tipoNecessidade;
-	
+
 	@Column(length = 300)
 	private String usoMedicacao;
-	
+
 	@Column(length = 10, nullable = false)
 	private String estadoCivil;
-	
+
 	@Column(length = 300, nullable = false)
 	private String conhecimentoCentro;
-	
+
 	@Column(length = 150)
 	private String nomePai;
-	
+
 	@Column(length = 150)
 	private String nomeMae;
-	
-	@OneToMany
+
+	@OneToOne
 	private Pessoa responsavel;
 
 	public Pessoa getPessoa() {
@@ -56,6 +63,14 @@ public class Paciente extends GenericDomain{
 
 	public String getTipoNecessidade() {
 		return tipoNecessidade;
+	}
+
+	public Date getDataCadastro() {
+		return dataCadastro;
+	}
+
+	public void setDataCadastro(Date dataCadastro) {
+		this.dataCadastro = dataCadastro;
 	}
 
 	public void setTipoNecessidade(String tipoNecessidade) {

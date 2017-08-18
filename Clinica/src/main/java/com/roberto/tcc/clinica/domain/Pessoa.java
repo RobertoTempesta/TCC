@@ -37,10 +37,6 @@ public class Pessoa extends GenericDomain{
 	@Column(length = 100, nullable = false)
 	private String escolaridade;
 	
-	@Column(nullable = false)
-	@Temporal(TemporalType.DATE)
-	private Date dataCadastro;
-	
 	@Column(length = 200, nullable = false)
 	private String endereco;
 	
@@ -115,14 +111,6 @@ public class Pessoa extends GenericDomain{
 
 	public void setEscolaridade(String escolaridade) {
 		this.escolaridade = escolaridade;
-	}
-
-	public Date getDataCadastro() {
-		return dataCadastro;
-	}
-
-	public void setDataCadastro(Date dataCadastro) {
-		this.dataCadastro = dataCadastro;
 	}
 
 	public String getEndereco() {

@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 @Entity
 public class Cargo extends GenericDomain{
 
-	@Column(length = 20, nullable = false)
+	@Column(length = 50, nullable = false)
 	private String descricao;
 
 	public String getDescricao() {
