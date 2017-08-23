@@ -36,17 +36,11 @@
 					</ui:fragment>
 
 					<pu:menu widgetVar="me">
-						<p:menuitem id="inicio" value="Início" icon="&#xE88A;"
-							outcome="/pages/private/inicio" />
-
-						<p:submenu id="cadastros" label="Cadastros" icon="&#xE147;">
-
-							<p:menuitem id="usuario" value="Usuários" icon="face" />
-						</p:submenu>
-
-						<p:submenu id="historico" label="Histórico" icon="receipt">
-							<p:menuitem id="visualizar" value="Visualizar" icon="zoom_in" />
-						</p:submenu>
+						<p:menuitem id="inicio" value="Início" icon="&#xE88A;" outcome="/paginas/private/inicio" />
+						<p:menuitem id="usuario" value="Usuários" icon="face" outcome="/paginas/private/usuario"/>
+						<p:menuitem id="sala" value="Salas" icon="weekend" outcome="/paginas/private/sala_atendimento"/>
+						<p:menuitem id="paciente" value="Pacientes" icon="accessibility" outcome="/paginas/private/paciente"/>
+						<p:menuitem id="consultas" value="Consultas" icon="zoom_in" />
 					</pu:menu>
 				</div>
 			</div>

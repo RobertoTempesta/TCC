@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="content">
+		<div class="ui-g">
+			<div class="ui-g-12">
+				<div class="card">
+					<h:form id="frmEstado">
+						<h:panelGrid style="margin: 1em auto">
+							<p:commandButton value="Novo" onclick="PF('dlgNovo').show();" />
+						</h:panelGrid>
+
+						<p:dataTable id="tabela"
+							emptyMessage="Nenhum registro encontrado....." rows="10"
+							paginator="true" paginatorPosition="top"
+							style="margin: 0em auto;" value="#{MBEstado.estados}"
+							var="estado">
+							<f:facet name="header">
+								<p:outputLabel value="Estados" />
+							</f:facet>
+							<p:column headerText="Nome">
+								<h:outputText value="#{estado.nome}" />
+							</p:column>
+
+							<p:column headerText="Sigla">
+								<h:outputText value="#{estado.sigla}" />
+							</p:column>
+
+							<p:column headerText="Opções">
+								<p:commandButton icon="ui-icon-delete"
+									actionListener="#{MBEstado.excluir}"
+									update=":growl :frmEstado:tabela">
+									<p:confirm header="Confirmação"
+										message="Deseja excluir o estado?" icon="ui-icon-alert" />
+									<f:attribute name="estadoSelecionado" value="#{estado}" />
+								</p:commandButton>
+								<p:commandButton icon="ui-icon-mode-edit"
+									actionListener="#{estadoBean.editar}"
+									update=":frmDlgNovo"
+									oncomplete="PF('dlgNovo').show();">
+									<f:attribute name="estadoSelecionado" value="#{estado}" />
+								</p:commandButton>
+							</p:column>
+						</p:dataTable>
+
+						<p:confirmDialog global="true">
+							<p:commandButton value="Sim" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="Não" type="button"
+								styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						</p:confirmDialog>
+
+					</h:form>
+				</div>
+
+				<p:dialog widgetVar="dlgNovo" resizable="false" onShow="true"
+					header="Novo estado" width="400">
+					<h:form id="frmDlgNovo">
+						<p:panelGrid columns="2" layout="grid" style="width: 100%">
+							<p:outputLabel for="nome" value="Nome:" />
+							<p:inputText id="nome" value="#{MBEstado.estado.nome}"
+								required="true"
+								requiredMessage="É necessario digitar o nome do Estado" />
+
+							<p:outputLabel for="sigla" value="Sigla:" />
+							<p:inputText id="sigla" value="#{MBEstado.estado.sigla}"
+								required="true"
+								requiredMessage="É necessario digitar a sigla do Estado" />
+
+							<p:commandButton value="Salvar"
+								update=":frmDlgNovo :growl :frmEstado"
+								actionListener="#{MBEstado.salvar}"
+								onclick="PF('dlgNovo').hid();" />
+						</p:panelGrid>
+					</h:form>
+				</p:dialog>
+			</div>
+		</div>
+
+	</ui:define>
+</ui:composition>

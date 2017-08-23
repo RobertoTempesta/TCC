@@ -11,6 +11,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 @SuppressWarnings("serial")
 @Entity
 public class Pessoa extends GenericDomain{
@@ -50,9 +53,10 @@ public class Pessoa extends GenericDomain{
 	@JoinColumn(nullable = false)
 	private Cidade cidade;
 	
-	@OneToMany
-	@JoinColumn(nullable = false)
-	private List<Telefone> telefone;
+	
+	@OneToMany(mappedBy="pessoa", orphanRemoval=true)
+	@Cascade(CascadeType.ALL)
+	private List<Telefone> telefones;
 	
 	@Column(length = 50)
 	private String email;
@@ -145,12 +149,12 @@ public class Pessoa extends GenericDomain{
 		this.cidade = cidade;
 	}
 
-	public List<Telefone> getTelefone() {
-		return telefone;
+	public List<Telefone> getTelefones() {
+		return telefones;
 	}
 
-	public void setTelefone(List<Telefone> telefone) {
-		this.telefone = telefone;
+	public void setTelefones(List<Telefone> telefones) {
+		this.telefones = telefones;
 	}
 
 	public String getEmail() {
@@ -160,4 +164,11 @@ public class Pessoa extends GenericDomain{
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+	@Override
+	public String toString() {
+		return "Pessoa [nome=" + nome + ", CPF=" + CPF + ", telefones=" + telefones.get(0) + "]";
+	}
+
+
 }

@@ -14,15 +14,14 @@ public class EstadoDAOTest {
 	@Ignore
 	public void salvar(){
 		Estado estado = new Estado();
-		estado.setNome("Parana");
-		estado.setSigla("PR");
+		estado.setNome("São Paulo");
+		estado.setSigla("SP");
 		
 		EstadoDAO estadoDAO = new EstadoDAO();
 		estadoDAO.salvar(estado);
 	}
 	
 	@Test
-	@Ignore
 	public void listar(){
 		
 		EstadoDAO estadoDAO = new EstadoDAO();
@@ -53,6 +52,7 @@ public class EstadoDAOTest {
 		estadoDAO.excluir(e);
 	}
 	
+	@Ignore
 	@Test
 	public void editar(){
 		

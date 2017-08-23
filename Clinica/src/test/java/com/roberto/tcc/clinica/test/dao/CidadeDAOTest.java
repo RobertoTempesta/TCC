@@ -12,16 +12,15 @@ import com.roberto.tcc.clinica.domain.Cidade;
 public class CidadeDAOTest {
 
 	@Test
-	@Ignore	
 	public void salvar() {
 		
 		EstadoDAO eDAO = new EstadoDAO();
 		
 		Cidade c = new Cidade();
-		c.setNome("Porra Loka");
-		c.setCEP("10000-000");
+		c.setNome("Santa Cruz do Rio Pardo");
+		c.setCEP("18900-000");
 		
-		c.setEstado(eDAO.buscar(2L));
+		c.setEstado(eDAO.buscar(1L));
 		
 		CidadeDAO cDAO = new CidadeDAO();
 		cDAO.salvar(c);
@@ -61,6 +60,7 @@ public class CidadeDAOTest {
 	}
 	
 	@Test
+	@Ignore	
 	public void editar(){
 		
 		CidadeDAO cDAO = new CidadeDAO();
