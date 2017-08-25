@@ -57,7 +57,9 @@
 
 										<p:outputLabel for="cpf" value="CPF:" />
 										<p:inputText id="cpf" value="#{MBUsuario.pessoa.CPF}"
-											required="true" requiredMessage="" />
+											required="true" requiredMessage="" >
+											<p:ajax event="blur" listener="#{MBUsuario.buscaUsuarioExistente}" update="growl" />
+										</p:inputText>
 
 										<p:outputLabel for="rg" value="RG:" />
 										<p:inputText id="rg" value="#{MBUsuario.pessoa.RG}"

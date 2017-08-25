@@ -60,6 +60,7 @@ public class PessoaDAOTest {
 	}
 	
 	@Test
+	@Ignore
 	public void buscar() {
 		
 		PessoaDAO pessoaDAO = new PessoaDAO();
@@ -77,4 +78,13 @@ public class PessoaDAOTest {
 		pessoaDAO.excluir(p);
 	}
 	
+	@Test
+	public void buscarCpf() {
+		
+		PessoaDAO pessoaDAO = new PessoaDAO();
+		Pessoa p = new Pessoa();
+		p.setCPF("35003699875");
+		p = pessoaDAO.buscarCPF(p);
+		System.out.println(p.getNome());
+	}
 }
