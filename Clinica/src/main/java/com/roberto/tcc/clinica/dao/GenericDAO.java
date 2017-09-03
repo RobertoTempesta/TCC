@@ -1,5 +1,6 @@
 package com.roberto.tcc.clinica.dao;
 
+import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
@@ -10,7 +11,8 @@ import org.hibernate.criterion.Restrictions;
 
 import com.roberto.tcc.clinica.util.HibernateUtil;
 
-public class GenericDAO<Entidade> {
+@SuppressWarnings("serial")
+public class GenericDAO<Entidade> implements Serializable{
 
 	private Class<Entidade> classe;
 

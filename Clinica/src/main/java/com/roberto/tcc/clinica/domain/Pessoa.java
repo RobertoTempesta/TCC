@@ -1,18 +1,13 @@
 package com.roberto.tcc.clinica.domain;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 @SuppressWarnings("serial")
 @Entity
@@ -21,12 +16,44 @@ public class Pessoa extends GenericDomain{
 	@Column(length = 50, nullable = false)
 	private String nome;
 	
-	@Column(length = 14, nullable = false)
+	public String getTelefone1() {
+		return telefone1;
+	}
+
+	public void setTelefone1(String telefone1) {
+		this.telefone1 = telefone1;
+	}
+
+	public String getTelefone2() {
+		return telefone2;
+	}
+
+	public void setTelefone2(String telefone2) {
+		this.telefone2 = telefone2;
+	}
+
+	public String getTelefone3() {
+		return telefone3;
+	}
+
+	public void setTelefone3(String telefone3) {
+		this.telefone3 = telefone3;
+	}
+
+	public String getTelefone4() {
+		return telefone4;
+	}
+
+	public void setTelefone4(String telefone4) {
+		this.telefone4 = telefone4;
+	}
+
+	@Column(length = 14, unique = true, nullable = false)
 	private String CPF;
 	
 	@Column(length = 12, nullable = false)
 	private String RG;
-	
+
 	@Column(length = 1,nullable = false)
 	private Character sexo;
 	
@@ -40,23 +67,21 @@ public class Pessoa extends GenericDomain{
 	@Column(length = 100, nullable = false)
 	private String escolaridade;
 	
-	@Column(length = 200, nullable = false)
-	private String endereco;
-	
-	@Column(length = 100, nullable = false)
-	private String bairro;
-	
-	@Column(length = 50, nullable = false)
-	private String numero;
-	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(nullable = false)
-	private Cidade cidade;
+	private Endereco endereco;
 	
+	@Column(length = 20, nullable = false)
+	private String telefone1;
 	
-	@OneToMany(mappedBy="pessoa", orphanRemoval=true)
-	@Cascade(CascadeType.ALL)
-	private List<Telefone> telefones;
+	@Column(length = 20)
+	private String telefone2;
+	
+	@Column(length = 20)
+	private String telefone3;
+	
+	@Column(length = 20)
+	private String telefone4;
 	
 	@Column(length = 50)
 	private String email;
@@ -117,46 +142,6 @@ public class Pessoa extends GenericDomain{
 		this.escolaridade = escolaridade;
 	}
 
-	public String getEndereco() {
-		return endereco;
-	}
-
-	public void setEndereco(String endereco) {
-		this.endereco = endereco;
-	}
-
-	public String getBairro() {
-		return bairro;
-	}
-
-	public void setBairro(String bairro) {
-		this.bairro = bairro;
-	}
-
-	public String getNumero() {
-		return numero;
-	}
-
-	public void setNumero(String numero) {
-		this.numero = numero;
-	}
-
-	public Cidade getCidade() {
-		return cidade;
-	}
-
-	public void setCidade(Cidade cidade) {
-		this.cidade = cidade;
-	}
-
-	public List<Telefone> getTelefones() {
-		return telefones;
-	}
-
-	public void setTelefones(List<Telefone> telefones) {
-		this.telefones = telefones;
-	}
-
 	public String getEmail() {
 		return email;
 	}
@@ -165,9 +150,12 @@ public class Pessoa extends GenericDomain{
 		this.email = email;
 	}
 
-	@Override
-	public String toString() {
-		return "Pessoa [nome=" + nome + ", CPF=" + CPF + ", telefones=" + telefones.get(0) + "]";
+	public Endereco getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
 	}
 
 

@@ -1,0 +1,130 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="content">
+		<div class="ui-g">
+			<div class="ui-g-12">
+				<div class="card">
+					<h:form id="frmUsuario">
+
+						<p:panelGrid style="margin: 1em auto">
+							<p:commandButton value="Novo" onclick="PF('dlgNovo').show();" />
+						</p:panelGrid>
+
+						<p:dataTable id="tabela"
+							emptyMessage="Nenhum registro encontrado....." rows="10"
+							paginator="true" paginatorPosition="top"
+							style="margin: 0em auto;" value="#{MBUsuario.usuarios}"
+							var="user">
+							<f:facet name="header">
+								<p:outputLabel value="Usuarios" />
+							</f:facet>
+							<p:column headerText="Nome">
+								<h:outputText value="#{user.pessoa.nome}" />
+							</p:column>
+
+							<p:column headerText="Cargo">
+								<h:outputText value="#{user.tipo}" />
+							</p:column>
+
+							<p:column headerText="Ativo">
+								<h:outputText value="#{user.ativo}" />
+							</p:column>
+
+							<p:column headerText="Opções">
+								<p:commandButton icon="ui-icon-delete"
+									actionListener="#{MBUsuario.excluir}"
+									update=":frmUsuario :growl">
+									<p:confirm header="Confirmação"
+										message="Deseja excluir o estado?" icon="ui-icon-alert" />
+									<f:attribute name="usuarioSelecionado" value="#{user}" />
+								</p:commandButton>
+								<p:commandButton icon="ui-icon-mode-edit">
+
+								</p:commandButton>
+
+								<p:commandButton icon="ui-icon-vpn-key" />
+							</p:column>
+						</p:dataTable>
+
+						<p:confirmDialog global="true">
+							<p:commandButton value="Sim" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="Não" type="button"
+								styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						</p:confirmDialog>
+					</h:form>
+				</div>
+
+				<p:dialog header="Usuarios - Cadastro" widgetVar="dlgNovo"
+					draggable="false" resizable="false" modal="true" closable="false"
+					width="500">
+					<h:form id="frmCadastro">
+						<div class="ui-fluid">
+							<p:panelGrid id="pgNovaPessoa" layout="grid" columns="2"
+								styleClass="ui-panelgrid-blank form-group"
+								columnClasses="ui-grid-col-6,ui-grid-col-6">
+
+								<p:outputLabel for="pessoa" value="Selecione uma Pessoa" />
+								<p:selectOneMenu id="pessoa" layout="responsive"
+									value="#{MBUsuario.pessoa}"
+									converter="omnifaces.SelectItemsConverter">
+									<f:selectItem itemLabel="Selecione uma pessoa"
+										noSelectionOption="true" />
+									<f:selectItems value="#{MBUsuario.pessoas}" var="pessoa"
+										itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" />
+									<p:ajax update=":frmCadastro" listener="#{MBUsuario.renderiza}" />
+								</p:selectOneMenu>
+
+							</p:panelGrid>
+							<h:panelGroup id="pGroupSenha" rendered="#{MBUsuario.ativaNovo}">
+								<p:panelGrid layout="grid" columns="2"
+									styleClass="ui-panelgrid-blank form-group"
+									columnClasses="ui-grid-col-6,ui-grid-col-6">
+									<p:outputLabel for="tipoUsuario" value="Selecione um tipo" />
+									<p:selectOneMenu id="tipoUsuario" layout="responsive"
+										value="#{MBUsuario.usuario.tipo}" required="true"
+										requiredMessage="É necessário selecionar o Sexo">
+										<f:selectItem itemLabel="Selecione um tipo"
+											noSelectionOption="true" />
+										<f:selectItem itemLabel="Gerente" itemValue="G" />
+										<f:selectItem itemLabel="Normal" itemValue="N" />
+									</p:selectOneMenu>
+
+									<h:outputLabel for="pwd1" value="Senha:" />
+									<p:password id="pwd1" value="#{MBUsuario.usuario.senha}"
+										match="pwd2" required="true" requiredMessage="Digite á Senha"
+										feedback="true" />
+
+									<h:outputLabel for="pwd2" value="Senha Novamente:" />
+									<p:password id="pwd2" value="#{MBUsuario.usuario.senha}"
+										required="true" requiredMessage="Digite á Senha Novamente"
+										feedback="true" />
+
+									<p:commandButton value="Salvar" onclick="PF('dlgNovo').hide();"
+										actionListener="#{MBUsuario.salvarUser}" update=":frmUsuario growl" />
+								</p:panelGrid>
+							</h:panelGroup>
+
+							<p:panelGrid layout="grid" columns="1"
+								styleClass="ui-panelgrid-blank form-group">
+
+								<p:commandButton value="Nova Pessoa"
+									disabled="#{MBUsuario.ativaNovo}" />
+								<p:commandButton value="Cancelar"
+									onclick="PF('dlgNovo').hide();" />
+
+							</p:panelGrid>
+
+						</div>
+					</h:form>
+				</p:dialog>
+
+			</div>
+		</div>
+
+	</ui:define>
+</ui:composition>

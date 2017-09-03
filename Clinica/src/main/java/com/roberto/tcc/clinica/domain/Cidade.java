@@ -17,20 +17,6 @@ public class Cidade extends GenericDomain{
 	@JoinColumn(nullable = false)
 	private Estado estado;
 	
-	@Column(length = 10, nullable = false)
-	private String CEP;
-	
-	
-	@Override
-	public String toString() {
-		return "Cidade [nome=" + nome + ", estado=" + estado + ", CEP=" + CEP + "]";
-	}
-	public String getCEP() {
-		return CEP;
-	}
-	public void setCEP(String cEP) {
-		CEP = cEP;
-	}
 	public String getNome() {
 		return nome;
 	}

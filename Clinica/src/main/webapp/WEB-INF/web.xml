@@ -9,7 +9,7 @@
 
 	<!-- Pagina Inicial -->
 	<welcome-file-list>
-		<welcome-file>paginas/public/login.xhtml</welcome-file>
+		<welcome-file>paginas/publico/login.xhtml</welcome-file>
 	</welcome-file-list>
 
 	<!-- Fase do Projeto -->
@@ -44,15 +44,15 @@
 	<!-- Paginas de Erro -->
 	<error-page>
 		<error-code>401</error-code>
-		<location>/paginas/public/access.xhtml</location>
+		<location>/paginas/publico/access.xhtml</location>
 	</error-page>
 	<error-page>
 		<error-code>404</error-code>
-		<location>/paginas/public/404.xhtml</location>
+		<location>/paginas/publico/404.xhtml</location>
 	</error-page>
 	<error-page>
 		<error-code>500</error-code>
-		<location>/paginas/public/error.xhtml</location>
+		<location>/paginas/publico/error.xhtml</location>
 	</error-page>
 
 	<!-- Configuração do Thema do PimeFaces -->

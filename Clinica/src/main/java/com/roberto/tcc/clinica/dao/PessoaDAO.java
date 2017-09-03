@@ -7,6 +7,7 @@ import org.hibernate.criterion.Restrictions;
 import com.roberto.tcc.clinica.domain.Pessoa;
 import com.roberto.tcc.clinica.util.HibernateUtil;
 
+@SuppressWarnings("serial")
 public class PessoaDAO extends GenericDAO<Pessoa> {
 
 	public Pessoa buscarCPF(Pessoa pessoa) throws RuntimeException {

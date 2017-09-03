@@ -18,7 +18,7 @@ public class CidadeDAOTest {
 		
 		Cidade c = new Cidade();
 		c.setNome("Santa Cruz do Rio Pardo");
-		c.setCEP("18900-000");
+//		c.setCEP("18900-000");
 		
 		c.setEstado(eDAO.buscar(1L));
 		

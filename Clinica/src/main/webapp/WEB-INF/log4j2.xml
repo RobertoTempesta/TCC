@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="debug">
+<Configuration status="info">
     <Properties>
         <Property name="pattern">%d{dd/MM/yyyy HH:mm:ss,SSS EEEE} %p [%-20c{1}] %m%n</Property>
         <Property name="filePath">${sys:user.home}</Property>
@@ -22,21 +22,21 @@
      
     <Loggers>
         <Root level="debug">
-            <AppenderRef ref="RollingFile"/>
+<!--             <AppenderRef ref="RollingFile"/> -->
             <AppenderRef ref="Console"/>
         </Root>
          <Root level="error">
-            <AppenderRef ref="RollingFile"/>
+<!--             <AppenderRef ref="RollingFile"/> -->
             <AppenderRef ref="Console"/>
         </Root>
          <Root level="info">
-            <AppenderRef ref="RollingFile"/>
+<!--             <AppenderRef ref="RollingFile"/> -->
             <AppenderRef ref="Console"/>
         </Root>
          
           <Logger name="org.hibernate" level="info" additivity="false">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="RollingFile"/>
+<!--             <AppenderRef ref="RollingFile"/> -->
         </Logger>
     </Loggers>
      

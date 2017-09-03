@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.event.ActionEvent;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,49 +23,75 @@ import com.roberto.tcc.clinica.domain.Usuario;
 public class UsuarioBean implements Serializable {
 
 	private static final Logger logger = LogManager.getLogger(UsuarioBean.class);
+
 	private Usuario usuario = null;
 	private Pessoa pessoa = null;
+
 	private UsuarioDAO usuarioDAO = null;
 	private PessoaDAO pessoaDAO = null;
+
 	private List<Usuario> usuarios = null;
-	private String sexo = null;
+	private List<Pessoa> pessoas = null;
+
+	private Boolean ativaNovo = Boolean.FALSE;
 
 	@PostConstruct
 	public void init() {
 		usuarioDAO = new UsuarioDAO();
+		pessoaDAO = new PessoaDAO();
+
 		usuario = new Usuario();
 		pessoa = new Pessoa();
-		pessoaDAO = new PessoaDAO();
-		listarUsuarios();
+		carregarTela();
 	}
 
-	private void listarUsuarios() {
+	public void carregarTela() {
 		try {
 			usuarios = usuarioDAO.listar();
+			pessoas = pessoaDAO.listar();
 		} catch (RuntimeException erro) {
+			Messages.addGlobalError(
+					"Ocorreu um erro interno ao carregar a tela, entre em contato com a Administrador do sistema.");
 			logger.error(erro);
 		}
 	}
 
-	public void buscaUsuarioExistente() {
+	public void salvarUser() {
+		try {
+			this.usuario.setPessoa(this.pessoa);
+			usuario.setAtivo(true);
+			usuario.setSalt("123");
+			usuarioDAO.salvar(usuario);
+			
+			usuarios = usuarioDAO.listar();
+			
+			Messages.addGlobalInfo("Usuário salvo com Sucesso!");
+		} catch (RuntimeException erro) {
+			logger.error("Erro ao salvar usuario: " + erro);
+			Messages.addGlobalError(
+					"Ocorreu um erro interno ao salvar o Usuário, entre em contato com a Administrador do sistema.");
+		}
+	}
+
+	public void excluir(ActionEvent evento) {
 
 		try {
-			if (pessoa.getCPF() == null && pessoa.getCPF().equals("")) {
-				Messages.addGlobalWarn("Digite um CPF valido.");
-				return;
-			}
+			usuario = (Usuario) evento.getComponent().getAttributes().get("usuarioSelecionado");
+			usuarioDAO.excluir(usuario);
 
-			pessoa = pessoaDAO.buscarCPF(pessoa);
-			
-			if (pessoa == null) {
-				return;
-			}
-			Messages.addGlobalFatal(pessoa.getNome());
-
+			carregarTela();
+			Messages.addGlobalInfo("Usuario removido com sucesso");
 		} catch (RuntimeException erro) {
-			Messages.addGlobalError(
-					"Ocorreu um erro interno ao verificar esse CPF, entre em contato com a Administradora do Sistema.");
-			logger.error(erro);
+			logger.error("Erro ao excluir: " + erro);
+		}
+	}
+
+	public void renderiza() {
+
+		if (pessoa != null) {
+			ativaNovo = Boolean.TRUE;
+		} else {
+			ativaNovo = Boolean.FALSE;
 		}
 
 	}
@@ -77,14 +104,6 @@ public class UsuarioBean implements Serializable {
 		return pessoa;
 	}
 
-	public String getSexo() {
-		return sexo;
-	}
-
-	public void setSexo(String sexo) {
-		this.sexo = sexo;
-	}
-
 	public void setPessoa(Pessoa pessoa) {
 		this.pessoa = pessoa;
 	}
@@ -93,12 +112,28 @@ public class UsuarioBean implements Serializable {
 		this.usuario = usuario;
 	}
 
+	public Boolean getAtivaNovo() {
+		return ativaNovo;
+	}
+
+	public void setAtivaNovo(Boolean ativaNovo) {
+		this.ativaNovo = ativaNovo;
+	}
+
 	public List<Usuario> getUsuarios() {
 		return usuarios;
 	}
 
 	public void setUsuarios(List<Usuario> usuarios) {
 		this.usuarios = usuarios;
+	}
+
+	public List<Pessoa> getPessoas() {
+		return pessoas;
+	}
+
+	public void setPessoas(List<Pessoa> pessoas) {
+		this.pessoas = pessoas;
 	}
 
 }
