@@ -15,38 +15,6 @@ public class Pessoa extends GenericDomain{
 
 	@Column(length = 50, nullable = false)
 	private String nome;
-	
-	public String getTelefone1() {
-		return telefone1;
-	}
-
-	public void setTelefone1(String telefone1) {
-		this.telefone1 = telefone1;
-	}
-
-	public String getTelefone2() {
-		return telefone2;
-	}
-
-	public void setTelefone2(String telefone2) {
-		this.telefone2 = telefone2;
-	}
-
-	public String getTelefone3() {
-		return telefone3;
-	}
-
-	public void setTelefone3(String telefone3) {
-		this.telefone3 = telefone3;
-	}
-
-	public String getTelefone4() {
-		return telefone4;
-	}
-
-	public void setTelefone4(String telefone4) {
-		this.telefone4 = telefone4;
-	}
 
 	@Column(length = 14, unique = true, nullable = false)
 	private String CPF;
@@ -59,7 +27,7 @@ public class Pessoa extends GenericDomain{
 	
 	@Column(nullable = true)
 	@Temporal(TemporalType.DATE)
-	private Date dataNacimento;
+	private Date dataNascimento;
 	
 	@Column(length = 3, nullable = false)
 	private Integer idade;
@@ -112,22 +80,52 @@ public class Pessoa extends GenericDomain{
 
 	public Character getSexo() {
 		return sexo;
+	}public String getTelefone1() {
+		return telefone1;
+	}
+
+	public void setTelefone1(String telefone1) {
+		this.telefone1 = telefone1;
+	}
+
+	public String getTelefone2() {
+		return telefone2;
+	}
+
+	public void setTelefone2(String telefone2) {
+		this.telefone2 = telefone2;
+	}
+
+	public String getTelefone3() {
+		return telefone3;
+	}
+
+	public void setTelefone3(String telefone3) {
+		this.telefone3 = telefone3;
+	}
+
+	public String getTelefone4() {
+		return telefone4;
+	}
+
+	public void setTelefone4(String telefone4) {
+		this.telefone4 = telefone4;
 	}
 
 	public void setSexo(Character sexo) {
 		this.sexo = sexo;
 	}
 
-	public Date getDataNacimento() {
-		return dataNacimento;
-	}
-
-	public void setDataNacimento(Date dataNacimento) {
-		this.dataNacimento = dataNacimento;
-	}
-
 	public Integer getIdade() {
 		return idade;
+	}
+
+	public Date getDataNascimento() {
+		return dataNascimento;
+	}
+
+	public void setDataNascimento(Date dataNascimento) {
+		this.dataNascimento = dataNascimento;
 	}
 
 	public void setIdade(Integer idade) {

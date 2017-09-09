@@ -27,7 +27,7 @@ public class PessoaDAOTest {
 		CidadeDAO cidadeDAO = new CidadeDAO();
 //		p.setCidade(cidadeDAO.buscar(1L));
 		
-		p.setDataNacimento(new SimpleDateFormat("dd/MM/yyyy").parse("08/08/1995"));
+//		p.setDataNacimento(new SimpleDateFormat("dd/MM/yyyy").parse("08/08/1995"));
 		p.setEmail("robertotempesta88@gmail.com");
 //		p.setEndereco("Rua José Zacura");
 		p.setEscolaridade("Cursando ensino superior");
@@ -69,7 +69,7 @@ public class PessoaDAOTest {
 		PessoaDAO pessoaDAO = new PessoaDAO();
 		Pessoa p = new Pessoa();
 		p.setCPF("35003699875");
-		p = pessoaDAO.buscarCPF(p);
+//		p = pessoaDAO.buscarCPF(p);
 		System.out.println(p.getNome());
 	}
 }

@@ -8,35 +8,35 @@
 		<div class="ui-g">
 			<div class="ui-g-12">
 				<div class="card">
-					<h:form id="frmSala">
+					<h:form id="frmListagem">
 
 						<p:dataTable emptyMessage="Nenhum registro encontrado..."
-							value="#{MBSala.salas}" var="sala" rows="10" paginator="true">
+							value="#{MBCargo.cargos}" var="cargo" rows="10" paginator="true">
 							<f:facet name="header">
-								<p:commandButton icon="ui-icon-add" actionListener="#{MBSala.novo}" 
+								<p:commandButton icon="ui-icon-add" actionListener="#{MBCargo.novo}" 
 									oncomplete="PF('dlgNovo').show();" update=":frmNovo">
 									<f:actionListener
 										type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
 								</p:commandButton>
 							</f:facet>
 							<p:column headerText="Código">
-								<h:outputText value="#{sala.codigo}" />
+								<h:outputText value="#{cargo.codigo}" />
 							</p:column>
-							<p:column headerText="Numero">
-								<h:outputText value="#{sala.numeroSala}" />
+							<p:column headerText="Descrição">
+								<h:outputText value="#{cargo.descricao}" />
 							</p:column>
 
 							<p:column headerText="Opções">
 								<p:commandButton icon="ui-icon-delete"
-									actionListener="#{MBSala.excluir}" update=":frmSala :growl">
+									actionListener="#{MBCargo.excluir}" update=":frmListagem :growl">
 									<p:confirm header="Confirmação"
-										message="Deseja excluir a Sala?" icon="ui-icon-alert" />
-									<f:attribute name="salaSelecionada" value="#{sala}" />
+										message="Deseja excluir o Cargo selecionado?" icon="ui-icon-alert" />
+									<f:attribute name="cargoSelecionado" value="#{cargo}" />
 								</p:commandButton>
 								<p:commandButton icon="ui-icon-mode-edit"
-									actionListener="#{MBSala.editar}" update=":frmNovo :growl"
+									actionListener="#{MBCargo.editar}" update=":frmNovo :growl"
 									oncomplete="PF('dlgNovo').show();">
-									<f:attribute name="salaSelecionada" value="#{sala}" />
+									<f:attribute name="cargoSelecionado" value="#{cargo}" />
 									<f:actionListener
 										type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
 								</p:commandButton>
@@ -54,7 +54,7 @@
 				</div>
 
 				<p:dialog widgetVar="dlgNovo" resizable="false" onShow="true"
-					header="Cadastros - Salas" width="400" draggable="false"
+					header="Cadastros - Cargos" width="400" draggable="false"
 					modal="true" closable="false">
 
 					<h:form id="frmNovo">
@@ -62,12 +62,12 @@
 							styleClass="ui-panelgrid-blank form-group"
 							columnClasses="ui-grid-col-3,ui-grid-col-6">
 							<p:outputLabel for="numero" value="Numero:" />
-							<p:inputText id="numero" value="#{MBSala.sala.numeroSala}"
+							<p:inputText id="numero" value="#{MBCargo.cargo.descricao}"
 								required="true"
-								requiredMessage="É necessario digitar o numero da sala" />
+								requiredMessage="É necessario digitar a descrição do cargo" />
 
-							<p:commandButton value="Salvar" actionListener="#{MBSala.salvar}"
-								update=":frmNovo :growl :frmSala" />
+							<p:commandButton value="Salvar" actionListener="#{MBCargo.salvar}"
+								update=":frmNovo :growl :frmListagem" />
 
 							<p:commandButton value="Fechar" onclick="PF('dlgNovo').hide();" />
 						</p:panelGrid>

@@ -14,15 +14,12 @@ import com.roberto.tcc.clinica.domain.Endereco;
 import com.roberto.tcc.clinica.domain.Estado;
 
 public class BuscaCEP {
+	
+	public String CEP;
 
-	private String CEP;
-
-	public BuscaCEP(String CEP) {
-		this.CEP = CEP;
-	}
-
-	public Endereco buscaEndereco()  throws IOException{
+	public Endereco buscaEndereco(String cep)  throws IOException{
 		Endereco endereco = null;
+		CEP = cep;
 		try {
 			endereco = new Endereco();
 			endereco.setCEP(CEP);

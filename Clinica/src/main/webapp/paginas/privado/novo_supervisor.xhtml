@@ -1,0 +1,144 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="content">
+		<div class="ui-g">
+			<div class="ui-g-12">
+				<div class="card">
+					<h:form id="frmNovo">
+
+						<p:panel header="Dados do Supervisor">
+						
+							<p:panelGrid id="pgDadosPessoa" layout="grid" columns="4"
+								styleClass="ui-panelgrid-blank form-group"
+								columnClasses="ui-grid-col-2,ui-grid-col-6,ui-grid-col-2,ui-grid-col-6">
+
+								<p:outputLabel for="cpf" value="CPF:" />
+								<p:inputText id="cpf" value="#{MBSupervisor.pessoa.CPF}"
+									required="true" requiredMessage="É necessário digitar um CPF" />
+								
+								<p:outputLabel for="nome" value="Nome:" />
+								<p:inputText id="nome" value="#{MBSupervisor.pessoa.nome}"
+									required="true" requiredMessage="É necessário digitar o Nome" />
+
+								<p:outputLabel for="rg" value="RG:" />
+								<p:inputText id="rg" value="#{MBSupervisor.pessoa.RG}"
+									required="true" requiredMessage="É necessário digitar um RG" />
+
+								<p:outputLabel for="sexo" value="Sexo" />
+								<p:selectOneRadio id="sexo" layout="responsive" columns="2"
+									value="#{MBSupervisor.pessoa.sexo}" required="true"
+									requiredMessage="É necessário selecionar o Sexo">
+									<f:selectItem itemLabel="Masculino" itemValue="M" />
+									<f:selectItem itemLabel="Feminino" itemValue="F" />
+								</p:selectOneRadio>
+
+								<p:outputLabel for="data" value="Nascimento:" />
+								<p:calendar id="data" pattern="dd/MM/yyyy" mask="true"
+									value="#{MBSupervisor.pessoa.dataNacimento}" required="true"
+									requiredMessage="É necessário digitar a Data de Nascimento" />
+
+								<p:outputLabel for="idade" value="Idade:" />
+								<p:inputText id="idade" value="#{MBSupervisor.pessoa.idade}"
+									required="true" requiredMessage="É necessário digitar a Idade" />
+
+								<p:outputLabel value="CEP:" />
+								<p:inputText value="#{MBSupervisor.endereco.CEP}">
+									<p:ajax event="blur" listener="#{MBSupervisor.buscaCEP}"
+										update=":frmNovo:rua,bairro,num,cidade,estado  :growl" />
+								</p:inputText>
+
+								<p:outputLabel for="rua" value="Rua:" />
+								<p:inputText id="rua" value="#{MBSupervisor.endereco.rua}"
+									required="true" requiredMessage="É necessário digitar Rua" />
+
+								<p:outputLabel for="bairro" value="Bairro:" />
+								<p:inputText id="bairro" value="#{MBSupervisor.endereco.bairro}"
+									required="true" requiredMessage="É necessário digitar Bairro" />
+
+								<p:outputLabel for="num" value="Numero:" />
+								<p:inputText id="num" value="#{MBSupervisor.endereco.numero}"
+									required="true" requiredMessage="É necessário digitar Numero" />
+
+								<p:outputLabel for="cidade" value="Cidade:" />
+								<p:inputText id="cidade" value="#{MBSupervisor.cidade.nome}"
+									required="true"
+									requiredMessage="É necessário informar a cidade" />
+
+								<p:outputLabel for="estado" value="Estado:" />
+								<p:selectOneMenu id="estado" value="#{MBSupervisor.estado}"
+									required="true"
+									requiredMessage="É necessário selecionar o Estado"
+									converter="omnifaces.SelectItemsConverter">
+									<f:selectItem itemLabel="Selecione um Estado"
+										noSelectionOption="true" />
+									<f:selectItems value="#{MBSupervisor.estados}" var="estado"
+										itemValue="#{estado}"
+										itemLabel="#{estado.nome} - #{estado.sigla}" />
+								</p:selectOneMenu>
+
+								<p:outputLabel for="tel1" value="Telefone:" />
+								<p:inputText id="tel1" required="true"
+									requiredMessage="É nescessario inserir o telefone"
+									value="#{MBSupervisor.pessoa.telefone1}" />
+
+								<p:outputLabel value="Telefone 2:" />
+								<p:inputText value="#{MBSupervisor.pessoa.telefone2}" />
+
+								<p:outputLabel value="Telefone 3:" />
+								<p:inputText value="#{MBSupervisor.pessoa.telefone3}" />
+
+								<p:outputLabel value="Telefone 4:" />
+								<p:inputText value="#{MBSupervisor.pessoa.telefone4}" />
+
+								<p:outputLabel for="email" value="Email:" />
+								<p:inputText id="email" value="#{MBSupervisor.pessoa.email}"
+									required="true" requiredMessage="É necessário digitar um Email" />
+
+								<p:outputLabel for="escol" value="Escolaridade:" />
+								<p:selectOneMenu id="escol"
+									value="#{MBSupervisor.pessoa.escolaridade}" required="true"
+									style="width: 50%">
+									<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+									<f:selectItem itemLabel="Fundamental - Incompleto"
+										itemValue="Fundamental - Incompleto" />
+									<f:selectItem itemLabel="Fundamental - Completo"
+										itemValue="Fundamental - Completo" />
+									<f:selectItem itemLabel="Médio - Incompleto"
+										itemValue="Médio - Incompleto" />
+									<f:selectItem itemLabel="Médio - Completo"
+										itemValue="Médio - Completo" />
+									<f:selectItem itemLabel="Superior - Incompleto"
+										itemValue="Superior - Incompleto" />
+									<f:selectItem itemLabel="Superior - Completo"
+										itemValue="Superior - Completo" />
+									<f:selectItem
+										itemLabel="Pós-graduação (Lato senso) - Incompleto"
+										itemValue="Pós-graduação (Lato senso) - Incompleto" />
+									<f:selectItem itemLabel="Pós-graduação (Lato senso) - Completo"
+										itemValue="Pós-graduação (Lato senso) - Completo" />
+									<f:selectItem
+										itemLabel="Pós-graduação (Stricto sensu, nível mestrado) - Incompleto"
+										itemValue="Pós-graduação (Stricto sensu, nível mestrado) - Incompleto" />
+									<f:selectItem
+										itemLabel="Pós-graduação (Stricto sensu, nível mestrado) - Completo"
+										itemValue="Pós-graduação (Stricto sensu, nível mestrado) - Completo" />
+									<f:selectItem
+										itemLabel="Pós-graduação (Stricto sensu, nível doutor) - Incompleto"
+										itemValue="Pós-graduação (Stricto sensu, nível doutor) - Incompleto" />
+									<f:selectItem
+										itemLabel="Pós-graduação (Stricto sensu, nível doutor) - Completo"
+										itemValue="Pós-graduação (Stricto sensu, nível doutor) - Completo" />
+								</p:selectOneMenu>
+							</p:panelGrid>
+						</p:panel>
+					</h:form>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+</ui:composition>

@@ -10,13 +10,13 @@ import com.roberto.tcc.clinica.util.HibernateUtil;
 @SuppressWarnings("serial")
 public class PessoaDAO extends GenericDAO<Pessoa> {
 
-	public Pessoa buscarCPF(Pessoa pessoa) throws RuntimeException {
+	public Pessoa buscarCPF(String cpf) throws RuntimeException {
 
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
 
-			Criteria consulta = sessao.createCriteria(pessoa.getClass());
-			consulta.add(Restrictions.ilike("CPF", pessoa.getCPF()));
+			Criteria consulta = sessao.createCriteria(Pessoa.class);
+			consulta.add(Restrictions.ilike("CPF", cpf));
 			Pessoa resultado = (Pessoa) consulta.uniqueResult();
 			return resultado;
 

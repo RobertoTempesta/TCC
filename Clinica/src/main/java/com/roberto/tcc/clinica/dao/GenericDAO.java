@@ -7,12 +7,13 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.roberto.tcc.clinica.util.HibernateUtil;
 
 @SuppressWarnings("serial")
-public class GenericDAO<Entidade> implements Serializable{
+public class GenericDAO<Entidade> implements Serializable {
 
 	private Class<Entidade> classe;
 
@@ -42,36 +43,51 @@ public class GenericDAO<Entidade> implements Serializable{
 			sessao.close();
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public List<Entidade> listar() throws RuntimeException{
-		
+	public List<Entidade> listar() throws RuntimeException {
+
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
-			
+
 			Criteria consulta = sessao.createCriteria(classe);
 			List<Entidade> resultado = consulta.list();
 			return resultado;
-			
-		}catch (RuntimeException exception) {
+
+		} catch (RuntimeException exception) {
 			throw exception;
 		} finally {
 			sessao.close();
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public Entidade buscar(Long codigo) throws RuntimeException{
-		
+	public List<Entidade> listar(String campoOrdenacao) {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
-			
+			Criteria consulta = sessao.createCriteria(classe);
+			consulta.addOrder(Order.asc(campoOrdenacao));
+			List<Entidade> resultado = consulta.list();
+			return resultado;
+		} catch (RuntimeException erro) {
+			throw erro;
+		} finally {
+			sessao.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public Entidade buscar(Long codigo) throws RuntimeException {
+
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		try {
+
 			Criteria consulta = sessao.createCriteria(classe);
 			consulta.add(Restrictions.idEq(codigo));
 			Entidade resultado = (Entidade) consulta.uniqueResult();
 			return resultado;
-			
-		}catch (RuntimeException exception) {
+
+		} catch (RuntimeException exception) {
 			throw exception;
 		} finally {
 			sessao.close();
@@ -97,9 +113,9 @@ public class GenericDAO<Entidade> implements Serializable{
 		} finally {
 			sessao.close();
 		}
-		
+
 	}
-	
+
 	public void editar(Entidade entidade) throws RuntimeException {
 
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
@@ -119,7 +135,25 @@ public class GenericDAO<Entidade> implements Serializable{
 		} finally {
 			sessao.close();
 		}
-		
+
+	}
+
+	public void merge(Entidade entidade) {
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		Transaction transacao = null;
+
+		try {
+			transacao = sessao.beginTransaction();
+			sessao.merge(entidade);
+			transacao.commit();
+		} catch (RuntimeException erro) {
+			if (transacao != null) {
+				transacao.rollback();
+			}
+			throw erro;
+		} finally {
+			sessao.close();
+		}
 	}
 
 }

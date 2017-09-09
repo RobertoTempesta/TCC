@@ -2,7 +2,6 @@ package com.roberto.tcc.clinica.bean;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -74,11 +73,11 @@ public class PessoaBean implements Serializable {
 		if (this.endereco.getCEP() == null || this.endereco.getCEP().equals("")) {
 			return;
 		}
-		BuscaCEP busca = new BuscaCEP(this.endereco.getCEP());
+		BuscaCEP busca = new BuscaCEP();
 		try {
 
 			Endereco endereco = new Endereco();
-			endereco = busca.buscaEndereco();
+			endereco = busca.buscaEndereco(this.endereco.getCEP());
 
 			if (endereco == null) {
 				Messages.addGlobalWarn("CEP Invalido!");

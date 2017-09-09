@@ -21,19 +21,16 @@ public class Paciente extends GenericDomain {
 	@Temporal(TemporalType.DATE)
 	private Date dataCadastro;
 
-	@Column(length = 200, nullable = false)
+	@Column(length = 200)
 	private String ocupacao;
 
-	@Column(length = 300)
-	private String tipoNecessidade;
+	@Column(length = 500)
+	private String Observacao;
 
-	@Column(length = 300)
-	private String usoMedicacao;
-
-	@Column(length = 10, nullable = false)
+	@Column(length = 10)
 	private String estadoCivil;
 
-	@Column(length = 300, nullable = false)
+	@Column(length = 300)
 	private String conhecimentoCentro;
 
 	@Column(length = 150)
@@ -61,28 +58,12 @@ public class Paciente extends GenericDomain {
 		this.ocupacao = ocupacao;
 	}
 
-	public String getTipoNecessidade() {
-		return tipoNecessidade;
-	}
-
 	public Date getDataCadastro() {
 		return dataCadastro;
 	}
 
 	public void setDataCadastro(Date dataCadastro) {
 		this.dataCadastro = dataCadastro;
-	}
-
-	public void setTipoNecessidade(String tipoNecessidade) {
-		this.tipoNecessidade = tipoNecessidade;
-	}
-
-	public String getUsoMedicacao() {
-		return usoMedicacao;
-	}
-
-	public void setUsoMedicacao(String usoMedicacao) {
-		this.usoMedicacao = usoMedicacao;
 	}
 
 	public String getEstadoCivil() {
@@ -111,6 +92,14 @@ public class Paciente extends GenericDomain {
 
 	public String getNomeMae() {
 		return nomeMae;
+	}
+
+	public String getObservacao() {
+		return Observacao;
+	}
+
+	public void setObservacao(String observacao) {
+		Observacao = observacao;
 	}
 
 	public void setNomeMae(String nomeMae) {
