@@ -51,7 +51,7 @@ public class Pessoa extends GenericDomain{
 	@Column(length = 20)
 	private String telefone4;
 	
-	@Column(length = 50)
+	@Column(length = 100)
 	private String email;
 
 	public String getNome() {

@@ -13,6 +13,9 @@
 						<p:dataTable emptyMessage="Nenhum registro encontrado..."
 							value="#{MBCargo.cargos}" var="cargo" rows="10" paginator="true">
 							<f:facet name="header">
+								
+								<p:outputLabel value="Cadastros - Cargos" style="margin-right: 5px" />
+								
 								<p:commandButton icon="ui-icon-add" actionListener="#{MBCargo.novo}" 
 									oncomplete="PF('dlgNovo').show();" update=":frmNovo">
 									<f:actionListener
@@ -60,9 +63,9 @@
 					<h:form id="frmNovo">
 						<p:panelGrid columns="2" layout="grid" style="width: 100%"
 							styleClass="ui-panelgrid-blank form-group"
-							columnClasses="ui-grid-col-3,ui-grid-col-6">
-							<p:outputLabel for="numero" value="Numero:" />
-							<p:inputText id="numero" value="#{MBCargo.cargo.descricao}"
+							columnClasses="ui-grid-col-6,ui-grid-col-6">
+							<p:outputLabel for="desc" value="Descrição do cargo:" />
+							<p:inputText id="desc" value="#{MBCargo.cargo.descricao}"
 								required="true"
 								requiredMessage="É necessario digitar a descrição do cargo" />
 

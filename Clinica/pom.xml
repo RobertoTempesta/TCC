@@ -132,14 +132,12 @@
 			<version>1.11</version>
 		</dependency>
 
-		<!-- Jsoup -->
+		<!-- json -->
 		<dependency>
-			<groupId>org.jsoup</groupId>
-			<artifactId>jsoup</artifactId>
-			<version>1.10.3</version>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20170516</version>
 		</dependency>
-
-
 	</dependencies>
 
 </project>

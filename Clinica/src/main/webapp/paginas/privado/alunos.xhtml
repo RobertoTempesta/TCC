@@ -4,6 +4,11 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
 
+	<f:metadata>
+		<f:viewAction action="#{MBAluno.iniciarDAO}"/>
+		<f:viewAction action="#{MBAluno.listarAlunos}"/>
+	</f:metadata>
+
 	<ui:define name="content">
 		<div class="ui-g">
 			<div class="ui-g-12">
@@ -11,34 +16,43 @@
 					<h:form id="frmListagem">
 
 						<p:dataTable emptyMessage="Nenhum registro encontrado..."
-							value="#{MBCargo.cargos}" var="cargo" rows="10" paginator="true">
+							value="#{MBAluno.alunos}" var="aluno" rows="10"
+							paginator="true">
 							<f:facet name="header">
-								<p:commandButton icon="ui-icon-add" actionListener="#{MBCargo.novo}" 
-									oncomplete="PF('dlgNovo').show();" update=":frmNovo">
+							
+								<p:outputLabel value="Cadastros - Alunos" style="margin-right: 5px" />
+							
+								<p:commandButton icon="ui-icon-add" actionListener="#{MBAluno.novo}">
 									<f:actionListener
 										type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
 								</p:commandButton>
 							</f:facet>
-							<p:column headerText="Código">
-								<h:outputText value="#{cargo.codigo}" />
+							<p:column headerText="Nome">
+								<h:outputText value="#{aluno.pessoa.nome}" />
 							</p:column>
-							<p:column headerText="Descrição">
-								<h:outputText value="#{cargo.descricao}" />
+							<p:column headerText="RA">
+								<h:outputText value="#{aluno.RA}" />
 							</p:column>
+							<p:column headerText="Cargo">
+								<h:outputText value="#{aluno.cargo.descricao}" />
+							</p:column>
+<!-- 							<p:column headerText="Data do Cadastro"> -->
+<!-- 								<h:outputText value="#{aluno.dataCadastro}" > -->
+<!-- 									<f:convertDateTime pattern="dd/MM/yyyy"/> -->
+<!-- 								</h:outputText> -->
+<!-- 							</p:column> -->
 
 							<p:column headerText="Opções">
 								<p:commandButton icon="ui-icon-delete"
-									actionListener="#{MBCargo.excluir}" update=":frmListagem :growl">
+									update=":frmListagem :growl" actionListener="#{MBAluno.excluir}">
 									<p:confirm header="Confirmação"
-										message="Deseja excluir o Cargo selecionado?" icon="ui-icon-alert" />
-									<f:attribute name="cargoSelecionado" value="#{cargo}" />
+										message="Deseja excluir o Aluno selecionado?"
+										icon="ui-icon-alert" />
+									<f:attribute name="alunoSelecionado" value="#{aluno}" />
 								</p:commandButton>
 								<p:commandButton icon="ui-icon-mode-edit"
-									actionListener="#{MBCargo.editar}" update=":frmNovo :growl"
-									oncomplete="PF('dlgNovo').show();">
-									<f:attribute name="cargoSelecionado" value="#{cargo}" />
-									<f:actionListener
-										type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+									update=":frmListagem :growl" actionListener="#{MBAluno.editar}">
+									<f:attribute name="alunoSelecionado" value="#{aluno}" />
 								</p:commandButton>
 							</p:column>
 						</p:dataTable>
@@ -52,27 +66,6 @@
 
 					</h:form>
 				</div>
-
-				<p:dialog widgetVar="dlgNovo" resizable="false" onShow="true"
-					header="Cadastros - Cargos" width="400" draggable="false"
-					modal="true" closable="false">
-
-					<h:form id="frmNovo">
-						<p:panelGrid columns="2" layout="grid" style="width: 100%"
-							styleClass="ui-panelgrid-blank form-group"
-							columnClasses="ui-grid-col-3,ui-grid-col-6">
-							<p:outputLabel for="numero" value="Numero:" />
-							<p:inputText id="numero" value="#{MBCargo.cargo.descricao}"
-								required="true"
-								requiredMessage="É necessario digitar a descrição do cargo" />
-
-							<p:commandButton value="Salvar" actionListener="#{MBCargo.salvar}"
-								update=":frmNovo :growl :frmListagem" />
-
-							<p:commandButton value="Fechar" onclick="PF('dlgNovo').hide();" />
-						</p:panelGrid>
-					</h:form>
-				</p:dialog>
 
 			</div>
 		</div>

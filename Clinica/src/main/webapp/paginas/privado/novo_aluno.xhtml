@@ -4,11 +4,13 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
 
-	<f:metadata>
-		<f:viewAction action="#{MBSupervisor.inicial}"/>
-		<f:viewAction action="#{MBSupervisor.carregarEstados}"/>
-		<f:viewAction action="#{MBSupervisor.iniciaEdicao}"/>
-	</f:metadata>
+		<f:metadata>
+			<f:viewAction action="#{MBAluno.inicial}"/>
+			<f:viewAction action="#{MBAluno.carregarEstados}"/>
+			<f:viewAction action="#{MBAluno.listarCargos}"/>
+			<f:viewAction action="#{MBAluno.listarSupervisores}"/>
+			<f:viewAction action="#{MBAluno.iniciaEdicao}"/>
+		</f:metadata>
 
 	<ui:define name="content">
 		<div class="ui-g">
@@ -23,24 +25,26 @@
 									columnClasses="ui-grid-col-2,ui-grid-col-6,ui-grid-col-2,ui-grid-col-6">
 
 									<p:outputLabel for="cpf" value="CPF:" />
-									<p:inputMask id="cpf" value="#{MBSupervisor.pessoa.CPF}" mask="999.999.999-99" 
-										required="true" requiredMessage="É necessário digitar um CPF">
-										<p:ajax event="blur" listener="#{MBSupervisor.verificaCPF}"
+									<p:inputMask id="cpf" value="#{MBAluno.pessoa.CPF}"
+										mask="999.999.999-99" required="true"
+										requiredMessage="É necessário digitar um CPF">
+										<p:ajax event="blur" listener="#{MBAluno.verificaCPF}"
 											update=":frmNovo:pgDadosPessoa  :growl" />
 									</p:inputMask>
 
 									<p:outputLabel for="nome" value="Nome:" />
-									<p:inputText id="nome" value="#{MBSupervisor.pessoa.nome}"
-										required="true" requiredMessage="É necessário digitar o Nome" 
-										maxlength="50"/>
+									<p:inputText id="nome" value="#{MBAluno.pessoa.nome}"
+										required="true" requiredMessage="É necessário digitar o Nome"
+										maxlength="50" />
 
 									<p:outputLabel for="rg" value="RG:" />
-									<p:inputMask id="rg" mask="99.999.999-9" size="10" value="#{MBSupervisor.pessoa.RG}"
-										required="true" requiredMessage="É necessário digitar um RG"  />
+									<p:inputMask id="rg" mask="99.999.999-9" size="10"
+										value="#{MBAluno.pessoa.RG}" required="true"
+										requiredMessage="É necessário digitar um RG" />
 
 									<p:outputLabel for="sexo" value="Sexo" />
 									<p:selectOneRadio id="sexo" layout="responsive" columns="2"
-										value="#{MBSupervisor.pessoa.sexo}" required="true"
+										value="#{MBAluno.pessoa.sexo}" required="true"
 										requiredMessage="É necessário selecionar o Sexo">
 										<f:selectItem itemLabel="Masculino" itemValue="M" />
 										<f:selectItem itemLabel="Feminino" itemValue="F" />
@@ -48,47 +52,50 @@
 
 									<p:outputLabel for="data" value="Nascimento:" />
 									<p:calendar id="data" pattern="dd/MM/yyyy" mask="true"
-										value="#{MBSupervisor.pessoa.dataNascimento}" required="true"
+										value="#{MBAluno.pessoa.dataNascimento}" required="true"
 										requiredMessage="É necessário digitar a Data de Nascimento" />
 
 									<p:outputLabel for="idade" value="Idade:" />
-									<p:inputText id="idade" value="#{MBSupervisor.pessoa.idade}"
-										required="true" requiredMessage="É necessário digitar a Idade" maxlength="3"/>
+									<p:inputText id="idade" value="#{MBAluno.pessoa.idade}"
+										required="true" requiredMessage="É necessário digitar a Idade"
+										maxlength="3" />
 
 									<p:outputLabel for="cep" value="CEP:" />
-									<p:inputMask id="cep" mask="99.999-999" value="#{MBSupervisor.endereco.CEP}"
-										required="true" requiredMessage="Necessario digitar um CEP">
-										<p:ajax event="blur" listener="#{MBSupervisor.carregarCEP}"
+									<p:inputMask id="cep" mask="99.999-999"
+										value="#{MBAluno.endereco.CEP}" required="true"
+										requiredMessage="Necessario digitar um CEP">
+										<p:ajax event="blur" listener="#{MBAluno.carregarCEP}"
 											update=":frmNovo:rua,bairro,num,cidade,estado  :growl" />
 									</p:inputMask>
 
 									<p:outputLabel for="rua" value="Rua:" />
-									<p:inputText id="rua" value="#{MBSupervisor.endereco.rua}" maxlength="50"
-										required="true" requiredMessage="É necessário digitar Rua" />
+									<p:inputText id="rua" value="#{MBAluno.endereco.rua}"
+										maxlength="50" required="true"
+										requiredMessage="É necessário digitar Rua" />
 
 									<p:outputLabel for="bairro" value="Bairro:" />
 									<p:inputText id="bairro" maxlength="30"
-										value="#{MBSupervisor.endereco.bairro}" required="true"
+										value="#{MBAluno.endereco.bairro}" required="true"
 										requiredMessage="É necessário digitar Bairro" />
 
 									<p:outputLabel for="num" value="Numero:" />
-									<p:inputText id="num" value="#{MBSupervisor.endereco.numero}"
-										required="true" requiredMessage="É necessário digitar Numero" 
-										maxlength="6"/>
+									<p:inputText id="num" value="#{MBAluno.endereco.numero}"
+										required="true" requiredMessage="É necessário digitar Numero"
+										maxlength="6" />
 
 									<p:outputLabel for="cidade" value="Cidade:" />
-									<p:inputText id="cidade" value="#{MBSupervisor.cidade.nome}"
+									<p:inputText id="cidade" value="#{MBAluno.cidade.nome}"
 										required="true" maxlength="50"
 										requiredMessage="É necessário informar a cidade" />
 
 									<p:outputLabel for="estado" value="Estado:" />
-									<p:selectOneMenu id="estado" value="#{MBSupervisor.estado}"
+									<p:selectOneMenu id="estado" value="#{MBAluno.estado}"
 										required="true"
 										requiredMessage="É necessário selecionar o Estado"
 										converter="omnifaces.SelectItemsConverter">
 										<f:selectItem itemLabel="Selecione um Estado"
 											noSelectionOption="true" />
-										<f:selectItems value="#{MBSupervisor.estados}" var="estado"
+										<f:selectItems value="#{MBAluno.estados}" var="estado"
 											itemValue="#{estado}"
 											itemLabel="#{estado.nome} - #{estado.sigla}" />
 									</p:selectOneMenu>
@@ -96,28 +103,45 @@
 									<p:outputLabel for="tel1" value="Telefone/Cel:" />
 									<p:inputText id="tel1" required="true"
 										requiredMessage="É nescessario inserir o telefone"
-										value="#{MBSupervisor.pessoa.telefone1}" />
+										value="#{MBAluno.pessoa.telefone1}" />
 
 									<p:outputLabel value="Telefone/Cel (Opcional):" />
-									<p:inputText value="#{MBSupervisor.pessoa.telefone2}" />
+									<p:inputText value="#{MBAluno.pessoa.telefone2}" />
 
 									<p:outputLabel value="Telefone/Cel (Opcional):" />
-									<p:inputText value="#{MBSupervisor.pessoa.telefone3}" />
+									<p:inputText value="#{MBAluno.pessoa.telefone3}" />
 
 									<p:outputLabel value="Telefone/Cel (Opcional):" />
-									<p:inputText value="#{MBSupervisor.pessoa.telefone4}" />
+									<p:inputText value="#{MBAluno.pessoa.telefone4}" />
 
 									<p:outputLabel for="email" value="Email:" />
-									<p:inputText id="email" value="#{MBSupervisor.pessoa.email}"
+									<p:inputText id="email" value="#{MBAluno.pessoa.email}"
 										required="true" maxlength="100"
 										requiredMessage="É necessário digitar um Email" />
+
+									<p:outputLabel for="ra" value="RA:" />
+									<p:inputText id="ra" value="#{MBAluno.aluno.RA}" maxlength="14"
+										required="true" requiredMessage="É necessário digitar o RA" />
 										
-									<p:outputLabel value="CRP:" />
-									<p:inputText value="#{MBSupervisor.supervisor.CRP}" maxlength="14"/>
+									<p:outputLabel for="cargo" value="Cargo:" />
+									<p:selectOneMenu id="cargo" converter="omnifaces.SelectItemsConverter"
+										value="#{MBAluno.aluno.cargo}" required="true">
+										<f:selectItem itemLabel="Selecione" noSelectionOption="true"/>
+										<f:selectItems value="#{MBAluno.cargos}" var="cargo" itemLabel="#{cargo.descricao}" 
+										itemValue="#{cargo}" />
+									</p:selectOneMenu>
+									
+									<p:outputLabel for="super" value="Supervisor:" />
+									<p:selectOneMenu id="super" converter="omnifaces.SelectItemsConverter"
+										value="#{MBAluno.aluno.supervisor}" required="true">
+										<f:selectItem itemLabel="Selecione" noSelectionOption="true"/>
+										<f:selectItems value="#{MBAluno.supervisores}" var="superv" 
+										itemLabel="#{superv.pessoa.nome}" itemValue="#{superv}" />
+									</p:selectOneMenu>
 
 									<p:outputLabel for="escol" value="Escolaridade:" />
 									<p:selectOneMenu id="escol"
-										value="#{MBSupervisor.pessoa.escolaridade}" required="true"
+										value="#{MBAluno.pessoa.escolaridade}" required="true"
 										style="width: 50%">
 										<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
 										<f:selectItem itemLabel="Fundamental - Incompleto"
@@ -152,12 +176,12 @@
 											itemValue="Pós-graduação (Stricto sensu, nível doutor) - Completo" />
 									</p:selectOneMenu>
 								</p:panelGrid>
-								
-								<h:panelGrid columns="2" style="margin: 1em auto">
-									<p:commandButton value="Salvar" actionListener="#{MBSupervisor.salvar}" update=":frmNovo:pgDadosPessoa :growl" />
-									<p:commandButton value="Voltar" />
+
+								<h:panelGrid columns="1" style="margin: 1em auto">
+									<p:commandButton value="Salvar" actionListener="#{MBAluno.salvar}"
+										update=":frmNovo:pgDadosPessoa :growl" />
 								</h:panelGrid>
-								
+
 							</p:panel>
 						</div>
 					</h:form>

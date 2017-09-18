@@ -13,6 +13,9 @@
 						<p:dataTable emptyMessage="Nenhum registro encontrado..."
 							value="#{MBSala.salas}" var="sala" rows="10" paginator="true">
 							<f:facet name="header">
+							
+								<p:outputLabel value="Cadastros - Salas" style="margin-right: 5px" />
+							
 								<p:commandButton icon="ui-icon-add" actionListener="#{MBSala.novo}" 
 									oncomplete="PF('dlgNovo').show();" update=":frmNovo">
 									<f:actionListener

@@ -10,13 +10,13 @@ import com.roberto.tcc.clinica.util.HibernateUtil;
 @SuppressWarnings("serial")
 public class CidadeDAO extends GenericDAO<Cidade>{
 
-	public Cidade buscarNome(Cidade cidade) {
+	public Cidade buscarNome(String cidade) {
 		
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
 
 			Criteria consulta = sessao.createCriteria(Cidade.class);
-			consulta.add(Restrictions.ilike("nome", cidade.getNome()));
+			consulta.add(Restrictions.ilike("nome", cidade));
 			Cidade resultado =  (Cidade) consulta.uniqueResult();
 			return resultado;
 

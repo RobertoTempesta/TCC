@@ -10,13 +10,13 @@ import com.roberto.tcc.clinica.util.HibernateUtil;
 @SuppressWarnings("serial")
 public class EstadoDAO extends GenericDAO<Estado>{
 
-public Estado buscarSigla(Estado estado) {
+public Estado buscarSigla(String estado) {
 		
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
 
 			Criteria consulta = sessao.createCriteria(Estado.class);
-			consulta.add(Restrictions.ilike("sigla", estado.getSigla()));
+			consulta.add(Restrictions.ilike("sigla", estado));
 			Estado resultado =  (Estado) consulta.uniqueResult();
 			return resultado;
 

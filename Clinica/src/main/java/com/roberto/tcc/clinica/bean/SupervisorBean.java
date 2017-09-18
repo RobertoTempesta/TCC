@@ -2,17 +2,18 @@ package com.roberto.tcc.clinica.bean;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.util.Date;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONObject;
 import org.omnifaces.util.Messages;
 
 import com.roberto.tcc.clinica.dao.CidadeDAO;
@@ -25,12 +26,13 @@ import com.roberto.tcc.clinica.domain.Endereco;
 import com.roberto.tcc.clinica.domain.Estado;
 import com.roberto.tcc.clinica.domain.Pessoa;
 import com.roberto.tcc.clinica.domain.Supervisor;
-import com.roberto.tcc.clinica.util.BuscaCEP;
+import com.roberto.tcc.clinica.util.CEPUtil;
 
-@SuppressWarnings("serial")
 @ManagedBean(name = "MBSupervisor")
 @ViewScoped
 public class SupervisorBean implements Serializable {
+
+	private static final long serialVersionUID = -3270976233702785391L;
 
 	private static final Logger logger = LogManager.getLogger(SupervisorBean.class);
 
@@ -41,7 +43,6 @@ public class SupervisorBean implements Serializable {
 	private Estado estado = null;
 
 	private List<Supervisor> supervisores = null;
-	// private List<Cidade> cidades = null;
 	private List<Estado> estados = null;
 
 	private SupervisorDAO supervisorDAO = null;
@@ -50,52 +51,168 @@ public class SupervisorBean implements Serializable {
 	private CidadeDAO cidadeDAO = null;
 	private EstadoDAO estadoDAO = null;
 
-	@PostConstruct
 	public void inicial() {
-		supervisorDAO = new SupervisorDAO();
-	}
-	
-	public void buscarCEP() {
-		if(endereco == null || endereco.getCEP() == null || endereco.getCEP().equals("")) {
-			Messages.addGlobalWarn("Digite um CEP");
-			return;
-		}
-		
-		try {
-			BuscaCEP busca = new BuscaCEP();
-			Endereco endereco = busca.buscaEndereco(this.endereco.getCEP());
-			if(endereco == null) {
-				Messages.addGlobalWarn("Digite um CEP valido");
-				return;
-			}
-			this.endereco = endereco;
-		}catch(IOException erro) {
-			logger.error("Erro ao buscar o CEP: "+erro);
-		}
+		iniciarDAO();
+		iniciarDomain();
 	}
 
-	public void novo() {
+	public void iniciarDomain() {
 		supervisor = new Supervisor();
 		pessoa = new Pessoa();
 		endereco = new Endereco();
 		cidade = new Cidade();
 		estado = new Estado();
-		
+	}
+
+	public void iniciarDAO() {
+		supervisorDAO = new SupervisorDAO();
 		estadoDAO = new EstadoDAO();
-		listarEstados();
-		
-		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()
-				.getResponse();
+		cidadeDAO = new CidadeDAO();
+		enderecoDAO = new EnderecoDAO();
+		pessoaDAO = new PessoaDAO();
+	}
+
+	public void telaNovoSupervisor() throws IOException {
+		FacesContext.getCurrentInstance().getExternalContext().redirect("novo_supervisor.xhtml");
+	}
+
+	public void telaInicial() throws IOException {
+		FacesContext.getCurrentInstance().getExternalContext().redirect("supervisores.xhtml");
+	}
+
+	public void editar(ActionEvent evento) {
 		try {
-			response.sendRedirect("novo_supervisor.xhtml");
-			FacesContext.getCurrentInstance().responseComplete();
-			
+			this.supervisor = (Supervisor) evento.getComponent().getAttributes().get("supervisorSelecionado");
+			FacesContext.getCurrentInstance().getExternalContext().getFlash().put("codigo",
+					this.supervisor.getCodigo());
+
+			telaNovoSupervisor();
+
 		} catch (IOException erro) {
 			logger.error("Erro ao direcionar pagina: " + erro);
 		}
 	}
 
-	public void listarEstados() {
+	public void iniciaEdicao() {
+		Long codigo = (Long) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("codigo");
+		if (codigo != null) {
+			this.supervisor = supervisorDAO.buscar(codigo);
+			this.pessoa = supervisor.getPessoa();
+			this.endereco = pessoa.getEndereco();
+			this.cidade = endereco.getCidade();
+			this.estado = cidade.getEstado();
+		}
+
+	}
+
+	public void salvar() {
+		try {
+			this.cidade.setEstado(this.estado);
+			Cidade cidade = cidadeDAO.merge(this.cidade);
+			endereco.setCidade(cidade);
+			Endereco endereco = enderecoDAO.merge(this.endereco);
+			this.pessoa.setEndereco(endereco);
+			this.pessoa.setNome(pessoa.getNome().toUpperCase());
+			Pessoa pessoa = pessoaDAO.merge(this.pessoa);
+			this.supervisor.setPessoa(pessoa);
+			this.supervisor.setDataCadastro(new Date());
+			supervisorDAO.merge(this.supervisor);
+
+			Messages.addGlobalInfo("Supervisor salvo com Sucesso!");
+
+			telaInicial();
+		} catch (RuntimeException erro) {
+			logger.error("Ocorreu um erro ao salvar supervisor: " + erro);
+			Messages.addGlobalError("Erro ao tentar salvar o Supervisor");
+		} catch (IOException erro) {
+			logger.error("Ocorreu um erro ao tentar voltar para a tela inicial");
+			Messages.addGlobalError("Erro ao sair da tela de cadastro");
+		}
+	}
+
+	public void verificaCPF() {
+
+		try {
+			String cpf = pessoa.getCPF();
+			cpf = cpf.replace(".", "");
+			cpf = cpf.replace("-", "");
+			cpf = cpf.replace("_", "");
+			if (cpf == null || cpf.equals("")) {
+				Messages.addGlobalWarn("'CPF' invalido");
+				return;
+			}
+
+			Pessoa pessoa = pessoaDAO.buscarCPF(this.pessoa.getCPF());
+			if (pessoa != null) {
+				this.pessoa = pessoa;
+				this.endereco = pessoa.getEndereco();
+				this.cidade = this.endereco.getCidade();
+				this.estado = this.cidade.getEstado();
+			}
+
+		} catch (RuntimeException erro) {
+			logger.error("Erro ao verificar CPF: " + erro);
+			Messages.addGlobalError("Ocorreu um erro interno ao verificar o 'CPF'");
+		}
+
+	}
+
+	public void carregarCEP() {
+
+		String cep = endereco.getCEP();
+		cep = cep.replace(".", "");
+		cep = cep.replace("-", "");
+		cep = cep.replace("_", "");
+
+		if (cep == null || cep.equals("")) {
+			Messages.addGlobalWarn("Digite um CEP");
+			return;
+		}
+
+		try {
+			JSONObject json = new CEPUtil().capturaJson(cep);
+			boolean erro = json.isNull("erro");
+
+			if (!erro) {
+				Messages.addGlobalWarn("Esse 'CEP' não existe");
+				return;
+			}
+			String CEP = json.getString("cep");
+			endereco = enderecoDAO.buscarCEP(CEP);
+			if (endereco == null) {
+				endereco = new Endereco();
+				endereco.setCEP(CEP);
+				endereco.setBairro(json.getString("bairro"));
+				endereco.setRua(json.getString("logradouro"));
+			}
+
+			String nomeCidade = json.getString("localidade");
+			cidade = cidadeDAO.buscarNome(nomeCidade);
+			if (cidade == null) {
+				cidade = new Cidade();
+				cidade.setNome(nomeCidade);
+			}
+			estado = estadoDAO.buscarSigla(json.getString("uf"));
+
+		} catch (MalformedURLException erro) {
+			logger.error("Erro ao buscar o CEP: " + erro);
+			Messages.addGlobalError("Ocorreu um erro interno ao buscar o endereço");
+		} catch (IOException erro) {
+			logger.error("Erro ao buscar o CEP: " + erro);
+			Messages.addGlobalError("Ocorreu um erro interno ao buscar o endereço");
+		}
+	}
+
+	public void novo() {
+
+		try {
+			telaNovoSupervisor();
+		} catch (IOException erro) {
+			logger.error("Erro ao direcionar pagina: " + erro);
+		}
+	}
+
+	public void carregarEstados() {
 		try {
 			estados = estadoDAO.listar();
 		} catch (RuntimeException erro) {
@@ -117,6 +234,8 @@ public class SupervisorBean implements Serializable {
 		try {
 			Supervisor supervisor = (Supervisor) evento.getComponent().getAttributes().get("supervisorSelecionado");
 			supervisorDAO.excluir(supervisor);
+
+			supervisores = supervisorDAO.listarOrdenado();
 			Messages.addGlobalInfo("Supervisor foi deletado com Sucesso");
 		} catch (RuntimeException erro) {
 			logger.error("Erro ao excluir supervisor: " + erro);

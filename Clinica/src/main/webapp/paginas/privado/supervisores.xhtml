@@ -5,6 +5,7 @@
 	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
 
 	<f:metadata>
+		<f:viewAction action="#{MBSupervisor.inicial}" />
 		<f:viewAction action="#{MBSupervisor.listarSupervisores}" />
 	</f:metadata>
 
@@ -18,30 +19,40 @@
 							value="#{MBSupervisor.supervisores}" var="superv" rows="10"
 							paginator="true">
 							<f:facet name="header">
+							
+								<p:outputLabel value="Cadastros - Supervisores" style="margin-right: 5px" />
+								
 								<p:commandButton icon="ui-icon-add"
 								actionListener="#{MBSupervisor.novo}">
 									<f:actionListener
 										type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
 								</p:commandButton>
 							</f:facet>
-							<p:column headerText="nome">
+							<p:column headerText="Nome">
 								<h:outputText value="#{superv.pessoa.nome}" />
 							</p:column>
 							<p:column headerText="CRP">
 								<h:outputText value="#{superv.CRP}" />
 							</p:column>
+							<p:column headerText="Data do Cadastro">
+								<h:outputText value="#{superv.dataCadastro}" >
+									<f:convertDateTime pattern="dd/MM/yyyy"/>
+								</h:outputText>
+							</p:column>
 
 							<p:column headerText="Opções">
 								<p:commandButton icon="ui-icon-delete"
-									update=":frmListagem :growl">
+									update=":frmListagem :growl" actionListener="#{MBSupervisor.excluir}">
 									<p:confirm header="Confirmação"
-										message="Deseja excluir o Cargo selecionado?"
+										message="Deseja excluir o Supervisor selecionado?"
 										icon="ui-icon-alert" />
+									<f:attribute name="supervisorSelecionado" value="#{superv}" />
 								</p:commandButton>
 								<p:commandButton icon="ui-icon-mode-edit"
-									update=":frmNovo :growl" oncomplete="PF('dlgNovo').show();">
+									update=":frmListagem :growl" actionListener="#{MBSupervisor.editar}">
 									<f:actionListener
 										type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+									<f:attribute name="supervisorSelecionado" value="#{superv}" />
 								</p:commandButton>
 							</p:column>
 						</p:dataTable>
