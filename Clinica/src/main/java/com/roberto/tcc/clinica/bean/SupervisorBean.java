@@ -17,7 +17,6 @@ import org.json.JSONObject;
 import org.omnifaces.util.Messages;
 
 import com.roberto.tcc.clinica.dao.CidadeDAO;
-import com.roberto.tcc.clinica.dao.EnderecoDAO;
 import com.roberto.tcc.clinica.dao.EstadoDAO;
 import com.roberto.tcc.clinica.dao.PessoaDAO;
 import com.roberto.tcc.clinica.dao.SupervisorDAO;
@@ -47,7 +46,6 @@ public class SupervisorBean implements Serializable {
 
 	private SupervisorDAO supervisorDAO = null;
 	private PessoaDAO pessoaDAO = null;
-	private EnderecoDAO enderecoDAO = null;
 	private CidadeDAO cidadeDAO = null;
 	private EstadoDAO estadoDAO = null;
 
@@ -68,7 +66,6 @@ public class SupervisorBean implements Serializable {
 		supervisorDAO = new SupervisorDAO();
 		estadoDAO = new EstadoDAO();
 		cidadeDAO = new CidadeDAO();
-		enderecoDAO = new EnderecoDAO();
 		pessoaDAO = new PessoaDAO();
 	}
 
@@ -108,12 +105,9 @@ public class SupervisorBean implements Serializable {
 	public void salvar() {
 		try {
 			this.cidade.setEstado(this.estado);
-			Cidade cidade = cidadeDAO.merge(this.cidade);
-			endereco.setCidade(cidade);
-			Endereco endereco = enderecoDAO.merge(this.endereco);
+			this.endereco.setCidade(cidade);
 			this.pessoa.setEndereco(endereco);
-			this.pessoa.setNome(pessoa.getNome().toUpperCase());
-			Pessoa pessoa = pessoaDAO.merge(this.pessoa);
+			this.pessoa = pessoaDAO.salvarPesEndereco(this.pessoa);
 			this.supervisor.setPessoa(pessoa);
 			this.supervisor.setDataCadastro(new Date());
 			supervisorDAO.merge(this.supervisor);
@@ -158,7 +152,6 @@ public class SupervisorBean implements Serializable {
 	}
 
 	public void carregarCEP() {
-
 		String cep = endereco.getCEP();
 		cep = cep.replace(".", "");
 		cep = cep.replace("-", "");
@@ -177,14 +170,10 @@ public class SupervisorBean implements Serializable {
 				Messages.addGlobalWarn("Esse 'CEP' não existe");
 				return;
 			}
-			String CEP = json.getString("cep");
-			endereco = enderecoDAO.buscarCEP(CEP);
-			if (endereco == null) {
-				endereco = new Endereco();
-				endereco.setCEP(CEP);
-				endereco.setBairro(json.getString("bairro"));
-				endereco.setRua(json.getString("logradouro"));
-			}
+
+			endereco.setCEP(json.getString("cep"));
+			endereco.setBairro(json.getString("bairro"));
+			endereco.setRua(json.getString("logradouro"));
 
 			String nomeCidade = json.getString("localidade");
 			cidade = cidadeDAO.buscarNome(nomeCidade);

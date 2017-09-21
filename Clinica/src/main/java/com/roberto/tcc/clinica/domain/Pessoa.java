@@ -39,16 +39,16 @@ public class Pessoa extends GenericDomain{
 	@JoinColumn(nullable = false)
 	private Endereco endereco;
 	
-	@Column(length = 20, nullable = false)
+	@Column(length = 13, nullable = false)
 	private String telefone1;
 	
-	@Column(length = 20)
+	@Column(length = 13)
 	private String telefone2;
 	
-	@Column(length = 20)
+	@Column(length = 13)
 	private String telefone3;
 	
-	@Column(length = 20)
+	@Column(length = 13)
 	private String telefone4;
 	
 	@Column(length = 100)

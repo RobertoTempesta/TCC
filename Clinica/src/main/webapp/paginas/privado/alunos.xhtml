@@ -5,27 +5,26 @@
 	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
 
 	<f:metadata>
-		<f:viewAction action="#{MBAluno.iniciarDAO}"/>
-		<f:viewAction action="#{MBAluno.listarAlunos}"/>
+		<f:viewAction action="#{MBAluno.iniciarDAO}" />
+		<f:viewAction action="#{MBAluno.listarAlunos}" />
 	</f:metadata>
 
 	<ui:define name="content">
 		<div class="ui-g">
 			<div class="ui-g-12">
 				<div class="card">
+					<div class="card card-w-title">
+						<h1>Cadastro de Alunos</h1>
+					</div>
 					<h:form id="frmListagem">
 
 						<p:dataTable emptyMessage="Nenhum registro encontrado..."
-							value="#{MBAluno.alunos}" var="aluno" rows="10"
-							paginator="true">
+							value="#{MBAluno.alunos}" var="aluno" rows="10" paginator="true">
 							<f:facet name="header">
-							
-								<p:outputLabel value="Cadastros - Alunos" style="margin-right: 5px" />
-							
-								<p:commandButton icon="ui-icon-add" actionListener="#{MBAluno.novo}">
-									<f:actionListener
-										type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
-								</p:commandButton>
+								<p:commandButton id="novo" icon="ui-icon-add"
+									actionListener="#{MBAluno.novo}" />
+								<p:tooltip id="toolTipFade" for="novo"
+									value="Adicionar um novo Aluno" position="top" />
 							</f:facet>
 							<p:column headerText="Nome">
 								<h:outputText value="#{aluno.pessoa.nome}" />
@@ -36,15 +35,16 @@
 							<p:column headerText="Cargo">
 								<h:outputText value="#{aluno.cargo.descricao}" />
 							</p:column>
-<!-- 							<p:column headerText="Data do Cadastro"> -->
-<!-- 								<h:outputText value="#{aluno.dataCadastro}" > -->
-<!-- 									<f:convertDateTime pattern="dd/MM/yyyy"/> -->
-<!-- 								</h:outputText> -->
-<!-- 							</p:column> -->
+							<!-- 							<p:column headerText="Data do Cadastro"> -->
+							<!-- 								<h:outputText value="#{aluno.dataCadastro}" > -->
+							<!-- 									<f:convertDateTime pattern="dd/MM/yyyy"/> -->
+							<!-- 								</h:outputText> -->
+							<!-- 							</p:column> -->
 
 							<p:column headerText="Opções">
 								<p:commandButton icon="ui-icon-delete"
-									update=":frmListagem :growl" actionListener="#{MBAluno.excluir}">
+									update=":frmListagem :growl"
+									actionListener="#{MBAluno.excluir}">
 									<p:confirm header="Confirmação"
 										message="Deseja excluir o Aluno selecionado?"
 										icon="ui-icon-alert" />

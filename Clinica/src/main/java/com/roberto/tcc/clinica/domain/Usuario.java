@@ -24,6 +24,22 @@ public class Usuario extends GenericDomain{
 	
 	@Column(nullable = false)
 	private Boolean ativo;
+	
+	public String getTipoFormatado() {
+		if(this.tipo.equals('G')) {
+			return "Gerênciador";
+		}else {
+			return "Usuário"; 
+		}
+	}
+	
+	public String getAtivoFormatado() {
+		if(this.ativo) {
+			return "Ativo";
+		}else {
+			return "Desativado";
+		}
+	}
 
 	public Pessoa getPessoa() {
 		return pessoa;

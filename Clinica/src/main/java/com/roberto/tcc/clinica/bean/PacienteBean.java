@@ -3,6 +3,7 @@ package com.roberto.tcc.clinica.bean;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.MalformedURLException;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -14,42 +15,43 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import org.omnifaces.util.Messages;
+import org.primefaces.context.RequestContext;
 
 import com.roberto.tcc.clinica.dao.CidadeDAO;
 import com.roberto.tcc.clinica.dao.EstadoDAO;
+import com.roberto.tcc.clinica.dao.PacienteDAO;
 import com.roberto.tcc.clinica.dao.PessoaDAO;
-import com.roberto.tcc.clinica.dao.UsuarioDAO;
 import com.roberto.tcc.clinica.domain.Cidade;
 import com.roberto.tcc.clinica.domain.Endereco;
 import com.roberto.tcc.clinica.domain.Estado;
+import com.roberto.tcc.clinica.domain.Paciente;
 import com.roberto.tcc.clinica.domain.Pessoa;
-import com.roberto.tcc.clinica.domain.Usuario;
 import com.roberto.tcc.clinica.util.CEPUtil;
 
-@ManagedBean(name = "MBUsuario")
+@ManagedBean(name = "MBPaciente")
 @ViewScoped
-public class UsuarioBean implements Serializable {
+public class PacienteBean implements Serializable {
 
-	private static final long serialVersionUID = -7249128232412599268L;
+	private static final long serialVersionUID = 3395759380539498382L;
 
-	private static final Logger logger = LogManager.getLogger(UsuarioBean.class);
+	private static final Logger logger = LogManager.getLogger(PacienteBean.class);
 
-	private Usuario usuario = null;
+	private Paciente paciente = null;
 	private Pessoa pessoa = null;
 	private Endereco endereco = null;
 	private Cidade cidade = null;
 	private Estado estado = null;
 
 	private List<Estado> estados = null;
-	private List<Usuario> usuarios = null;
+	private List<Paciente> pacientes = null;
 
-	private UsuarioDAO usuarioDAO = null;
+	private PacienteDAO pacienteDAO = null;
 	private PessoaDAO pessoaDAO = null;
 	private CidadeDAO cidadeDAO = null;
 	private EstadoDAO estadoDAO = null;
 
 	public void iniciarDomain() {
-		usuario = new Usuario();
+		paciente = new Paciente();
 		pessoa = new Pessoa();
 		endereco = new Endereco();
 		cidade = new Cidade();
@@ -57,78 +59,10 @@ public class UsuarioBean implements Serializable {
 	}
 
 	public void iniciarDAO() {
-		usuarioDAO = new UsuarioDAO();
+		pacienteDAO = new PacienteDAO();
 		pessoaDAO = new PessoaDAO();
 		cidadeDAO = new CidadeDAO();
 		estadoDAO = new EstadoDAO();
-	}
-
-	public void inicial() {
-		iniciarDAO();
-		iniciarDomain();
-	}
-	
-	public void excluir(ActionEvent evento) {
-		try {
-			Usuario usuario = (Usuario) evento.getComponent().getAttributes().get("usuarioSelecionado");
-			usuarioDAO.excluir(usuario);
-
-			usuarios = usuarioDAO.listar();
-			Messages.addGlobalInfo("Usuário deletado com Sucesso");
-		} catch (RuntimeException erro) {
-			logger.error("Erro ao excluir usuário: " + erro);
-			Messages.addGlobalError("Ocorreu um erro ao tentar deletar o Usuário");
-		}
-	}
-	
-	public void listarUsuarios() {
-		try {
-			usuarios = usuarioDAO.listar();
-		}catch(RuntimeException erro) {
-			logger.error("Ocorreu um erro ao tentar listar os usuarios: "+erro);
-		}
-	}
-	
-	public void editar(ActionEvent evento) {
-		try {
-			Usuario usuario = (Usuario) evento.getComponent().getAttributes().get("usuarioSelecionado");
-			FacesContext.getCurrentInstance().getExternalContext().getFlash().put("codigo",
-					usuario.getCodigo());
-
-			telaNovoUsuario();
-
-		} catch (Exception erro) {
-			logger.error("Erro ao direcionar pagina: " + erro);
-		}
-	}
-	
-	public void iniciaEdicao() {
-		Long codigo = (Long) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("codigo");
-		if (codigo != null) {
-			this.usuario = usuarioDAO.buscar(codigo);
-			this.pessoa = usuario.getPessoa();
-			this.endereco = pessoa.getEndereco();
-			this.cidade = endereco.getCidade();
-			this.estado = cidade.getEstado();
-		}
-
-	}
-
-	public void salvar() {
-		try {
-			this.cidade.setEstado(this.estado);
-			this.endereco.setCidade(this.cidade);
-			this.pessoa.setEndereco(this.endereco);
-			this.pessoa = pessoaDAO.salvarPesEndereco(this.pessoa);
-			this.usuario.setPessoa(this.pessoa);
-			this.usuario.setSalt("123456");
-			usuarioDAO.merge(this.usuario);
-			Messages.addGlobalInfo("Usuario salvo com sucesso");
-			telaInicial();
-		} catch (RuntimeException erro) {
-			logger.error("Ocorreu um erro ao tentar salvar o usuario: " + erro);
-			Messages.addGlobalError("Ocorreu um erro ao tentar salvar o Usuário");
-		}
 	}
 
 	public void verificaCPF() {
@@ -156,6 +90,18 @@ public class UsuarioBean implements Serializable {
 			Messages.addGlobalError("Ocorreu um erro interno ao verificar o 'CPF'");
 		}
 
+	}
+	
+	public void detalhesPaciente(ActionEvent evento) {
+		try {
+			this.paciente =  (Paciente) evento.getComponent().getAttributes().get("pacienteSelecionado");
+			pacienteDAO.buscar(paciente.getCodigo());
+
+			RequestContext.getCurrentInstance().execute("PF('dlgDetalhes').show();");
+		} catch (RuntimeException erro) {
+			logger.error("Erro ao excluir Paciente: " + erro);
+			Messages.addGlobalError("Ocorreu um erro ao tentar deletar o Paciente");
+		}
 	}
 
 	public void carregarCEP() {
@@ -209,9 +155,9 @@ public class UsuarioBean implements Serializable {
 		}
 	}
 
-	public void telaNovoUsuario() {
+	public void telaNovoPaciente() {
 		try {
-			FacesContext.getCurrentInstance().getExternalContext().redirect("novo_usuario.xhtml");
+			FacesContext.getCurrentInstance().getExternalContext().redirect("novo_paciente.xhtml");
 		} catch (IOException erro) {
 			logger.error("Ocorreu um erro ao tentar redirecionar a tela[novo_usuario]: " + erro);
 		}
@@ -219,18 +165,87 @@ public class UsuarioBean implements Serializable {
 
 	public void telaInicial() {
 		try {
-			FacesContext.getCurrentInstance().getExternalContext().redirect("usuario.xhtml");
+			FacesContext.getCurrentInstance().getExternalContext().redirect("pacientes.xhtml");
 		} catch (IOException erro) {
-			logger.error("Ocorreu um erro ao tentar redirecionar a tela[usuarios] " + erro);
+			logger.error("Ocorreu um erro ao tentar redirecionar a tela[pacientes] " + erro);
 		}
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
+	public void inicial() {
+		iniciarDAO();
+		iniciarDomain();
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void carregarPacientes() {
+		try {
+			pacientes = pacienteDAO.listar();
+		} catch (RuntimeException erro) {
+			logger.error("Ocorreu um erro ao tentar carregar a lista de pacientes: " + erro);
+		}
+	}
+
+	public void salvar() {
+		try {
+
+			this.cidade.setEstado(this.estado);
+			this.endereco.setCidade(this.cidade);
+			this.pessoa.setEndereco(this.endereco);
+			this.pessoa = pessoaDAO.salvarPesEndereco(this.pessoa);
+			this.paciente.setPessoa(this.pessoa);
+			this.paciente.setDataCadastro(new Date());
+			pacienteDAO.merge(this.paciente);
+			telaInicial();
+			Messages.addGlobalInfo("Paciente salvo com sucesso");
+		} catch (RuntimeException erro) {
+			logger.error("Ocorreu um erro ao tentar salvar o paciente" + erro);
+			Messages.addGlobalError("Ocorreu um erro ao tentar salvar o Paciente");
+		}
+	}
+	
+	public void excluir(ActionEvent evento) {
+		try {
+			Paciente paciente =  (Paciente) evento.getComponent().getAttributes().get("pacienteSelecionado");
+			pacienteDAO.excluir(paciente);
+
+			pacientes = pacienteDAO.listar();
+			Messages.addGlobalInfo("Paciente deletado com Sucesso");
+		} catch (RuntimeException erro) {
+			logger.error("Erro ao excluir Paciente: " + erro);
+			Messages.addGlobalError("Ocorreu um erro ao tentar deletar o Paciente");
+		}
+	}
+	
+	public void editar(ActionEvent evento) {
+		try {
+			Paciente paciente =  (Paciente) evento.getComponent().getAttributes().get("pacienteSelecionado");
+			FacesContext.getCurrentInstance().getExternalContext().getFlash().put("codigo",
+					paciente.getCodigo());
+
+			telaNovoPaciente();
+
+		} catch (Exception erro) {
+			logger.error("Erro ao direcionar pagina: " + erro);
+		}
+	}
+
+	public void iniciaEdicao() {
+		Long codigo = (Long) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("codigo");
+		if (codigo != null) {
+			this.paciente = pacienteDAO.buscar(codigo);
+			this.pessoa = paciente.getPessoa();
+			this.endereco = pessoa.getEndereco();
+			this.cidade = endereco.getCidade();
+			this.estado = cidade.getEstado();
+		}
+
+	}
+	
+	public Paciente getPaciente() {
+		return paciente;
+	}
+
+	public void setPaciente(Paciente paciente) {
+		this.paciente = paciente;
 	}
 
 	public Pessoa getPessoa() {
@@ -273,12 +288,12 @@ public class UsuarioBean implements Serializable {
 		this.estados = estados;
 	}
 
-	public List<Usuario> getUsuarios() {
-		return usuarios;
+	public List<Paciente> getPacientes() {
+		return pacientes;
 	}
 
-	public void setUsuarios(List<Usuario> usuarios) {
-		this.usuarios = usuarios;
+	public void setPacientes(List<Paciente> pacientes) {
+		this.pacientes = pacientes;
 	}
 
 }

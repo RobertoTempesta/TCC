@@ -4,46 +4,55 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
 
+	<f:metadata>
+		<f:viewAction action="#{MBUsuario.inicial}" />
+		<f:viewAction action="#{MBUsuario.listarUsuarios}" />
+	</f:metadata>
+
 	<ui:define name="content">
 		<div class="ui-g">
 			<div class="ui-g-12">
 				<div class="card">
+					<div class="card card-w-title">
+						<h1>Cadastro de Usuários</h1>
+					</div>
 					<h:form id="frmListagem">
 
 						<p:dataTable id="tabela"
 							emptyMessage="Nenhum registro encontrado....." rows="10"
-							paginator="true" paginatorPosition="top"
+							paginator="true" value="#{MBUsuario.usuarios}" var="user"
 							style="margin: 0em auto;">
 							<f:facet name="header">
-								
-								<p:outputLabel value="Cadastros - Usuários" style="margin-right: 5px" />
-								
-								<p:commandButton icon="ui-icon-add">
-									<f:actionListener
-										type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
-								</p:commandButton>
+								<p:commandButton id="novo" icon="ui-icon-add"
+									actionListener="#{MBUsuario.telaNovoUsuario}"/>
+								<p:tooltip id="toolTipFade" for="novo"
+									value="Adicionar um novo Usuário" position="top" />
 							</f:facet>
 							<p:column headerText="Nome">
 								<h:outputText value="#{user.pessoa.nome}" />
 							</p:column>
 
 							<p:column headerText="Tipo">
-								<h:outputText value="#{user.tipo}" />
+								<h:outputText value="#{user.tipoFormatado}" />
 							</p:column>
 
-							<p:column headerText="Ativo">
-								<h:outputText value="#{user.ativo}" />
+							<p:column headerText="Usuário">
+								<h:outputText value="#{user.ativoFormatado}" />
 							</p:column>
 
 							<p:column headerText="Opções">
 								<p:commandButton icon="ui-icon-delete"
-									update=":frmListagem :growl">
+									update=":frmListagem :growl"
+									actionListener="#{MBUsuario.excluir}">
 									<p:confirm header="Confirmação"
-										message="Deseja excluir o Usuario selecionado?" icon="ui-icon-alert" />
+										message="Deseja excluir o Usuário selecionado?"
+										icon="ui-icon-alert" />
 									<f:attribute name="usuarioSelecionado" value="#{user}" />
 								</p:commandButton>
-								<p:commandButton icon="ui-icon-mode-edit">
-
+								<p:commandButton icon="ui-icon-mode-edit"
+									update=":frmListagem :growl"
+									actionListener="#{MBUsuario.editar}">
+									<f:attribute name="usuarioSelecionado" value="#{user}" />
 								</p:commandButton>
 
 								<p:commandButton icon="ui-icon-vpn-key" />

@@ -5,160 +5,202 @@
 	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
 
 	<f:metadata>
-		<f:viewAction action="#{MBSupervisor.inicial}"/>
-		<f:viewAction action="#{MBSupervisor.carregarEstados}"/>
-		<f:viewAction action="#{MBSupervisor.iniciaEdicao}"/>
+		<f:viewAction action="#{MBSupervisor.inicial}" />
+		<f:viewAction action="#{MBSupervisor.carregarEstados}" />
+		<f:viewAction action="#{MBSupervisor.iniciaEdicao}" />
 	</f:metadata>
 
 	<ui:define name="content">
 		<div class="ui-g">
 			<div class="ui-g-12">
-				<div class="card">
+				<div class="card card-w-title">
+					<h1 style="text-align: center">Dados do Supervisor</h1>
+					<!-- 					<h3>Dodos Gerais</h3> -->
 					<h:form id="frmNovo">
 
 						<div class="ui-fluid">
-							<p:panel header="Dados do Supervisor">
-								<p:panelGrid id="pgDadosPessoa" layout="grid" columns="4"
-									styleClass="ui-panelgrid-blank form-group"
-									columnClasses="ui-grid-col-2,ui-grid-col-6,ui-grid-col-2,ui-grid-col-6">
 
-									<p:outputLabel for="cpf" value="CPF:" />
-									<p:inputMask id="cpf" value="#{MBSupervisor.pessoa.CPF}" mask="999.999.999-99" 
-										required="true" requiredMessage="É necessário digitar um CPF">
+							<p:panelGrid id="pgDadosPessoa" layout="grid" columns="3"
+								styleClass="ui-panelgrid-blank form-group"
+								columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4">
+
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputMask id="cpf" value="#{MBSupervisor.pessoa.CPF}"
+										mask="999.999.999-99" required="true"
+										requiredMessage="É necessário digitar um CPF">
 										<p:ajax event="blur" listener="#{MBSupervisor.verificaCPF}"
 											update=":frmNovo:pgDadosPessoa  :growl" />
 									</p:inputMask>
+									<label>CPF</label>
+								</h:panelGroup>
 
-									<p:outputLabel for="nome" value="Nome:" />
+								<h:panelGroup styleClass="md-inputfield">
 									<p:inputText id="nome" value="#{MBSupervisor.pessoa.nome}"
-										required="true" requiredMessage="É necessário digitar o Nome" 
-										maxlength="50"/>
+										required="true" requiredMessage="É necessário digitar o Nome"
+										maxlength="50" />
+									<label>Nome do Paciente</label>
+								</h:panelGroup>
 
-									<p:outputLabel for="rg" value="RG:" />
-									<p:inputMask id="rg" mask="99.999.999-9" size="10" value="#{MBSupervisor.pessoa.RG}"
-										required="true" requiredMessage="É necessário digitar um RG"  />
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputMask id="rg" mask="99.999.999-9" size="10"
+										value="#{MBSupervisor.pessoa.RG}" required="true"
+										requiredMessage="É necessário digitar um RG" />
+									<label>RG</label>
+								</h:panelGroup>
 
-									<p:outputLabel for="sexo" value="Sexo" />
-									<p:selectOneRadio id="sexo" layout="responsive" columns="2"
-										value="#{MBSupervisor.pessoa.sexo}" required="true"
-										requiredMessage="É necessário selecionar o Sexo">
-										<f:selectItem itemLabel="Masculino" itemValue="M" />
-										<f:selectItem itemLabel="Feminino" itemValue="F" />
-									</p:selectOneRadio>
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputText id="crp" value="#{MBSupervisor.supervisor.CRP}"
+										required="true" maxlength="100"
+										requiredMessage="É necessário digitar o CRP" />
+									<label>CRP</label>
+								</h:panelGroup>
 
-									<p:outputLabel for="data" value="Nascimento:" />
+								<p:selectOneRadio id="sexo" layout="responsive" columns="2"
+									value="#{MBSupervisor.pessoa.sexo}" required="true"
+									requiredMessage="É necessário selecionar o Sexo">
+									<f:selectItem itemLabel="Masculino" itemValue="M" />
+									<f:selectItem itemLabel="Feminino" itemValue="F" />
+								</p:selectOneRadio>
+
+								<h:panelGroup styleClass="md-inputfield">
 									<p:calendar id="data" pattern="dd/MM/yyyy" mask="true"
 										value="#{MBSupervisor.pessoa.dataNascimento}" required="true"
 										requiredMessage="É necessário digitar a Data de Nascimento" />
+									<label>Data de Nascimento</label>
+								</h:panelGroup>
 
-									<p:outputLabel for="idade" value="Idade:" />
+								<h:panelGroup styleClass="md-inputfield">
 									<p:inputText id="idade" value="#{MBSupervisor.pessoa.idade}"
-										required="true" requiredMessage="É necessário digitar a Idade" maxlength="3"/>
+										required="true" requiredMessage="É necessário digitar a Idade"
+										maxlength="3" />
+									<label>Idade</label>
+								</h:panelGroup>
 
-									<p:outputLabel for="cep" value="CEP:" />
-									<p:inputMask id="cep" mask="99.999-999" value="#{MBSupervisor.endereco.CEP}"
-										required="true" requiredMessage="Necessario digitar um CEP">
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputMask id="cep" mask="99999-999"
+										value="#{MBSupervisor.endereco.CEP}" required="true"
+										requiredMessage="Necessario digitar um CEP">
 										<p:ajax event="blur" listener="#{MBSupervisor.carregarCEP}"
 											update=":frmNovo:rua,bairro,num,cidade,estado  :growl" />
 									</p:inputMask>
+									<label>CEP</label>
+								</h:panelGroup>
 
-									<p:outputLabel for="rua" value="Rua:" />
-									<p:inputText id="rua" value="#{MBSupervisor.endereco.rua}" maxlength="50"
-										required="true" requiredMessage="É necessário digitar Rua" />
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputText id="rua" value="#{MBSupervisor.endereco.rua}"
+										maxlength="50" required="true"
+										requiredMessage="É necessário digitar Rua" />
+									<label>Lougradouro</label>
+								</h:panelGroup>
 
-									<p:outputLabel for="bairro" value="Bairro:" />
+								<h:panelGroup styleClass="md-inputfield">
 									<p:inputText id="bairro" maxlength="30"
 										value="#{MBSupervisor.endereco.bairro}" required="true"
 										requiredMessage="É necessário digitar Bairro" />
+									<label>Bairro</label>
+								</h:panelGroup>
 
-									<p:outputLabel for="num" value="Numero:" />
+								<h:panelGroup styleClass="md-inputfield">
 									<p:inputText id="num" value="#{MBSupervisor.endereco.numero}"
-										required="true" requiredMessage="É necessário digitar Numero" 
-										maxlength="6"/>
+										required="true" requiredMessage="É necessário digitar Numero"
+										maxlength="6" />
+									<label>Numero</label>
+								</h:panelGroup>
 
-									<p:outputLabel for="cidade" value="Cidade:" />
+								<h:panelGroup styleClass="md-inputfield">
 									<p:inputText id="cidade" value="#{MBSupervisor.cidade.nome}"
 										required="true" maxlength="50"
 										requiredMessage="É necessário informar a cidade" />
+									<label>Cidade</label>
+								</h:panelGroup>
 
-									<p:outputLabel for="estado" value="Estado:" />
-									<p:selectOneMenu id="estado" value="#{MBSupervisor.estado}"
-										required="true"
-										requiredMessage="É necessário selecionar o Estado"
-										converter="omnifaces.SelectItemsConverter">
-										<f:selectItem itemLabel="Selecione um Estado"
-											noSelectionOption="true" />
-										<f:selectItems value="#{MBSupervisor.estados}" var="estado"
-											itemValue="#{estado}"
-											itemLabel="#{estado.nome} - #{estado.sigla}" />
-									</p:selectOneMenu>
+								<p:selectOneMenu id="estado" value="#{MBSupervisor.estado}"
+									required="true"
+									requiredMessage="É necessário selecionar o Estado"
+									converter="omnifaces.SelectItemsConverter">
+									<f:selectItem itemLabel="Selecione o Estado"
+										noSelectionOption="true" />
+									<f:selectItems value="#{MBSupervisor.estados}" var="estado"
+										itemValue="#{estado}"
+										itemLabel="#{estado.nome} - #{estado.sigla}" />
+								</p:selectOneMenu>
 
-									<p:outputLabel for="tel1" value="Telefone/Cel:" />
-									<p:inputText id="tel1" required="true"
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputText id="tel1" required="true" maxlength="13"
 										requiredMessage="É nescessario inserir o telefone"
 										value="#{MBSupervisor.pessoa.telefone1}" />
+									<label>Telefone</label>
+								</h:panelGroup>
 
-									<p:outputLabel value="Telefone/Cel (Opcional):" />
-									<p:inputText value="#{MBSupervisor.pessoa.telefone2}" />
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputText value="#{MBSupervisor.pessoa.telefone2}"
+										maxlength="13" />
+									<label>Telefone (Opcional)</label>
+								</h:panelGroup>
 
-									<p:outputLabel value="Telefone/Cel (Opcional):" />
-									<p:inputText value="#{MBSupervisor.pessoa.telefone3}" />
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputText value="#{MBSupervisor.pessoa.telefone3}"
+										maxlength="13" />
+									<label>Telefone (Opcional)</label>
+								</h:panelGroup>
 
-									<p:outputLabel value="Telefone/Cel (Opcional):" />
-									<p:inputText value="#{MBSupervisor.pessoa.telefone4}" />
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputText value="#{MBSupervisor.pessoa.telefone4}"
+										maxlength="13" />
+									<label>Telefone (Opcional)</label>
+								</h:panelGroup>
 
-									<p:outputLabel for="email" value="Email:" />
+								<h:panelGroup styleClass="md-inputfield">
 									<p:inputText id="email" value="#{MBSupervisor.pessoa.email}"
 										required="true" maxlength="100"
 										requiredMessage="É necessário digitar um Email" />
-										
-									<p:outputLabel value="CRP:" />
-									<p:inputText value="#{MBSupervisor.supervisor.CRP}" maxlength="14"/>
+									<label>Email</label>
+								</h:panelGroup>
 
-									<p:outputLabel for="escol" value="Escolaridade:" />
-									<p:selectOneMenu id="escol"
-										value="#{MBSupervisor.pessoa.escolaridade}" required="true"
-										style="width: 50%">
-										<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
-										<f:selectItem itemLabel="Fundamental - Incompleto"
-											itemValue="Fundamental - Incompleto" />
-										<f:selectItem itemLabel="Fundamental - Completo"
-											itemValue="Fundamental - Completo" />
-										<f:selectItem itemLabel="Médio - Incompleto"
-											itemValue="Médio - Incompleto" />
-										<f:selectItem itemLabel="Médio - Completo"
-											itemValue="Médio - Completo" />
-										<f:selectItem itemLabel="Superior - Incompleto"
-											itemValue="Superior - Incompleto" />
-										<f:selectItem itemLabel="Superior - Completo"
-											itemValue="Superior - Completo" />
-										<f:selectItem
-											itemLabel="Pós-graduação (Lato senso) - Incompleto"
-											itemValue="Pós-graduação (Lato senso) - Incompleto" />
-										<f:selectItem
-											itemLabel="Pós-graduação (Lato senso) - Completo"
-											itemValue="Pós-graduação (Lato senso) - Completo" />
-										<f:selectItem
-											itemLabel="Pós-graduação (Stricto sensu, nível mestrado) - Incompleto"
-											itemValue="Pós-graduação (Stricto sensu, nível mestrado) - Incompleto" />
-										<f:selectItem
-											itemLabel="Pós-graduação (Stricto sensu, nível mestrado) - Completo"
-											itemValue="Pós-graduação (Stricto sensu, nível mestrado) - Completo" />
-										<f:selectItem
-											itemLabel="Pós-graduação (Stricto sensu, nível doutor) - Incompleto"
-											itemValue="Pós-graduação (Stricto sensu, nível doutor) - Incompleto" />
-										<f:selectItem
-											itemLabel="Pós-graduação (Stricto sensu, nível doutor) - Completo"
-											itemValue="Pós-graduação (Stricto sensu, nível doutor) - Completo" />
-									</p:selectOneMenu>
-								</p:panelGrid>
-								
-								<h:panelGrid columns="2" style="margin: 1em auto">
-									<p:commandButton value="Salvar" actionListener="#{MBSupervisor.salvar}" update=":frmNovo:pgDadosPessoa :growl" />
-									<p:commandButton value="Voltar" />
-								</h:panelGrid>
-								
-							</p:panel>
+								<p:selectOneMenu id="escol"
+									requiredMessage="É necessario selecionar a escolaridade do Paciente"
+									value="#{MBSupervisor.pessoa.escolaridade}" required="true"
+									style="width: 50%">
+									<f:selectItem itemLabel="Selecione a Escolaridade"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Fundamental - Incompleto"
+										itemValue="Fundamental - Incompleto" />
+									<f:selectItem itemLabel="Fundamental - Completo"
+										itemValue="Fundamental - Completo" />
+									<f:selectItem itemLabel="Médio - Incompleto"
+										itemValue="Médio - Incompleto" />
+									<f:selectItem itemLabel="Médio - Completo"
+										itemValue="Médio - Completo" />
+									<f:selectItem itemLabel="Superior - Incompleto"
+										itemValue="Superior - Incompleto" />
+									<f:selectItem itemLabel="Superior - Completo"
+										itemValue="Superior - Completo" />
+									<f:selectItem
+										itemLabel="Pós-graduação (Lato senso) - Incompleto"
+										itemValue="Pós-graduação (Lato senso) - Incompleto" />
+									<f:selectItem itemLabel="Pós-graduação (Lato senso) - Completo"
+										itemValue="Pós-graduação (Lato senso) - Completo" />
+									<f:selectItem
+										itemLabel="Pós-graduação (Stricto sensu, nível mestrado) - Incompleto"
+										itemValue="Pós-graduação (Stricto sensu, nível mestrado) - Incompleto" />
+									<f:selectItem
+										itemLabel="Pós-graduação (Stricto sensu, nível mestrado) - Completo"
+										itemValue="Pós-graduação (Stricto sensu, nível mestrado) - Completo" />
+									<f:selectItem
+										itemLabel="Pós-graduação (Stricto sensu, nível doutor) - Incompleto"
+										itemValue="Pós-graduação (Stricto sensu, nível doutor) - Incompleto" />
+									<f:selectItem
+										itemLabel="Pós-graduação (Stricto sensu, nível doutor) - Completo"
+										itemValue="Pós-graduação (Stricto sensu, nível doutor) - Completo" />
+								</p:selectOneMenu>
+							</p:panelGrid>
+
+							<div align="center">
+								<p:commandButton value="Salvar" style="width:30%" styleClass="green-btn"
+									actionListener="#{MBSupervisor.salvar}"
+									update=":frmNovo:pgDadosPessoa :growl" />
+							</div>
+
 						</div>
 					</h:form>
 				</div>
