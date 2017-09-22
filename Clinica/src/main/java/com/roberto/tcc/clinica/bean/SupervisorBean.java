@@ -69,12 +69,20 @@ public class SupervisorBean implements Serializable {
 		pessoaDAO = new PessoaDAO();
 	}
 
-	public void telaNovoSupervisor() throws IOException {
-		FacesContext.getCurrentInstance().getExternalContext().redirect("novo_supervisor.xhtml");
+	public void telaNovoSupervisor() {
+		try {
+			FacesContext.getCurrentInstance().getExternalContext().redirect("novo_supervisor.xhtml");
+		} catch (IOException erro) {
+			logger.error("Ocorreu um erro ao tentar redirecionar a tela[novo_supervisor]: " + erro);
+		}
 	}
 
-	public void telaInicial() throws IOException {
-		FacesContext.getCurrentInstance().getExternalContext().redirect("supervisores.xhtml");
+	public void telaInicial() {
+		try {
+			FacesContext.getCurrentInstance().getExternalContext().redirect("supervisores.xhtml");
+		} catch (IOException erro) {
+			logger.error("Ocorreu um erro ao tentar redirecionar a tela[supervisores]: " + erro);
+		}
 	}
 
 	public void editar(ActionEvent evento) {
@@ -85,7 +93,7 @@ public class SupervisorBean implements Serializable {
 
 			telaNovoSupervisor();
 
-		} catch (IOException erro) {
+		} catch (Exception erro) {
 			logger.error("Erro ao direcionar pagina: " + erro);
 		}
 	}
@@ -118,10 +126,7 @@ public class SupervisorBean implements Serializable {
 		} catch (RuntimeException erro) {
 			logger.error("Ocorreu um erro ao salvar supervisor: " + erro);
 			Messages.addGlobalError("Erro ao tentar salvar o Supervisor");
-		} catch (IOException erro) {
-			logger.error("Ocorreu um erro ao tentar voltar para a tela inicial");
-			Messages.addGlobalError("Erro ao sair da tela de cadastro");
-		}
+		} 
 	}
 
 	public void verificaCPF() {
@@ -132,12 +137,18 @@ public class SupervisorBean implements Serializable {
 			cpf = cpf.replace("-", "");
 			cpf = cpf.replace("_", "");
 			if (cpf == null || cpf.equals("")) {
-				Messages.addGlobalWarn("'CPF' invalido");
+				Messages.addGlobalWarn("Informe um CPF válido!");
 				return;
 			}
 
 			Pessoa pessoa = pessoaDAO.buscarCPF(this.pessoa.getCPF());
 			if (pessoa != null) {
+				Supervisor supervisor = supervisorDAO.buscarCodigoPes(pessoa.getCodigo());
+				if(supervisor != null && this.supervisor.getCodigo() == null) {
+					Messages.addGlobalWarn("Essa Pessoa já é um Supervisor cadastrado no Sistema!");
+					this.pessoa = new Pessoa();
+					return;
+				}
 				this.pessoa = pessoa;
 				this.endereco = pessoa.getEndereco();
 				this.cidade = this.endereco.getCidade();
@@ -146,7 +157,7 @@ public class SupervisorBean implements Serializable {
 
 		} catch (RuntimeException erro) {
 			logger.error("Erro ao verificar CPF: " + erro);
-			Messages.addGlobalError("Ocorreu um erro interno ao verificar o 'CPF'");
+			Messages.addGlobalError("Ocorreu um erro interno ao verificar o CPF informado!");
 		}
 
 	}
@@ -158,7 +169,7 @@ public class SupervisorBean implements Serializable {
 		cep = cep.replace("_", "");
 
 		if (cep == null || cep.equals("")) {
-			Messages.addGlobalWarn("Digite um CEP");
+			Messages.addGlobalWarn("Digite um CEP válido!");
 			return;
 		}
 
@@ -167,7 +178,7 @@ public class SupervisorBean implements Serializable {
 			boolean erro = json.isNull("erro");
 
 			if (!erro) {
-				Messages.addGlobalWarn("Esse 'CEP' não existe");
+				Messages.addGlobalWarn("CEP informado não existe!");
 				return;
 			}
 
@@ -196,7 +207,7 @@ public class SupervisorBean implements Serializable {
 
 		try {
 			telaNovoSupervisor();
-		} catch (IOException erro) {
+		} catch (Exception erro) {
 			logger.error("Erro ao direcionar pagina: " + erro);
 		}
 	}

@@ -28,4 +28,23 @@ public class PacienteDAO extends GenericDAO<Paciente>{
 		}
 	}
 	
+	public Paciente buscarCodigoPes(Long codigo) throws RuntimeException {
+
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		try {
+
+			Criteria consulta = sessao.createCriteria(Paciente.class);
+			consulta.createAlias("pessoa", "p");
+			consulta.add(Restrictions.eq("p.codigo", codigo));
+			Paciente resultado = (Paciente) consulta.uniqueResult();
+			return resultado;
+
+		} catch (RuntimeException exception) {
+			throw exception;
+		} finally {
+			sessao.close();
+		}
+
+	}
+	
 }

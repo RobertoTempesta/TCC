@@ -8,19 +8,23 @@
 		<div class="ui-g">
 			<div class="ui-g-12">
 				<div class="card">
+					<div class="card card-w-title">
+						<h1>Cadastro de Cargos</h1>
+						
+					</div>
 					<h:form id="frmListagem">
 
 						<p:dataTable emptyMessage="Nenhum registro encontrado..."
 							value="#{MBCargo.cargos}" var="cargo" rows="10" paginator="true">
 							<f:facet name="header">
-								
-								<p:outputLabel value="Cadastros - Cargos" style="margin-right: 5px" />
-								
-								<p:commandButton icon="ui-icon-add" actionListener="#{MBCargo.novo}" 
+								<p:commandButton id="novo" icon="ui-icon-add"
+									actionListener="#{MBCargo.novo}"
 									oncomplete="PF('dlgNovo').show();" update=":frmNovo">
 									<f:actionListener
 										type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
 								</p:commandButton>
+								<p:tooltip id="toolTipFade" for="novo"
+									value="Adicionar um novo Cargo" position="top" />
 							</f:facet>
 							<p:column headerText="Código">
 								<h:outputText value="#{cargo.codigo}" />
@@ -31,9 +35,11 @@
 
 							<p:column headerText="Opções">
 								<p:commandButton icon="ui-icon-delete"
-									actionListener="#{MBCargo.excluir}" update=":frmListagem :growl">
+									actionListener="#{MBCargo.excluir}"
+									update=":frmListagem :growl">
 									<p:confirm header="Confirmação"
-										message="Deseja excluir o Cargo selecionado?" icon="ui-icon-alert" />
+										message="Deseja excluir o Cargo selecionado?"
+										icon="ui-icon-alert" />
 									<f:attribute name="cargoSelecionado" value="#{cargo}" />
 								</p:commandButton>
 								<p:commandButton icon="ui-icon-mode-edit"
@@ -69,7 +75,8 @@
 								required="true"
 								requiredMessage="É necessario digitar a descrição do cargo" />
 
-							<p:commandButton value="Salvar" actionListener="#{MBCargo.salvar}"
+							<p:commandButton value="Salvar"
+								actionListener="#{MBCargo.salvar}"
 								update=":frmNovo :growl :frmListagem" />
 
 							<p:commandButton value="Fechar" onclick="PF('dlgNovo').hide();" />

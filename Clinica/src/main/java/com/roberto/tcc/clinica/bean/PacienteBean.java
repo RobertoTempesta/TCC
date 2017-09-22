@@ -73,12 +73,18 @@ public class PacienteBean implements Serializable {
 			cpf = cpf.replace("-", "");
 			cpf = cpf.replace("_", "");
 			if (cpf == null || cpf.equals("")) {
-				Messages.addGlobalWarn("'CPF' invalido");
+				Messages.addGlobalWarn("O CPF informado não é válido!");
 				return;
 			}
 
 			Pessoa pessoa = pessoaDAO.buscarCPF(this.pessoa.getCPF());
 			if (pessoa != null) {
+				Paciente paciente = pacienteDAO.buscarCodigoPes(pessoa.getCodigo());
+				if(paciente != null && this.paciente.getCodigo() == null) {
+					Messages.addGlobalWarn("Essa Pessoa já é um Paciente cadastrado no Sistema!");
+					this.pessoa = new Pessoa();
+					return;
+				}
 				this.pessoa = pessoa;
 				this.endereco = pessoa.getEndereco();
 				this.cidade = this.endereco.getCidade();
@@ -112,7 +118,7 @@ public class PacienteBean implements Serializable {
 		cep = cep.replace("_", "");
 
 		if (cep == null || cep.equals("")) {
-			Messages.addGlobalWarn("Digite um CEP");
+			Messages.addGlobalWarn("Digite um CEP válido!");
 			return;
 		}
 
@@ -121,7 +127,7 @@ public class PacienteBean implements Serializable {
 			boolean erro = json.isNull("erro");
 
 			if (!erro) {
-				Messages.addGlobalWarn("Esse 'CEP' não existe");
+				Messages.addGlobalWarn("CEP informado não existe!");
 				return;
 			}
 

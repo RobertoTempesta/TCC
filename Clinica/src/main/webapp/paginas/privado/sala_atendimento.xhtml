@@ -8,18 +8,21 @@
 		<div class="ui-g">
 			<div class="ui-g-12">
 				<div class="card">
+					<div class="card card-w-title">
+						<h1>Cadastro de Salas para Atendimento</h1>
+					</div>
 					<h:form id="frmSala">
 
 						<p:dataTable emptyMessage="Nenhum registro encontrado..."
 							value="#{MBSala.salas}" var="sala" rows="10" paginator="true">
 							<f:facet name="header">
-							
-								<p:outputLabel value="Cadastros - Salas" style="margin-right: 5px" />
-							
-								<p:commandButton icon="ui-icon-add" actionListener="#{MBSala.novo}" 
+								<p:commandButton id="novo" icon="ui-icon-add"
+									actionListener="#{MBSala.novo}"
 									oncomplete="PF('dlgNovo').show();" update=":frmNovo">
 									<f:actionListener
 										type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+								<p:tooltip id="toolTipFade" for="novo"
+									value="Adicionar uma nova Sala" position="top" />
 								</p:commandButton>
 							</f:facet>
 							<p:column headerText="Código">

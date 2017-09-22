@@ -24,6 +24,7 @@ import com.roberto.tcc.clinica.domain.Endereco;
 import com.roberto.tcc.clinica.domain.Estado;
 import com.roberto.tcc.clinica.domain.Pessoa;
 import com.roberto.tcc.clinica.domain.Usuario;
+import com.roberto.tcc.clinica.security.Criptografia;
 import com.roberto.tcc.clinica.util.CEPUtil;
 
 @ManagedBean(name = "MBUsuario")
@@ -120,8 +121,10 @@ public class UsuarioBean implements Serializable {
 			this.endereco.setCidade(this.cidade);
 			this.pessoa.setEndereco(this.endereco);
 			this.pessoa = pessoaDAO.salvarPesEndereco(this.pessoa);
+			
+			this.usuario = Criptografia.gerarSenhaCrip(this.usuario, this.usuario.getSenha());
 			this.usuario.setPessoa(this.pessoa);
-			this.usuario.setSalt("123456");
+			
 			usuarioDAO.merge(this.usuario);
 			Messages.addGlobalInfo("Usuario salvo com sucesso");
 			telaInicial();
@@ -139,12 +142,18 @@ public class UsuarioBean implements Serializable {
 			cpf = cpf.replace("-", "");
 			cpf = cpf.replace("_", "");
 			if (cpf == null || cpf.equals("")) {
-				Messages.addGlobalWarn("'CPF' invalido");
+				Messages.addGlobalWarn("Informe um CPF!");
 				return;
 			}
 
 			Pessoa pessoa = pessoaDAO.buscarCPF(this.pessoa.getCPF());
 			if (pessoa != null) {
+				Usuario user = usuarioDAO.buscarCodigoPes(pessoa.getCodigo());
+				if(user != null && this.usuario.getCodigo() == null) {
+					Messages.addGlobalWarn("Essa Pessoa já é um Usuário do Sistema!");
+					this.pessoa = new Pessoa();
+					return;
+				}
 				this.pessoa = pessoa;
 				this.endereco = pessoa.getEndereco();
 				this.cidade = this.endereco.getCidade();
@@ -153,7 +162,7 @@ public class UsuarioBean implements Serializable {
 
 		} catch (RuntimeException erro) {
 			logger.error("Erro ao verificar CPF: " + erro);
-			Messages.addGlobalError("Ocorreu um erro interno ao verificar o 'CPF'");
+			Messages.addGlobalError("Ocorreu um erro interno ao verificar o CPF informado!");
 		}
 
 	}
@@ -166,7 +175,7 @@ public class UsuarioBean implements Serializable {
 		cep = cep.replace("_", "");
 
 		if (cep == null || cep.equals("")) {
-			Messages.addGlobalWarn("Digite um CEP");
+			Messages.addGlobalWarn("Digite um CEP válido!");
 			return;
 		}
 
@@ -175,7 +184,7 @@ public class UsuarioBean implements Serializable {
 			boolean erro = json.isNull("erro");
 
 			if (!erro) {
-				Messages.addGlobalWarn("Esse 'CEP' não existe");
+				Messages.addGlobalWarn("CEP informado não existe!");
 				return;
 			}
 

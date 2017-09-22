@@ -133,12 +133,18 @@ public class AlunoBean implements Serializable {
 			cpf = cpf.replace("-", "");
 			cpf = cpf.replace("_", "");
 			if (cpf == null || cpf.equals("")) {
-				Messages.addGlobalWarn("'CPF' invalido");
+				Messages.addGlobalWarn("Informe um CPF!");
 				return;
 			}
 
 			Pessoa pessoa = pessoaDAO.buscarCPF(this.pessoa.getCPF());
 			if (pessoa != null) {
+				Aluno aluno = alunoDAO.buscarCodigoPes(pessoa.getCodigo());
+				if(aluno != null && this.aluno.getCodigo() == null) {
+					Messages.addGlobalWarn("Essa Pessoa já é um Aluno Cadastrado no Sistema!");
+					this.pessoa = new Pessoa();
+					return;
+				}
 				this.pessoa = pessoa;
 				this.endereco = pessoa.getEndereco();
 				this.cidade = this.endereco.getCidade();
@@ -147,7 +153,7 @@ public class AlunoBean implements Serializable {
 
 		} catch (RuntimeException erro) {
 			logger.error("Erro ao verificar CPF: " + erro);
-			Messages.addGlobalError("Ocorreu um erro interno ao verificar o 'CPF'");
+			Messages.addGlobalError("Ocorreu um erro interno ao verificar o CPF informado!");
 		}
 
 	}
@@ -185,7 +191,7 @@ public class AlunoBean implements Serializable {
 		cep = cep.replace("_", "");
 
 		if (cep == null || cep.equals("")) {
-			Messages.addGlobalWarn("Digite um CEP");
+			Messages.addGlobalWarn("Digite um CEP válido!");
 			return;
 		}
 
@@ -194,20 +200,13 @@ public class AlunoBean implements Serializable {
 			boolean erro = json.isNull("erro");
 
 			if (!erro) {
-				Messages.addGlobalWarn("Esse 'CEP' não existe");
+				Messages.addGlobalWarn("CEP informado não existe!");
 				return;
 			}
-			// String CEP = json.getString("cep");
+
 			endereco.setCEP(json.getString("cep"));
 			endereco.setBairro(json.getString("bairro"));
 			endereco.setRua(json.getString("logradouro"));
-			// endereco = enderecoDAO.buscarCEP(CEP);
-			// if (endereco == null) {
-			// endereco = new Endereco();
-			// endereco.setCEP(CEP);
-			// endereco.setBairro(json.getString("bairro"));
-			// endereco.setRua(json.getString("logradouro"));
-			// }
 
 			String nomeCidade = json.getString("localidade");
 			cidade = cidadeDAO.buscarNome(nomeCidade);
