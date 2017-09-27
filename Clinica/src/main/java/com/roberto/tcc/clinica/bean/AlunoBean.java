@@ -15,6 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import org.omnifaces.util.Messages;
+import org.primefaces.context.RequestContext;
 
 import com.roberto.tcc.clinica.dao.AlunoDAO;
 import com.roberto.tcc.clinica.dao.CargoDAO;
@@ -100,13 +101,14 @@ public class AlunoBean implements Serializable {
 			this.cidade.setEstado(this.estado);
 			this.endereco.setCidade(this.cidade);
 			this.pessoa.setEndereco(this.endereco);
-			this.pessoa = pessoaDAO.salvarPesEndereco(this.pessoa);
-			this.pessoa.setNome(this.pessoa.getNome().toUpperCase());
+			this.pessoa = pessoaDAO.salvarCustomizado(this.pessoa);
+//			this.pessoa.setNome(this.pessoa.getNome().toUpperCase());
 			this.aluno.setPessoa(this.pessoa);
 			this.aluno.setDataCadastro(new Date());
 			alunoDAO.merge(this.aluno);
-			Messages.addGlobalInfo("Aluno salvo com sucesso");
-			telaInicialAluno();
+//			Messages.addGlobalInfo("Aluno salvo com sucesso");
+//			telaInicialAluno();
+			RequestContext.getCurrentInstance().execute("PF('dlgConfirma').show();");
 		} catch (RuntimeException erro) {
 			logger.error("Ocorreu um erro ao tentar: " + erro);
 			Messages.addGlobalError("Ocorreu um erro ao tentar salvar o aluno");

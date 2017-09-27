@@ -6,6 +6,12 @@
 
 	<!-- Nome da Aplicação -->
 	<display-name>Clinica</display-name>
+	
+	<!-- Localização do faces-config.xml -->
+	<context-param>
+		<param-name>javax.faces.CONFIG_FILES</param-name>
+		<param-value>/WEB-INF/faces-config.xml</param-value>
+	</context-param>
 
 	<!-- Pagina Inicial -->
 	<welcome-file-list>

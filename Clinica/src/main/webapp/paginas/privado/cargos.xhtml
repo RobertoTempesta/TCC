@@ -72,8 +72,10 @@
 							columnClasses="ui-grid-col-6,ui-grid-col-6">
 							<p:outputLabel for="desc" value="Descrição do cargo:" />
 							<p:inputText id="desc" value="#{MBCargo.cargo.descricao}"
-								required="true"
-								requiredMessage="É necessario digitar a descrição do cargo" />
+								required="true" converter="upperCaseConverter"
+								requiredMessage="É necessario digitar a descrição do cargo" >
+								<p:ajax event="blur" update=":frmNovo:desc" />
+							</p:inputText>
 
 							<p:commandButton value="Salvar"
 								actionListener="#{MBCargo.salvar}"

@@ -14,8 +14,12 @@
 			<div class="ui-g-12">
 				<div class="card">
 					<div class="card card-w-title">
-						<h1>Cadastro de Usuários</h1>
+
+						<h1>Usuários Cadastrados</h1>
+
 					</div>
+
+
 					<h:form id="frmListagem">
 
 						<p:dataTable id="tabela"
@@ -24,7 +28,7 @@
 							style="margin: 0em auto;">
 							<f:facet name="header">
 								<p:commandButton id="novo" icon="ui-icon-add"
-									actionListener="#{MBUsuario.telaNovoUsuario}"/>
+									actionListener="#{MBUsuario.telaNovoUsuario}" />
 								<p:tooltip id="toolTipFade" for="novo"
 									value="Adicionar um novo Usuário" position="top" />
 							</f:facet>
@@ -55,7 +59,7 @@
 									<f:attribute name="usuarioSelecionado" value="#{user}" />
 								</p:commandButton>
 
-								<p:commandButton icon="ui-icon-vpn-key" />
+								<!-- 								<p:commandButton icon="ui-icon-vpn-key" /> -->
 							</p:column>
 						</p:dataTable>
 

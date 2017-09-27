@@ -1,42 +1,62 @@
 package com.roberto.tcc.clinica.security;
 
-import org.apache.shiro.crypto.RandomNumberGenerator;
-import org.apache.shiro.crypto.SecureRandomNumberGenerator;
-import org.apache.shiro.crypto.hash.Sha256Hash;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
+
 
 import com.roberto.tcc.clinica.domain.Usuario;
 
 public class Criptografia {
-	public static String gerarChaveRandomica() {
-		String chave = null;
+
+	public static Usuario gerarSenhaCrip(Usuario usuario, String textoPuro)
+			throws NoSuchAlgorithmException, UnsupportedEncodingException {
+
 		try {
-			javax.crypto.KeyGenerator keygen = javax.crypto.KeyGenerator.getInstance("AES");
-			java.security.SecureRandom random = new java.security.SecureRandom();
-			keygen.init(random);
-			javax.crypto.SecretKey key = keygen.generateKey();
-			byte[] buffer = key.getEncoded();
-			byte[] chaveGerada = org.apache.commons.codec.binary.Base64.encodeBase64(buffer);
-			chave = new String(chaveGerada, "UTF-8");
-		} catch (Exception e) {
-			e.printStackTrace();
+
+			UUID uuid = UUID.randomUUID();
+			String salt = uuid.toString();
+
+			MessageDigest algorithm = MessageDigest.getInstance("SHA-256");
+			textoPuro = textoPuro + salt;
+			byte messageDigest[] = algorithm.digest(textoPuro.getBytes("UTF-8"));
+
+			StringBuilder hexString = new StringBuilder();
+			for (byte b : messageDigest) {
+				hexString.append(String.format("%02X", 0xFF & b));
+			}
+			String senha = hexString.toString();
+			usuario.setSenha(senha);
+			usuario.setSalt(salt);
+
+		} catch (NoSuchAlgorithmException | UnsupportedEncodingException erro) {
+			throw erro;
 		}
-		return chave;
-	}
-	
-	public static Usuario gerarSenhaCrip(Usuario usuario, String textoPuro) {
-		RandomNumberGenerator rng = new SecureRandomNumberGenerator();
-		Object salt = rng.nextBytes();
-
-		String hashedPasswordBase64 = new Sha256Hash(textoPuro, salt, 1024).toBase64();
-
-		usuario.setSenha(hashedPasswordBase64);
-		usuario.setSalt(salt.toString());
 
 		return usuario;
 	}
-	
-	public static String criptografaSenha(String senha, String salt) {
-		String hashedPasswordBase64 = new Sha256Hash(senha, salt, 1024).toBase64();		
-		return hashedPasswordBase64;
+
+	public static String gerarSenhaCriptografada(String textoPuro)
+			throws NoSuchAlgorithmException, UnsupportedEncodingException {
+		
+		String senha = null;
+		
+		try {
+
+			MessageDigest algorithm = MessageDigest.getInstance("SHA-256");
+			byte messageDigest[] = algorithm.digest(textoPuro.getBytes("UTF-8"));
+
+			StringBuilder hexString = new StringBuilder();
+			for (byte b : messageDigest) {
+				hexString.append(String.format("%02X", 0xFF & b));
+			}
+			senha = hexString.toString();
+
+		} catch (NoSuchAlgorithmException | UnsupportedEncodingException erro) {
+			throw erro;
+		}
+
+		return senha;
 	}
 }

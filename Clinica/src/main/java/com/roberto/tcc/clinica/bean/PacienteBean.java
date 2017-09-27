@@ -196,12 +196,11 @@ public class PacienteBean implements Serializable {
 			this.cidade.setEstado(this.estado);
 			this.endereco.setCidade(this.cidade);
 			this.pessoa.setEndereco(this.endereco);
-			this.pessoa = pessoaDAO.salvarPesEndereco(this.pessoa);
+			this.pessoa = pessoaDAO.salvarCustomizado(this.pessoa);
 			this.paciente.setPessoa(this.pessoa);
 			this.paciente.setDataCadastro(new Date());
 			pacienteDAO.merge(this.paciente);
-			telaInicial();
-			Messages.addGlobalInfo("Paciente salvo com sucesso");
+			RequestContext.getCurrentInstance().execute("PF('dlgConfirma').show();");
 		} catch (RuntimeException erro) {
 			logger.error("Ocorreu um erro ao tentar salvar o paciente" + erro);
 			Messages.addGlobalError("Ocorreu um erro ao tentar salvar o Paciente");

@@ -8,7 +8,6 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.roberto.tcc.clinica.domain.Supervisor;
-import com.roberto.tcc.clinica.domain.Usuario;
 import com.roberto.tcc.clinica.util.HibernateUtil;
 
 

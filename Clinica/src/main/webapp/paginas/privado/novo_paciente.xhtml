@@ -34,17 +34,20 @@
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText id="nome" value="#{MBPaciente.pessoa.nome}"
-										required="true" requiredMessage="É necessário digitar o Nome"
-										maxlength="50" />
-									<label>Nome do Paciente</label>
-								</h:panelGroup>
-
-								<h:panelGroup styleClass="md-inputfield">
 									<p:inputMask id="rg" mask="99.999.999-9" size="10"
 										value="#{MBPaciente.pessoa.RG}" required="true"
 										requiredMessage="É necessário digitar um RG" />
 									<label>RG</label>
+								</h:panelGroup>
+
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputText id="nome" value="#{MBPaciente.pessoa.nome}"
+										required="true"
+										requiredMessage="É necessário digitar o Nome do Paciente"
+										maxlength="50" converter="upperCaseConverter">
+										<p:ajax event="blur" update=":frmNovo:nome" />
+									</p:inputText>
+									<label>Nome do Paciente</label>
 								</h:panelGroup>
 
 								<p:selectOneRadio id="sexo" layout="responsive" columns="2"
@@ -245,19 +248,28 @@
 									<label>Observações</label>
 								</h:panelGroup>
 							</p:panelGrid>
-							
+
 							<div align="center">
-								<p:commandButton value="Salvar" styleClass="green-btn" style="width:30%"
-									actionListener="#{MBPaciente.salvar}" 
+								<p:commandButton value="Salvar" styleClass="green-btn"
+									style="width:30%" actionListener="#{MBPaciente.salvar}"
 									update=":frmNovo:pgDadosPessoa,pgDadosPaciente :growl" />
 							</div>
 						</div>
-
-
 					</h:form>
 				</div>
 			</div>
 		</div>
-
+		<p:dialog header="Atenção!" widgetVar="dlgConfirma" minHeight="40"
+			modal="true" closable="false">
+			<h:form>
+				<h:outputText value="Paciente Salvo com Sucesso!"
+					style="margin: 1em auto" />
+				<div align="center">
+					<p:commandButton value="Confirmar" styleClass="red-btn"
+						style="width:100%; margin-top: 20px"
+						actionListener="#{MBUsuario.telaInicial}" update=":growl" />
+				</div>
+			</h:form>
+		</p:dialog>
 	</ui:define>
 </ui:composition>

@@ -15,6 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import org.omnifaces.util.Messages;
+import org.primefaces.context.RequestContext;
 
 import com.roberto.tcc.clinica.dao.CidadeDAO;
 import com.roberto.tcc.clinica.dao.EstadoDAO;
@@ -115,14 +116,13 @@ public class SupervisorBean implements Serializable {
 			this.cidade.setEstado(this.estado);
 			this.endereco.setCidade(cidade);
 			this.pessoa.setEndereco(endereco);
-			this.pessoa = pessoaDAO.salvarPesEndereco(this.pessoa);
+			this.pessoa = pessoaDAO.salvarCustomizado(this.pessoa);
 			this.supervisor.setPessoa(pessoa);
 			this.supervisor.setDataCadastro(new Date());
 			supervisorDAO.merge(this.supervisor);
 
-			Messages.addGlobalInfo("Supervisor salvo com Sucesso!");
+			RequestContext.getCurrentInstance().execute("PF('dlgConfirma').show();");
 
-			telaInicial();
 		} catch (RuntimeException erro) {
 			logger.error("Ocorreu um erro ao salvar supervisor: " + erro);
 			Messages.addGlobalError("Erro ao tentar salvar o Supervisor");

@@ -69,8 +69,10 @@
 							columnClasses="ui-grid-col-3,ui-grid-col-6">
 							<p:outputLabel for="numero" value="Numero:" />
 							<p:inputText id="numero" value="#{MBSala.sala.numeroSala}"
-								required="true"
-								requiredMessage="É necessario digitar o numero da sala" />
+								required="true" converter="upperCaseConverter"
+								requiredMessage="É necessario digitar o numero da sala" >
+								<p:ajax event="blur" update="frmNovo:numero" />	
+							</p:inputText>
 
 							<p:commandButton value="Salvar" actionListener="#{MBSala.salvar}"
 								update=":frmNovo :growl :frmSala" />

@@ -31,7 +31,7 @@ public class PessoaDAO extends GenericDAO<Pessoa> {
 
 	}
 	
-	public Pessoa salvarPesEndereco(Pessoa pessoa) {
+	public Pessoa salvarCustomizado(Pessoa pessoa) {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		Transaction transacao = null;
 

@@ -2,7 +2,9 @@ package com.roberto.tcc.clinica.bean;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -14,6 +16,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import org.omnifaces.util.Messages;
+import org.primefaces.context.RequestContext;
 
 import com.roberto.tcc.clinica.dao.CidadeDAO;
 import com.roberto.tcc.clinica.dao.EstadoDAO;
@@ -120,15 +123,14 @@ public class UsuarioBean implements Serializable {
 			this.cidade.setEstado(this.estado);
 			this.endereco.setCidade(this.cidade);
 			this.pessoa.setEndereco(this.endereco);
-			this.pessoa = pessoaDAO.salvarPesEndereco(this.pessoa);
+			this.pessoa = pessoaDAO.salvarCustomizado(this.pessoa);
 			
 			this.usuario = Criptografia.gerarSenhaCrip(this.usuario, this.usuario.getSenha());
 			this.usuario.setPessoa(this.pessoa);
 			
 			usuarioDAO.merge(this.usuario);
-			Messages.addGlobalInfo("Usuario salvo com sucesso");
-			telaInicial();
-		} catch (RuntimeException erro) {
+			RequestContext.getCurrentInstance().execute("PF('dlgConfirma').show();");
+		} catch (RuntimeException | NoSuchAlgorithmException | UnsupportedEncodingException erro) {
 			logger.error("Ocorreu um erro ao tentar salvar o usuario: " + erro);
 			Messages.addGlobalError("Ocorreu um erro ao tentar salvar o Usuário");
 		}

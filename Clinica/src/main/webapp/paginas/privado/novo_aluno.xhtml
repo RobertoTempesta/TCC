@@ -37,17 +37,20 @@
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText id="nome" value="#{MBAluno.pessoa.nome}"
-										required="true" requiredMessage="É necessário digitar o Nome"
-										maxlength="50" />
-									<label>Nome do Paciente</label>
-								</h:panelGroup>
-
-								<h:panelGroup styleClass="md-inputfield">
 									<p:inputMask id="rg" mask="99.999.999-9" size="10"
 										value="#{MBAluno.pessoa.RG}" required="true"
 										requiredMessage="É necessário digitar um RG" />
 									<label>RG</label>
+								</h:panelGroup>
+
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputText id="nome" value="#{MBAluno.pessoa.nome}"
+										required="true"
+										requiredMessage="É necessário digitar o Nome do Aluno"
+										maxlength="50" converter="upperCaseConverter">
+										<p:ajax event="blur" update=":frmNovo:nome" />
+									</p:inputText>
+									<label>Nome do Aluno</label>
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
@@ -157,6 +160,7 @@
 
 								<p:selectOneMenu id="cargo"
 									converter="omnifaces.SelectItemsConverter"
+									requiredMessage="Selecione uma função para o Aluno"
 									value="#{MBAluno.aluno.cargo}" required="true">
 									<f:selectItem itemLabel="Selecione a Função"
 										noSelectionOption="true" />
@@ -167,7 +171,8 @@
 
 								<p:selectOneMenu id="super"
 									converter="omnifaces.SelectItemsConverter"
-									value="#{MBAluno.aluno.supervisor}" required="true">
+									value="#{MBAluno.aluno.supervisor}" required="true"
+									requiredMessage="Selecione uma Supervisor para Aluno">
 									<f:selectItem itemLabel="Selecione o Supervisor"
 										noSelectionOption="true" />
 									<f:selectItems value="#{MBAluno.supervisores}" var="superv"
@@ -225,6 +230,17 @@
 				</div>
 			</div>
 		</div>
-
+		<p:dialog header="Atenção!" widgetVar="dlgConfirma" minHeight="40"
+			modal="true" closable="false">
+			<h:form>
+				<h:outputText value="Aluno Salvo com Sucesso!"
+					style="margin: 1em auto" />
+				<div align="center">
+					<p:commandButton value="Confirmar" styleClass="red-btn"
+						style="width:100%; margin-top: 20px"
+						actionListener="#{MBAluno.telaInicialAluno}" update=":growl" />
+				</div>
+			</h:form>
+		</p:dialog>
 	</ui:define>
 </ui:composition>

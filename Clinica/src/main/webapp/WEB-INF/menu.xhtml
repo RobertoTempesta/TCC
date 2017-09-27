@@ -14,11 +14,11 @@
 						<div class="profile">
 							<p:panel
 								style="background-color: transparent; border-color: transparent;">
-								<div class="profile-image-menu"></div>
+								<div class="profile-image-menu"><i class="material-icons" style="width:100px">&#xE55A;</i></div>
 							</p:panel>
-
+							
 							<a id="profile-options" href="#"> <span class="profile-name"><h:outputText
-										value="Roberto Tempesta" /></span> <i class="material-icons">&#xE313;</i>
+										value="#{MBLogin.nomeFormatado}" /></span> <i class="material-icons">&#xE313;</i>
 							</a>
 						</div>
 
@@ -28,7 +28,7 @@
 									<span>Alterar Senha</span>
 								</p:link></li>
 
-							<li role="menuitem"><p:commandLink styleClass="ripplelink">
+							<li role="menuitem"><p:commandLink actionListener="#{MBLogin.logout}" styleClass="ripplelink">
 									<i class="material-icons">cancel</i>
 									<span>Sair</span>
 								</p:commandLink></li>
@@ -38,9 +38,9 @@
 					<pu:menu widgetVar="me">
 						<p:menuitem id="inicio" value="Início" icon="&#xE88A;" outcome="/paginas/privado/inicio" />
 						<p:submenu label="Cadastros" icon="&#xE8B8;">
-							<p:menuitem id="usuario" value="Usuários" icon="&#xE55A;" outcome="/paginas/privado/usuario" />
-							<p:menuitem id="sala" value="Salas" icon="weekend" outcome="/paginas/privado/sala_atendimento"/>
-							<p:menuitem id="cargo" value="Cargos" icon="work" outcome="/paginas/privado/cargos" />
+							<p:menuitem id="usuario" value="Usuários" icon="&#xE55A;" outcome="/paginas/privado/usuario" rendered="#{MBLogin.temAcesso(['G', 'R'])}"/>
+							<p:menuitem id="sala" value="Salas de Atendimento" icon="weekend" outcome="/paginas/privado/sala_atendimento"/>
+							<p:menuitem id="cargo" value="Cargos/Funções" icon="work" outcome="/paginas/privado/cargos" />
 							<p:menuitem id="supervisor" value="Supervisores" icon="group" outcome="/paginas/privado/supervisores" />
 							<p:menuitem id="aluno" value="Alunos" icon="person" outcome="/paginas/privado/alunos" />
 							<p:menuitem id="paciente" value="Pacientes" icon="&#xE0BA;" outcome="/paginas/privado/pacientes"/>
