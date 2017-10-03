@@ -103,7 +103,7 @@
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText id="cidade" value="#{MBUsuario.cidade.nome}"
+									<p:inputText id="cidade" value="#{MBUsuario.endereco.cidade}"
 										required="true" maxlength="50"
 										requiredMessage="É necessário informar a cidade" />
 									<label>Cidade</label>
@@ -240,14 +240,14 @@
 				</div>
 			</div>
 		</div>
-		<p:dialog header="Atenção!" widgetVar="dlgConfirma" minHeight="40"
+		<p:dialog header="Atenção!" widgetVar="dlgConfirma" minHeight="40" width="350"
 			modal="true" closable="false">
 			<h:form>
 				<h:outputText value="Usuário Salvo com Sucesso!"
 					style="margin: 1em auto" />
 				<div align="center">
-					<p:commandButton value="Confirmar" styleClass="red-btn"
-						style="width:100%; margin-top: 20px"
+					<p:commandButton value="Confirmar" styleClass="blue-btn"
+						style="width:50%; margin-top: 20px"
 						actionListener="#{MBUsuario.telaInicial}" update=":growl" />
 				</div>
 			</h:form>

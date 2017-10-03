@@ -6,7 +6,7 @@ import javax.faces.event.PhaseListener;
 
 import org.omnifaces.util.Faces;
 
-import com.roberto.tcc.clinica.bean.AutenticacaoBean;
+import com.roberto.tcc.clinica.bean.LoginBean;
 import com.roberto.tcc.clinica.domain.Usuario;
 
 @SuppressWarnings("serial")
@@ -18,7 +18,7 @@ public class AutenticacaoListener implements PhaseListener {
 
 		if (!ehPaginaPublica()) {
 			// Pega o atributo da sessão
-			AutenticacaoBean autenticacaoBean = Faces.getSessionAttribute("MBLogin");
+			LoginBean autenticacaoBean = Faces.getSessionAttribute("MBLogin");
 
 			if (autenticacaoBean == null) {
 				Faces.navigate("/paginas/publico/login.xhtml");

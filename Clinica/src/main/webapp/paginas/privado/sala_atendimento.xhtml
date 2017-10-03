@@ -8,44 +8,48 @@
 		<div class="ui-g">
 			<div class="ui-g-12">
 				<div class="card">
-					<div class="card card-w-title">
-						<h1>Cadastro de Salas para Atendimento</h1>
-					</div>
-					<h:form id="frmSala">
 
+					<h:form id="frmSala">
+					
+						<h:panelGrid style="margin: 1em auto">
+							<p:commandButton id="novo" icon="ui-icon-add" value="Nova Sala"
+								actionListener="#{MBSala.novo}"
+								oncomplete="PF('dlgNovo').show();" update=":frmNovo">
+								<f:actionListener
+									type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+								<p:tooltip id="toolTipFade" for="novo"
+									value="Adicionar uma nova Sala?" position="top" />
+							</p:commandButton>
+						</h:panelGrid>
+						
 						<p:dataTable emptyMessage="Nenhum registro encontrado..."
 							value="#{MBSala.salas}" var="sala" rows="10" paginator="true">
-							<f:facet name="header">
-								<p:commandButton id="novo" icon="ui-icon-add"
-									actionListener="#{MBSala.novo}"
-									oncomplete="PF('dlgNovo').show();" update=":frmNovo">
-									<f:actionListener
-										type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
-								<p:tooltip id="toolTipFade" for="novo"
-									value="Adicionar uma nova Sala" position="top" />
-								</p:commandButton>
-							</f:facet>
+
 							<p:column headerText="Código">
 								<h:outputText value="#{sala.codigo}" />
 							</p:column>
 							<p:column headerText="Numero">
-								<h:outputText value="#{sala.numeroSala}" />
+								<h:outputText value="#{sala.descricao}" />
 							</p:column>
 
 							<p:column headerText="Opções">
-								<p:commandButton icon="ui-icon-delete"
+								<p:commandButton id="delete" icon="ui-icon-delete"
 									actionListener="#{MBSala.excluir}" update=":frmSala :growl">
 									<p:confirm header="Confirmação"
 										message="Deseja excluir a Sala?" icon="ui-icon-alert" />
 									<f:attribute name="salaSelecionada" value="#{sala}" />
 								</p:commandButton>
-								<p:commandButton icon="ui-icon-mode-edit"
+								<p:commandButton id="editar" icon="ui-icon-mode-edit"
 									actionListener="#{MBSala.editar}" update=":frmNovo :growl"
 									oncomplete="PF('dlgNovo').show();">
 									<f:attribute name="salaSelecionada" value="#{sala}" />
 									<f:actionListener
 										type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
 								</p:commandButton>
+								<p:tooltip id="toolDelete" for="delete" value="Deletar Sala?"
+									position="top" />
+								<p:tooltip id="toolEditare" for="editar" value="Editar Sala?"
+									position="top" />
 							</p:column>
 						</p:dataTable>
 
@@ -67,11 +71,11 @@
 						<p:panelGrid columns="2" layout="grid" style="width: 100%"
 							styleClass="ui-panelgrid-blank form-group"
 							columnClasses="ui-grid-col-3,ui-grid-col-6">
-							<p:outputLabel for="numero" value="Numero:" />
-							<p:inputText id="numero" value="#{MBSala.sala.numeroSala}"
+							<p:outputLabel for="numero" value="Descrição:" />
+							<p:inputText id="numero" value="#{MBSala.sala.descricao}"
 								required="true" converter="upperCaseConverter"
-								requiredMessage="É necessario digitar o numero da sala" >
-								<p:ajax event="blur" update="frmNovo:numero" />	
+								requiredMessage="É necessario digitar descrição da sala">
+								<p:ajax event="blur" update="frmNovo:numero" />
 							</p:inputText>
 
 							<p:commandButton value="Salvar" actionListener="#{MBSala.salvar}"

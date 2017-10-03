@@ -18,14 +18,11 @@ import org.omnifaces.util.Messages;
 import org.primefaces.context.RequestContext;
 
 import com.roberto.tcc.clinica.dao.AlunoDAO;
-import com.roberto.tcc.clinica.dao.CargoDAO;
-import com.roberto.tcc.clinica.dao.CidadeDAO;
 import com.roberto.tcc.clinica.dao.EstadoDAO;
 import com.roberto.tcc.clinica.dao.PessoaDAO;
 import com.roberto.tcc.clinica.dao.SupervisorDAO;
 import com.roberto.tcc.clinica.domain.Aluno;
-import com.roberto.tcc.clinica.domain.Cargo;
-import com.roberto.tcc.clinica.domain.Cidade;
+import com.roberto.tcc.clinica.domain.Funcao;
 import com.roberto.tcc.clinica.domain.Endereco;
 import com.roberto.tcc.clinica.domain.Estado;
 import com.roberto.tcc.clinica.domain.Pessoa;
@@ -43,35 +40,31 @@ public class AlunoBean implements Serializable {
 	private Aluno aluno = null;
 	private Pessoa pessoa = null;
 	private Endereco endereco = null;
-	private Cidade cidade = null;
 	private Estado estado = null;
 
 	private List<Estado> estados = null;
 	private List<Aluno> alunos = null;
-	private List<Cargo> cargos = null;
+	private List<Funcao> funcoes = null;
 	private List<Supervisor> supervisores = null;
 
 	private AlunoDAO alunoDAO = null;
 	private PessoaDAO pessoaDAO = null;
-	private CidadeDAO cidadeDAO = null;
 	private EstadoDAO estadoDAO = null;
-	private CargoDAO cargoDAO = null;
+	private FuncaoDAO funcaoDAO = null;
 	private SupervisorDAO supervisorDAO = null;
 
 	public void iniciarDomain() {
 		aluno = new Aluno();
 		pessoa = new Pessoa();
 		endereco = new Endereco();
-		cidade = new Cidade();
 		estado = new Estado();
 	}
 
 	public void iniciarDAO() {
 		alunoDAO = new AlunoDAO();
 		estadoDAO = new EstadoDAO();
-		cidadeDAO = new CidadeDAO();
 		pessoaDAO = new PessoaDAO();
-		cargoDAO = new CargoDAO();
+		funcaoDAO = new FuncaoDAO();
 		supervisorDAO = new SupervisorDAO();
 	}
 
@@ -98,16 +91,13 @@ public class AlunoBean implements Serializable {
 
 	public void salvar() {
 		try {
-			this.cidade.setEstado(this.estado);
-			this.endereco.setCidade(this.cidade);
+	
+			this.endereco.setEstado(this.estado);
 			this.pessoa.setEndereco(this.endereco);
-			this.pessoa = pessoaDAO.salvarCustomizado(this.pessoa);
-//			this.pessoa.setNome(this.pessoa.getNome().toUpperCase());
 			this.aluno.setPessoa(this.pessoa);
 			this.aluno.setDataCadastro(new Date());
 			alunoDAO.merge(this.aluno);
-//			Messages.addGlobalInfo("Aluno salvo com sucesso");
-//			telaInicialAluno();
+			
 			RequestContext.getCurrentInstance().execute("PF('dlgConfirma').show();");
 		} catch (RuntimeException erro) {
 			logger.error("Ocorreu um erro ao tentar: " + erro);
@@ -149,8 +139,7 @@ public class AlunoBean implements Serializable {
 				}
 				this.pessoa = pessoa;
 				this.endereco = pessoa.getEndereco();
-				this.cidade = this.endereco.getCidade();
-				this.estado = this.cidade.getEstado();
+				this.estado = this.endereco.getEstado();
 			}
 
 		} catch (RuntimeException erro) {
@@ -179,8 +168,7 @@ public class AlunoBean implements Serializable {
 			this.aluno = alunoDAO.buscar(codigo);
 			this.pessoa = aluno.getPessoa();
 			this.endereco = pessoa.getEndereco();
-			this.cidade = endereco.getCidade();
-			this.estado = cidade.getEstado();
+			this.estado = endereco.getEstado();
 		}
 
 	}
@@ -210,12 +198,8 @@ public class AlunoBean implements Serializable {
 			endereco.setBairro(json.getString("bairro"));
 			endereco.setRua(json.getString("logradouro"));
 
-			String nomeCidade = json.getString("localidade");
-			cidade = cidadeDAO.buscarNome(nomeCidade);
-			if (cidade == null) {
-				cidade = new Cidade();
-				cidade.setNome(nomeCidade);
-			}
+			endereco.setCidade(json.getString("localidade"));
+			
 			estado = estadoDAO.buscarSigla(json.getString("uf"));
 
 		} catch (MalformedURLException erro) {
@@ -235,9 +219,9 @@ public class AlunoBean implements Serializable {
 		}
 	}
 
-	public void listarCargos() {
+	public void listarFuncoes() {
 		try {
-			cargos = cargoDAO.listar();
+			funcoes = funcaoDAO.listar();
 		} catch (RuntimeException erro) {
 			logger.error("Ocorreu um erro ao listar os Cargos: " + erro);
 		}
@@ -288,14 +272,6 @@ public class AlunoBean implements Serializable {
 		this.endereco = endereco;
 	}
 
-	public Cidade getCidade() {
-		return cidade;
-	}
-
-	public void setCidade(Cidade cidade) {
-		this.cidade = cidade;
-	}
-
 	public Estado getEstado() {
 		return estado;
 	}
@@ -320,20 +296,20 @@ public class AlunoBean implements Serializable {
 		this.alunos = alunos;
 	}
 
-	public List<Cargo> getCargos() {
-		return cargos;
-	}
-
-	public void setCargos(List<Cargo> cargos) {
-		this.cargos = cargos;
-	}
-
 	public List<Supervisor> getSupervisores() {
 		return supervisores;
 	}
 
 	public void setSupervisores(List<Supervisor> supervisores) {
 		this.supervisores = supervisores;
+	}
+
+	public List<Funcao> getFuncoes() {
+		return funcoes;
+	}
+
+	public void setFuncoes(List<Funcao> funcoes) {
+		this.funcoes = funcoes;
 	}
 
 }

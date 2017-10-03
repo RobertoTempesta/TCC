@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 
 @SuppressWarnings("serial")
 @Entity
-public class Cargo extends GenericDomain{
+public class Funcao extends GenericDomain{
 
 	@Column(length = 50, nullable = false)
 	private String descricao;

@@ -2,9 +2,12 @@ package com.roberto.tcc.clinica.dao;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
 import com.roberto.tcc.clinica.domain.Aluno;
+import com.roberto.tcc.clinica.domain.Endereco;
+import com.roberto.tcc.clinica.domain.Pessoa;
 import com.roberto.tcc.clinica.util.HibernateUtil;
 
 @SuppressWarnings("serial")
@@ -27,6 +30,30 @@ public class AlunoDAO extends GenericDAO<Aluno>{
 			sessao.close();
 		}
 
+	}
+	
+	public Aluno salvarPessoa(Aluno aluno) {
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		Transaction transacao = null;
+
+		try {
+			
+			transacao = sessao.beginTransaction();
+			aluno.getPessoa().setEndereco((Endereco) sessao.merge(aluno.getPessoa().getEndereco()));
+			aluno.setPessoa((Pessoa) sessao.merge(aluno.getPessoa()));
+			Aluno retorno = (Aluno) sessao.merge(aluno);
+			transacao.commit();
+			return retorno;
+			
+		} catch (RuntimeException erro) {
+			if (transacao != null) {
+				transacao.rollback();
+			}
+			throw erro;
+		} finally {
+			sessao.close();
+		}
+	
 	}
 	
 }

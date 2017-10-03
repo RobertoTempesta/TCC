@@ -5,8 +5,11 @@ import java.security.NoSuchAlgorithmException;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
+import com.roberto.tcc.clinica.domain.Endereco;
+import com.roberto.tcc.clinica.domain.Pessoa;
 import com.roberto.tcc.clinica.domain.Usuario;
 import com.roberto.tcc.clinica.security.Criptografia;
 import com.roberto.tcc.clinica.util.HibernateUtil;
@@ -73,6 +76,30 @@ public class UsuarioDAO extends GenericDAO<Usuario> {
 		} finally {
 			sessao.close();
 		}
+	}
+	
+	public Usuario salvarPessoa(Usuario usuario) {
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		Transaction transacao = null;
+
+		try {
+			
+			transacao = sessao.beginTransaction();
+			usuario.getPessoa().setEndereco((Endereco) sessao.merge(usuario.getPessoa().getEndereco()));
+			usuario.setPessoa((Pessoa) sessao.merge(usuario.getPessoa()));
+			Usuario retorno = (Usuario) sessao.merge(usuario);
+			transacao.commit();
+			return retorno;
+			
+		} catch (RuntimeException erro) {
+			if (transacao != null) {
+				transacao.rollback();
+			}
+			throw erro;
+		} finally {
+			sessao.close();
+		}
+	
 	}
 
 }

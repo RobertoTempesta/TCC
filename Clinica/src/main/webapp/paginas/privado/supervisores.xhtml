@@ -13,20 +13,20 @@
 		<div class="ui-g">
 			<div class="ui-g-12">
 				<div class="card">
-					<div class="card card-w-title">
-						<h1>Cadastro de Supervisores</h1>
-					</div>
+
 					<h:form id="frmListagem">
+
+						<h:panelGrid style="margin: 1em auto">
+							<p:commandButton id="novo" icon="ui-icon-add" value="Novo Supervisor"
+								actionListener="#{MBSupervisor.novo}" />
+							<p:tooltip id="toolTipFade" for="novo"
+								value="Adicionar um novo Supervisor?" position="top" />
+						</h:panelGrid>
 
 						<p:dataTable emptyMessage="Nenhum registro encontrado..."
 							value="#{MBSupervisor.supervisores}" var="superv" rows="10"
 							paginator="true">
-							<f:facet name="header">
-								<p:commandButton id="novo" icon="ui-icon-add"
-									actionListener="#{MBSupervisor.novo}" />
-								<p:tooltip id="toolTipFade" for="novo"
-									value="Adicionar um novo Supervisor" position="top" />
-							</f:facet>
+
 							<p:column headerText="Nome">
 								<h:outputText value="#{superv.pessoa.nome}" />
 							</p:column>
@@ -40,7 +40,7 @@
 							</p:column>
 
 							<p:column headerText="Opções">
-								<p:commandButton icon="ui-icon-delete"
+								<p:commandButton id="delete" icon="ui-icon-delete"
 									update=":frmListagem :growl"
 									actionListener="#{MBSupervisor.excluir}">
 									<p:confirm header="Confirmação"
@@ -48,13 +48,22 @@
 										icon="ui-icon-alert" />
 									<f:attribute name="supervisorSelecionado" value="#{superv}" />
 								</p:commandButton>
-								<p:commandButton icon="ui-icon-mode-edit"
+								<p:commandButton id="editar" icon="ui-icon-mode-edit"
 									update=":frmListagem :growl"
 									actionListener="#{MBSupervisor.editar}">
 									<f:actionListener
 										type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
 									<f:attribute name="supervisorSelecionado" value="#{superv}" />
 								</p:commandButton>
+								<p:commandButton id="detalhes" icon="ui-icon-search">
+								</p:commandButton>
+
+								<p:tooltip id="toolDelete" for="delete" value="Deletar Supervisor?"
+									position="top" />
+								<p:tooltip id="toolEditare" for="editar" value="Editar Supervisor?"
+									position="top" />
+								<p:tooltip id="toolDetalhes" for="detalhes"
+									value="Ver detalhes do Supervisor?" position="top" />
 							</p:column>
 						</p:dataTable>
 

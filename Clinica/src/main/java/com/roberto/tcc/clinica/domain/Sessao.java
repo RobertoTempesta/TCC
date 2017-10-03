@@ -6,37 +6,35 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @SuppressWarnings("serial")
 @Entity
-public class Consulta extends GenericDomain{
+public class Sessao extends GenericDomain{
 
-	@ManyToOne
-	@JoinColumn(nullable = false)
-	private Prontuario prontuario;
-	
 	@ManyToOne
 	@JoinColumn(nullable = false)
 	private SalaAtendimento sala;
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(nullable = false)
 	private Aluno aluno;
 	
+	@ManyToOne
+	@JoinColumn(nullable = false)
+	private Paciente paciente;
+	
+	@Column(length = 500)
+	private String observacao;
+	
+	@Column(length = 1, nullable = false)
+	private Character frequencia;
+	
 	@Column(nullable = false)
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private Date data;
-
-	public Prontuario getProntuario() {
-		return prontuario;
-	}
-
-	public void setProntuario(Prontuario prontuario) {
-		this.prontuario = prontuario;
-	}
+	
 
 	public SalaAtendimento getSala() {
 		return sala;
@@ -54,6 +52,30 @@ public class Consulta extends GenericDomain{
 		this.aluno = aluno;
 	}
 
+	public Paciente getPaciente() {
+		return paciente;
+	}
+
+	public void setPaciente(Paciente paciente) {
+		this.paciente = paciente;
+	}
+
+	public String getObservacao() {
+		return observacao;
+	}
+
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
+	}
+
+	public char getFrequencia() {
+		return frequencia;
+	}
+
+	public void setFrequencia(char frequencia) {
+		this.frequencia = frequencia;
+	}
+
 	public Date getData() {
 		return data;
 	}
@@ -61,5 +83,6 @@ public class Consulta extends GenericDomain{
 	public void setData(Date data) {
 		this.data = data;
 	}
+	
 	
 }

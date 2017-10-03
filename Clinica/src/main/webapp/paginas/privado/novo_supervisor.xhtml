@@ -15,7 +15,6 @@
 			<div class="ui-g-12">
 				<div class="card card-w-title">
 					<h1 style="text-align: center">Dados do Supervisor</h1>
-					<!-- 					<h3>Dodos Gerais</h3> -->
 					<h:form id="frmNovo">
 
 						<div class="ui-fluid">
@@ -111,7 +110,7 @@
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText id="cidade" value="#{MBSupervisor.cidade.nome}"
+									<p:inputText id="cidade" value="#{MBSupervisor.endereco.cidade}"
 										required="true" maxlength="50"
 										requiredMessage="É necessário informar a cidade" />
 									<label>Cidade</label>
@@ -209,14 +208,14 @@
 				</div>
 			</div>
 		</div>
-		<p:dialog header="Atenção!" widgetVar="dlgConfirma" minHeight="40"
+		<p:dialog header="Atenção!" widgetVar="dlgConfirma" minHeight="40" width="350"
 			modal="true" closable="false">
 			<h:form>
 				<h:outputText value="Supervisor Salvo com Sucesso!"
 					style="margin: 1em auto" />
 				<div align="center">
-					<p:commandButton value="Confirmar" styleClass="red-btn"
-						style="width:100%; margin-top: 20px"
+					<p:commandButton value="Confirmar" styleClass="blue-btn"
+						style="width:50%; margin-top: 20px"
 						actionListener="#{MBSupervisor.telaInicial}" update=":growl" />
 				</div>
 			</h:form>

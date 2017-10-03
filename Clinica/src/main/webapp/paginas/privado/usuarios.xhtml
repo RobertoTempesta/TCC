@@ -13,25 +13,22 @@
 		<div class="ui-g">
 			<div class="ui-g-12">
 				<div class="card">
-					<div class="card card-w-title">
-
-						<h1>Usuários Cadastrados</h1>
-
-					</div>
-
 
 					<h:form id="frmListagem">
+
+						<h:panelGrid style="margin: 1em auto">
+							<p:commandButton id="novo" icon="ui-icon-add"
+								value="Novo Usuário"
+								actionListener="#{MBUsuario.telaNovoUsuario}" />
+							<p:tooltip id="toolTipFade" for="novo"
+								value="Adicionar um novo Usuário?" position="top" />
+						</h:panelGrid>
 
 						<p:dataTable id="tabela"
 							emptyMessage="Nenhum registro encontrado....." rows="10"
 							paginator="true" value="#{MBUsuario.usuarios}" var="user"
 							style="margin: 0em auto;">
-							<f:facet name="header">
-								<p:commandButton id="novo" icon="ui-icon-add"
-									actionListener="#{MBUsuario.telaNovoUsuario}" />
-								<p:tooltip id="toolTipFade" for="novo"
-									value="Adicionar um novo Usuário" position="top" />
-							</f:facet>
+
 							<p:column headerText="Nome">
 								<h:outputText value="#{user.pessoa.nome}" />
 							</p:column>
@@ -45,7 +42,7 @@
 							</p:column>
 
 							<p:column headerText="Opções">
-								<p:commandButton icon="ui-icon-delete"
+								<p:commandButton id="delete" icon="ui-icon-delete"
 									update=":frmListagem :growl"
 									actionListener="#{MBUsuario.excluir}">
 									<p:confirm header="Confirmação"
@@ -53,13 +50,21 @@
 										icon="ui-icon-alert" />
 									<f:attribute name="usuarioSelecionado" value="#{user}" />
 								</p:commandButton>
-								<p:commandButton icon="ui-icon-mode-edit"
+								<p:commandButton id="editar" icon="ui-icon-mode-edit"
 									update=":frmListagem :growl"
 									actionListener="#{MBUsuario.editar}">
 									<f:attribute name="usuarioSelecionado" value="#{user}" />
 								</p:commandButton>
+								<p:commandButton id="detalhes" icon="ui-icon-search">
+									
+								</p:commandButton>
 
-								<!-- 								<p:commandButton icon="ui-icon-vpn-key" /> -->
+								<p:tooltip id="toolDelete" for="delete"
+								value="Deletar Usuário?" position="top" />
+								<p:tooltip id="toolEditare" for="editar"
+								value="Editar Usuário?" position="top" />
+								<p:tooltip id="toolDetalhes" for="detalhes"
+								value="Ver detalhes do Usuário?" position="top" />
 							</p:column>
 						</p:dataTable>
 

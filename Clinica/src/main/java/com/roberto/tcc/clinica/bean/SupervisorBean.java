@@ -17,11 +17,9 @@ import org.json.JSONObject;
 import org.omnifaces.util.Messages;
 import org.primefaces.context.RequestContext;
 
-import com.roberto.tcc.clinica.dao.CidadeDAO;
 import com.roberto.tcc.clinica.dao.EstadoDAO;
 import com.roberto.tcc.clinica.dao.PessoaDAO;
 import com.roberto.tcc.clinica.dao.SupervisorDAO;
-import com.roberto.tcc.clinica.domain.Cidade;
 import com.roberto.tcc.clinica.domain.Endereco;
 import com.roberto.tcc.clinica.domain.Estado;
 import com.roberto.tcc.clinica.domain.Pessoa;
@@ -39,7 +37,6 @@ public class SupervisorBean implements Serializable {
 	private Supervisor supervisor = null;
 	private Pessoa pessoa = null;
 	private Endereco endereco = null;
-	private Cidade cidade = null;
 	private Estado estado = null;
 
 	private List<Supervisor> supervisores = null;
@@ -47,7 +44,6 @@ public class SupervisorBean implements Serializable {
 
 	private SupervisorDAO supervisorDAO = null;
 	private PessoaDAO pessoaDAO = null;
-	private CidadeDAO cidadeDAO = null;
 	private EstadoDAO estadoDAO = null;
 
 	public void inicial() {
@@ -59,14 +55,12 @@ public class SupervisorBean implements Serializable {
 		supervisor = new Supervisor();
 		pessoa = new Pessoa();
 		endereco = new Endereco();
-		cidade = new Cidade();
 		estado = new Estado();
 	}
 
 	public void iniciarDAO() {
 		supervisorDAO = new SupervisorDAO();
 		estadoDAO = new EstadoDAO();
-		cidadeDAO = new CidadeDAO();
 		pessoaDAO = new PessoaDAO();
 	}
 
@@ -105,21 +99,19 @@ public class SupervisorBean implements Serializable {
 			this.supervisor = supervisorDAO.buscar(codigo);
 			this.pessoa = supervisor.getPessoa();
 			this.endereco = pessoa.getEndereco();
-			this.cidade = endereco.getCidade();
-			this.estado = cidade.getEstado();
+			this.estado =  endereco.getEstado();
 		}
 
 	}
 
 	public void salvar() {
 		try {
-			this.cidade.setEstado(this.estado);
-			this.endereco.setCidade(cidade);
-			this.pessoa.setEndereco(endereco);
-			this.pessoa = pessoaDAO.salvarCustomizado(this.pessoa);
-			this.supervisor.setPessoa(pessoa);
+			
+			this.endereco.setEstado(this.estado);
+			this.pessoa.setEndereco(this.endereco);
+			this.supervisor.setPessoa(this.pessoa);
 			this.supervisor.setDataCadastro(new Date());
-			supervisorDAO.merge(this.supervisor);
+			supervisorDAO.salvarPessoa(this.supervisor);
 
 			RequestContext.getCurrentInstance().execute("PF('dlgConfirma').show();");
 
@@ -151,8 +143,7 @@ public class SupervisorBean implements Serializable {
 				}
 				this.pessoa = pessoa;
 				this.endereco = pessoa.getEndereco();
-				this.cidade = this.endereco.getCidade();
-				this.estado = this.cidade.getEstado();
+				this.estado = this.endereco.getEstado();
 			}
 
 		} catch (RuntimeException erro) {
@@ -185,13 +176,8 @@ public class SupervisorBean implements Serializable {
 			endereco.setCEP(json.getString("cep"));
 			endereco.setBairro(json.getString("bairro"));
 			endereco.setRua(json.getString("logradouro"));
-
-			String nomeCidade = json.getString("localidade");
-			cidade = cidadeDAO.buscarNome(nomeCidade);
-			if (cidade == null) {
-				cidade = new Cidade();
-				cidade.setNome(nomeCidade);
-			}
+			endereco.setCidade(json.getString("localidade"));
+			
 			estado = estadoDAO.buscarSigla(json.getString("uf"));
 
 		} catch (MalformedURLException erro) {
@@ -281,14 +267,6 @@ public class SupervisorBean implements Serializable {
 
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
-	}
-
-	public Cidade getCidade() {
-		return cidade;
-	}
-
-	public void setCidade(Cidade cidade) {
-		this.cidade = cidade;
 	}
 
 	public Estado getEstado() {

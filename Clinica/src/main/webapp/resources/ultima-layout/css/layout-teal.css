@@ -430,7 +430,7 @@
       vertical-align: middle;
       width: 200px;
       height: 30px;
-      background: url("#{resource['ultima-layout:images/logo.png']}") top left no-repeat; }
+      background: url("#{resource['imagens:CEPP6.png']}") top left no-repeat; }
     .landing-wrapper #header .header-top #menu {
       float: right;
       list-style: none;
@@ -695,7 +695,7 @@
       padding: 0; } }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .landing-wrapper .header .header-top .logo {
-    background: url("#{resource['ultima-layout:images/logo2x.png']}") top left no-repeat;
+    background: url("#{resource['imagens:CEPP6.png']}") top left no-repeat;
     background-size: 200px 30px; } }
 html {
   height: 100%; }
@@ -737,7 +737,7 @@ body {
     vertical-align: middle;
     width: 200px;
     height: 30px;
-    background: url("#{resource['ultima-layout:images/logo.png']}") top left no-repeat; }
+    background: url("#{resource['imagens:CEPP6.png']}") top left no-repeat; }
   .layout-wrapper .topbar .topbar-left {
     box-sizing: border-box;
     padding: 20px;
@@ -1490,7 +1490,7 @@ body {
       margin-right: -2px; } }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .layout-wrapper .topbar .logo {
-    background: url("#{resource['ultima-layout:images/logo2x.png']}") top left no-repeat;
+    background: url("#{resource['imagens:CEPP6.png']}") top left no-repeat;
     background-size: 200px 30px; } }
 @media (max-width: 399px) {
   .layout-wrapper .topbar .topbar-right #topbar-menu-button {

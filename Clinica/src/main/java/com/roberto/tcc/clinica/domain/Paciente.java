@@ -16,31 +16,37 @@ public class Paciente extends GenericDomain {
 	@OneToOne
 	@JoinColumn(nullable = false)
 	private Pessoa pessoa;
-
-	@Column(nullable = false)
-	@Temporal(TemporalType.DATE)
-	private Date dataCadastro;
-
-	@Column(length = 100)
+	
+	@Column(length = 100, nullable = false)
 	private String ocupacao;
-
-	@Column(length = 500)
-	private String Observacao;
-
-	@Column(length = 1)
+	
+	@Column(length = 1, nullable = false)
 	private char estadoCivil;
-
-	@Column(length = 300)
-	private String conhecimentoCentro;
-
-	@Column(length = 80)
+	
+	@Column(length = 80, nullable = false)
 	private String nomePai;
 
-	@Column(length = 80)
+	@Column(length = 80, nullable = false)
 	private String nomeMae;
 
 	@OneToOne
-	private Pessoa responsavel;
+	private Responsavel responsavel;
+
+	@Column(length = 100)
+	private String medicamento;
+	
+	@Column(length = 500)
+	private String observacao;
+	
+	@Column(length = 100)
+	private String necessidadesEspeciais;
+	
+	@Column(nullable = false)
+	@Temporal(TemporalType.DATE)
+	private Date dataCadastro;
+	
+	@Column(length = 50)
+	private String numeroCaso;
 
 	public Pessoa getPessoa() {
 		return pessoa;
@@ -58,20 +64,12 @@ public class Paciente extends GenericDomain {
 		this.ocupacao = ocupacao;
 	}
 
-	public Date getDataCadastro() {
-		return dataCadastro;
+	public char getEstadoCivil() {
+		return estadoCivil;
 	}
 
-	public void setDataCadastro(Date dataCadastro) {
-		this.dataCadastro = dataCadastro;
-	}
-
-	public String getConhecimentoCentro() {
-		return conhecimentoCentro;
-	}
-
-	public void setConhecimentoCentro(String conhecimentoCentro) {
-		this.conhecimentoCentro = conhecimentoCentro;
+	public void setEstadoCivil(char estadoCivil) {
+		this.estadoCivil = estadoCivil;
 	}
 
 	public String getNomePai() {
@@ -82,35 +80,59 @@ public class Paciente extends GenericDomain {
 		this.nomePai = nomePai;
 	}
 
-	public char getEstadoCivil() {
-		return estadoCivil;
-	}
-
-	public void setEstadoCivil(char estadoCivil) {
-		this.estadoCivil = estadoCivil;
-	}
-
 	public String getNomeMae() {
 		return nomeMae;
-	}
-
-	public String getObservacao() {
-		return Observacao;
-	}
-
-	public void setObservacao(String observacao) {
-		Observacao = observacao;
 	}
 
 	public void setNomeMae(String nomeMae) {
 		this.nomeMae = nomeMae;
 	}
 
-	public Pessoa getResponsavel() {
+	public Responsavel getResponsavel() {
 		return responsavel;
 	}
 
-	public void setResponsavel(Pessoa responsavel) {
+	public void setResponsavel(Responsavel responsavel) {
 		this.responsavel = responsavel;
+	}
+
+	public String getMedicamento() {
+		return medicamento;
+	}
+
+	public void setMedicamento(String medicamento) {
+		this.medicamento = medicamento;
+	}
+
+	public String getObservacao() {
+		return observacao;
+	}
+
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
+	}
+
+	public String getNecessidadesEspeciais() {
+		return necessidadesEspeciais;
+	}
+
+	public void setNecessidadesEspeciais(String necessidadesEspeciais) {
+		this.necessidadesEspeciais = necessidadesEspeciais;
+	}
+
+	public Date getDataCadastro() {
+		return dataCadastro;
+	}
+
+	public void setDataCadastro(Date dataCadastro) {
+		this.dataCadastro = dataCadastro;
+	}
+
+	public String getNumeroCaso() {
+		return numeroCaso;
+	}
+
+	public void setNumeroCaso(String numeroCaso) {
+		this.numeroCaso = numeroCaso;
 	}
 }

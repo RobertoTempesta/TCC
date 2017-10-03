@@ -13,22 +13,21 @@
 		<div class="ui-g">
 			<div class="ui-g-12">
 				<div class="card card-w-title">
-					<div class="card card-w-title">
-						<h1>Cadastro de Pacientes</h1>
-					</div>
-					
-					<h:form id="frmListagem">
 
+					<h:form id="frmListagem">
+						<h:panelGrid style="margin: 1em auto">
+							<p:commandButton id="novo" icon="ui-icon-add"
+								value="Novo Paciente"
+								actionListener="#{MBPaciente.telaNovoPaciente}" />
+							<p:tooltip id="toolTipFade" for="novo"
+								value="Adicionar um novo Paciente" position="top" />
+						</h:panelGrid>
+						
 						<p:dataTable id="tabela"
 							emptyMessage="Nenhum registro encontrado....." rows="10"
 							paginator="true" value="#{MBPaciente.pacientes}" var="paciente"
 							style="margin: 0em auto;">
-							<f:facet name="header">
-								<p:commandButton id="novo" icon="ui-icon-add"
-									actionListener="#{MBPaciente.telaNovoPaciente}" />
-								<p:tooltip id="toolTipFade" for="novo"
-									value="Adicionar um novo Paciente" position="top" />
-							</f:facet>
+
 							<p:column headerText="Paciente" style="text-align: center">
 								<h:outputText value="#{paciente.pessoa.nome}" />
 							</p:column>

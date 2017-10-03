@@ -38,7 +38,7 @@ public class SalaAtendimentoBean implements Serializable {
 	public void listar() {
 		try {
 
-			salas = salaDAO.listar("numeroSala");
+			salas = salaDAO.listar("descricao");
 
 		} catch (RuntimeException erro) {
 			logger.error("Erro ao listar salas: " + erro);

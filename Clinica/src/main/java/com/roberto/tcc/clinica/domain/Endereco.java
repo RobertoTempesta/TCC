@@ -22,10 +22,12 @@ public class Endereco extends GenericDomain{
 	@Column(length = 50, nullable = false)
 	private String bairro;
 	
+	@Column(length = 50, nullable = false)
+	private String cidade;
+
 	@ManyToOne
 	@JoinColumn(nullable = false)
-	private Cidade cidade;
-
+	private Estado estado;
 
 	public String getRua() {
 		return rua;
@@ -59,12 +61,20 @@ public class Endereco extends GenericDomain{
 		CEP = cEP;
 	}
 
-	public Cidade getCidade() {
+	public String getCidade() {
 		return cidade;
 	}
 
-	public void setCidade(Cidade cidade) {
+	public void setCidade(String cidade) {
 		this.cidade = cidade;
+	}
+
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
 	}
 	
 	

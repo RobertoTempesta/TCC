@@ -21,9 +21,9 @@ import com.roberto.tcc.clinica.domain.Usuario;
 @SuppressWarnings("serial")
 @ManagedBean(name = "MBLogin")
 @SessionScoped
-public class AutenticacaoBean implements Serializable {
+public class LoginBean implements Serializable {
 
-	private static final Logger logger = LogManager.getLogger(AutenticacaoBean.class);
+	private static final Logger logger = LogManager.getLogger(LoginBean.class);
 	private Usuario usuario;
 	private Usuario usuarioLogado;
 

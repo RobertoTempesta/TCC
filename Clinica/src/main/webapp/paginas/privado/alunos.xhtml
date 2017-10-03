@@ -13,19 +13,19 @@
 		<div class="ui-g">
 			<div class="ui-g-12">
 				<div class="card">
-					<div class="card card-w-title">
-						<h1>Cadastro de Alunos</h1>
-					</div>
-					<h:form id="frmListagem">
 
+					<h:form id="frmListagem">
+					
+						<h:panelGrid style="margin: 1em auto">
+							<p:commandButton id="novo" icon="ui-icon-add" value="Novo Aluno"
+								actionListener="#{MBAluno.novo}" />
+							<p:tooltip id="toolTipFade" for="novo"
+								value="Adicionar um novo Aluno?" position="top" />
+						</h:panelGrid>
+						
 						<p:dataTable emptyMessage="Nenhum registro encontrado..."
 							value="#{MBAluno.alunos}" var="aluno" rows="10" paginator="true">
-							<f:facet name="header">
-								<p:commandButton id="novo" icon="ui-icon-add"
-									actionListener="#{MBAluno.novo}" />
-								<p:tooltip id="toolTipFade" for="novo"
-									value="Adicionar um novo Aluno" position="top" />
-							</f:facet>
+
 							<p:column headerText="Nome">
 								<h:outputText value="#{aluno.pessoa.nome}" />
 							</p:column>
@@ -33,16 +33,12 @@
 								<h:outputText value="#{aluno.RA}" />
 							</p:column>
 							<p:column headerText="Cargo">
-								<h:outputText value="#{aluno.cargo.descricao}" />
+								<h:outputText value="#{aluno.funcao.descricao}" />
 							</p:column>
-							<!-- 							<p:column headerText="Data do Cadastro"> -->
-							<!-- 								<h:outputText value="#{aluno.dataCadastro}" > -->
-							<!-- 									<f:convertDateTime pattern="dd/MM/yyyy"/> -->
-							<!-- 								</h:outputText> -->
-							<!-- 							</p:column> -->
+							
 
 							<p:column headerText="Opções">
-								<p:commandButton icon="ui-icon-delete"
+								<p:commandButton id="delete" icon="ui-icon-delete"
 									update=":frmListagem :growl"
 									actionListener="#{MBAluno.excluir}">
 									<p:confirm header="Confirmação"
@@ -50,10 +46,19 @@
 										icon="ui-icon-alert" />
 									<f:attribute name="alunoSelecionado" value="#{aluno}" />
 								</p:commandButton>
-								<p:commandButton icon="ui-icon-mode-edit"
+								<p:commandButton id="editar" icon="ui-icon-mode-edit"
 									update=":frmListagem :growl" actionListener="#{MBAluno.editar}">
 									<f:attribute name="alunoSelecionado" value="#{aluno}" />
 								</p:commandButton>
+								<p:commandButton id="detalhes" icon="ui-icon-search">
+								</p:commandButton>
+								
+								<p:tooltip id="toolDelete" for="delete" value="Deletar Aluno?"
+									position="top" />
+								<p:tooltip id="toolEditare" for="editar" value="Editar Aluno?"
+									position="top" />
+								<p:tooltip id="toolDetalhes" for="detalhes"
+									value="Ver detalhes do Aluno?" position="top" />
 							</p:column>
 						</p:dataTable>
 

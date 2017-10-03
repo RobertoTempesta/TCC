@@ -22,7 +22,7 @@ public class Aluno extends GenericDomain {
 
 	@OneToOne
 	@JoinColumn(nullable = false)
-	private Cargo cargo;
+	private Funcao funcao;
 
 	@OneToOne
 	@JoinColumn(nullable = false)
@@ -64,12 +64,11 @@ public class Aluno extends GenericDomain {
 		RA = rA;
 	}
 
-	public Cargo getCargo() {
-		return cargo;
+	public Funcao getFuncao() {
+		return funcao;
 	}
 
-	public void setCargo(Cargo cargo) {
-		this.cargo = cargo;
+	public void setFuncao(Funcao funcao) {
+		this.funcao = funcao;
 	}
-
 }

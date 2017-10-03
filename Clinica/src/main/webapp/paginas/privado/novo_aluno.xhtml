@@ -7,7 +7,7 @@
 	<f:metadata>
 		<f:viewAction action="#{MBAluno.inicial}" />
 		<f:viewAction action="#{MBAluno.carregarEstados}" />
-		<f:viewAction action="#{MBAluno.listarCargos}" />
+		<f:viewAction action="#{MBAluno.listarFuncoes}" />
 		<f:viewAction action="#{MBAluno.listarSupervisores}" />
 		<f:viewAction action="#{MBAluno.iniciaEdicao}" />
 	</f:metadata>
@@ -112,7 +112,7 @@
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText id="cidade" value="#{MBAluno.cidade.nome}"
+									<p:inputText id="cidade" value="#{MBAluno.endereco.cidade}"
 										required="true" maxlength="50"
 										requiredMessage="É necessário informar a cidade" />
 									<label>Cidade</label>
@@ -161,11 +161,11 @@
 								<p:selectOneMenu id="cargo"
 									converter="omnifaces.SelectItemsConverter"
 									requiredMessage="Selecione uma função para o Aluno"
-									value="#{MBAluno.aluno.cargo}" required="true">
+									value="#{MBAluno.aluno.funcao}" required="true">
 									<f:selectItem itemLabel="Selecione a Função"
 										noSelectionOption="true" />
-									<f:selectItems value="#{MBAluno.cargos}" var="cargo"
-										itemLabel="#{cargo.descricao}" itemValue="#{cargo}" />
+									<f:selectItems value="#{MBAluno.funcoes}" var="funcao"
+										itemLabel="#{funcao.descricao}" itemValue="#{funcao}" />
 								</p:selectOneMenu>
 
 
@@ -230,14 +230,14 @@
 				</div>
 			</div>
 		</div>
-		<p:dialog header="Atenção!" widgetVar="dlgConfirma" minHeight="40"
+		<p:dialog header="Atenção!" widgetVar="dlgConfirma" minHeight="40" width="350"
 			modal="true" closable="false">
 			<h:form>
 				<h:outputText value="Aluno Salvo com Sucesso!"
 					style="margin: 1em auto" />
 				<div align="center">
-					<p:commandButton value="Confirmar" styleClass="red-btn"
-						style="width:100%; margin-top: 20px"
+					<p:commandButton value="Confirmar" styleClass="blue-btn"
+						style="width:50%; margin-top: 20px"
 						actionListener="#{MBAluno.telaInicialAluno}" update=":growl" />
 				</div>
 			</h:form>

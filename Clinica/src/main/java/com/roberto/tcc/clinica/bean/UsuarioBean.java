@@ -18,11 +18,9 @@ import org.json.JSONObject;
 import org.omnifaces.util.Messages;
 import org.primefaces.context.RequestContext;
 
-import com.roberto.tcc.clinica.dao.CidadeDAO;
 import com.roberto.tcc.clinica.dao.EstadoDAO;
 import com.roberto.tcc.clinica.dao.PessoaDAO;
 import com.roberto.tcc.clinica.dao.UsuarioDAO;
-import com.roberto.tcc.clinica.domain.Cidade;
 import com.roberto.tcc.clinica.domain.Endereco;
 import com.roberto.tcc.clinica.domain.Estado;
 import com.roberto.tcc.clinica.domain.Pessoa;
@@ -41,7 +39,6 @@ public class UsuarioBean implements Serializable {
 	private Usuario usuario = null;
 	private Pessoa pessoa = null;
 	private Endereco endereco = null;
-	private Cidade cidade = null;
 	private Estado estado = null;
 
 	private List<Estado> estados = null;
@@ -49,21 +46,18 @@ public class UsuarioBean implements Serializable {
 
 	private UsuarioDAO usuarioDAO = null;
 	private PessoaDAO pessoaDAO = null;
-	private CidadeDAO cidadeDAO = null;
 	private EstadoDAO estadoDAO = null;
 
 	public void iniciarDomain() {
 		usuario = new Usuario();
 		pessoa = new Pessoa();
 		endereco = new Endereco();
-		cidade = new Cidade();
 		estado = new Estado();
 	}
 
 	public void iniciarDAO() {
 		usuarioDAO = new UsuarioDAO();
 		pessoaDAO = new PessoaDAO();
-		cidadeDAO = new CidadeDAO();
 		estadoDAO = new EstadoDAO();
 	}
 
@@ -112,23 +106,21 @@ public class UsuarioBean implements Serializable {
 			this.usuario = usuarioDAO.buscar(codigo);
 			this.pessoa = usuario.getPessoa();
 			this.endereco = pessoa.getEndereco();
-			this.cidade = endereco.getCidade();
-			this.estado = cidade.getEstado();
+			this.estado = endereco.getEstado();
 		}
 
 	}
 
 	public void salvar() {
 		try {
-			this.cidade.setEstado(this.estado);
-			this.endereco.setCidade(this.cidade);
+			
+			this.endereco.setEstado(this.estado);
 			this.pessoa.setEndereco(this.endereco);
-			this.pessoa = pessoaDAO.salvarCustomizado(this.pessoa);
 			
 			this.usuario = Criptografia.gerarSenhaCrip(this.usuario, this.usuario.getSenha());
 			this.usuario.setPessoa(this.pessoa);
 			
-			usuarioDAO.merge(this.usuario);
+			usuarioDAO.salvarPessoa(this.usuario);
 			RequestContext.getCurrentInstance().execute("PF('dlgConfirma').show();");
 		} catch (RuntimeException | NoSuchAlgorithmException | UnsupportedEncodingException erro) {
 			logger.error("Ocorreu um erro ao tentar salvar o usuario: " + erro);
@@ -158,8 +150,7 @@ public class UsuarioBean implements Serializable {
 				}
 				this.pessoa = pessoa;
 				this.endereco = pessoa.getEndereco();
-				this.cidade = this.endereco.getCidade();
-				this.estado = this.cidade.getEstado();
+				this.estado = this.endereco.getEstado();
 			}
 
 		} catch (RuntimeException erro) {
@@ -194,12 +185,8 @@ public class UsuarioBean implements Serializable {
 			endereco.setBairro(json.getString("bairro"));
 			endereco.setRua(json.getString("logradouro"));
 
-			String nomeCidade = json.getString("localidade");
-			cidade = cidadeDAO.buscarNome(nomeCidade);
-			if (cidade == null) {
-				cidade = new Cidade();
-				cidade.setNome(nomeCidade);
-			}
+			endereco.setCidade(json.getString("localidade"));
+			
 			estado = estadoDAO.buscarSigla(json.getString("uf"));
 
 		} catch (MalformedURLException erro) {
@@ -230,7 +217,7 @@ public class UsuarioBean implements Serializable {
 
 	public void telaInicial() {
 		try {
-			FacesContext.getCurrentInstance().getExternalContext().redirect("usuario.xhtml");
+			FacesContext.getCurrentInstance().getExternalContext().redirect("usuarios.xhtml");
 		} catch (IOException erro) {
 			logger.error("Ocorreu um erro ao tentar redirecionar a tela[usuarios] " + erro);
 		}
@@ -258,14 +245,6 @@ public class UsuarioBean implements Serializable {
 
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
-	}
-
-	public Cidade getCidade() {
-		return cidade;
-	}
-
-	public void setCidade(Cidade cidade) {
-		this.cidade = cidade;
 	}
 
 	public Estado getEstado() {

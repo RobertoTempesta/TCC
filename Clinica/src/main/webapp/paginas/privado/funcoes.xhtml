@@ -8,47 +8,50 @@
 		<div class="ui-g">
 			<div class="ui-g-12">
 				<div class="card">
-					<div class="card card-w-title">
-						<h1>Cadastro de Cargos</h1>
-						
-					</div>
+
 					<h:form id="frmListagem">
+						<h:panelGrid style="margin: 1em auto">
+							<p:commandButton id="novo" icon="ui-icon-add" value="Nova Função"
+								actionListener="#{MBFuncao.novo}"
+								oncomplete="PF('dlgNovo').show();" update=":frmNovo">
+								<f:actionListener
+									type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+							</p:commandButton>
+							<p:tooltip id="toolTipFade" for="novo"
+								value="Adicionar uma nova Função?" position="top" />
+						</h:panelGrid>
 
 						<p:dataTable emptyMessage="Nenhum registro encontrado..."
-							value="#{MBCargo.cargos}" var="cargo" rows="10" paginator="true">
-							<f:facet name="header">
-								<p:commandButton id="novo" icon="ui-icon-add"
-									actionListener="#{MBCargo.novo}"
-									oncomplete="PF('dlgNovo').show();" update=":frmNovo">
-									<f:actionListener
-										type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
-								</p:commandButton>
-								<p:tooltip id="toolTipFade" for="novo"
-									value="Adicionar um novo Cargo" position="top" />
-							</f:facet>
+							value="#{MBFuncao.funcoes}" var="funcao" rows="10" paginator="true">
+
 							<p:column headerText="Código">
-								<h:outputText value="#{cargo.codigo}" />
+								<h:outputText value="#{funcao.codigo}" />
 							</p:column>
 							<p:column headerText="Descrição">
-								<h:outputText value="#{cargo.descricao}" />
+								<h:outputText value="#{funcao.descricao}" />
 							</p:column>
 
 							<p:column headerText="Opções">
-								<p:commandButton icon="ui-icon-delete"
-									actionListener="#{MBCargo.excluir}"
+								<p:commandButton id="delete" icon="ui-icon-delete"
+									actionListener="#{MBFuncao.excluir}"
 									update=":frmListagem :growl">
 									<p:confirm header="Confirmação"
-										message="Deseja excluir o Cargo selecionado?"
+										message="Deseja excluir o função selecionada?"
 										icon="ui-icon-alert" />
-									<f:attribute name="cargoSelecionado" value="#{cargo}" />
+									<f:attribute name="funcaoSelecionado" value="#{funcao}" />
 								</p:commandButton>
-								<p:commandButton icon="ui-icon-mode-edit"
-									actionListener="#{MBCargo.editar}" update=":frmNovo :growl"
+								
+								<p:commandButton id="editar" icon="ui-icon-mode-edit"
+									actionListener="#{MBFuncao.editar}" update=":frmNovo :growl"
 									oncomplete="PF('dlgNovo').show();">
-									<f:attribute name="cargoSelecionado" value="#{cargo}" />
+									<f:attribute name="funcaoSelecionado" value="#{funcao}" />
 									<f:actionListener
 										type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
 								</p:commandButton>
+								<p:tooltip id="toolDelete" for="delete"
+								value="Deletar Função?" position="top" />
+								<p:tooltip id="toolEditare" for="editar"
+								value="Editar Função?" position="top" />
 							</p:column>
 						</p:dataTable>
 
@@ -63,22 +66,22 @@
 				</div>
 
 				<p:dialog widgetVar="dlgNovo" resizable="false" onShow="true"
-					header="Cadastros - Cargos" width="400" draggable="false"
+					header="Cadastros - Função" width="400" draggable="false"
 					modal="true" closable="false">
 
 					<h:form id="frmNovo">
 						<p:panelGrid columns="2" layout="grid" style="width: 100%"
 							styleClass="ui-panelgrid-blank form-group"
 							columnClasses="ui-grid-col-6,ui-grid-col-6">
-							<p:outputLabel for="desc" value="Descrição do cargo:" />
-							<p:inputText id="desc" value="#{MBCargo.cargo.descricao}"
+							<p:outputLabel for="desc" value="Descrição da Função:" />
+							<p:inputText id="desc" value="#{MBFuncao.funcao.descricao}"
 								required="true" converter="upperCaseConverter"
-								requiredMessage="É necessario digitar a descrição do cargo" >
+								requiredMessage="É necessario digitar a descrição da Função">
 								<p:ajax event="blur" update=":frmNovo:desc" />
 							</p:inputText>
 
 							<p:commandButton value="Salvar"
-								actionListener="#{MBCargo.salvar}"
+								actionListener="#{MBFuncao.salvar}"
 								update=":frmNovo :growl :frmListagem" />
 
 							<p:commandButton value="Fechar" onclick="PF('dlgNovo').hide();" />

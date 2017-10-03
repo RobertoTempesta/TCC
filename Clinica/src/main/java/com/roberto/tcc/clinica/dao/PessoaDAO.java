@@ -5,7 +5,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
-import com.roberto.tcc.clinica.domain.Cidade;
 import com.roberto.tcc.clinica.domain.Endereco;
 import com.roberto.tcc.clinica.domain.Pessoa;
 import com.roberto.tcc.clinica.util.HibernateUtil;
@@ -38,11 +37,7 @@ public class PessoaDAO extends GenericDAO<Pessoa> {
 		try {
 			transacao = sessao.beginTransaction();
 			
-			Cidade cidade = (Cidade) sessao.merge(pessoa.getEndereco().getCidade());
-			Endereco endereco = new Endereco();
-			endereco = pessoa.getEndereco();
-			endereco.setCidade(cidade);
-			endereco = (Endereco) sessao.merge(endereco);
+			Endereco endereco = (Endereco) sessao.merge(pessoa.getEndereco());
 			pessoa.setEndereco(endereco);
 			Pessoa resultado = (Pessoa) sessao.merge(pessoa);
 			

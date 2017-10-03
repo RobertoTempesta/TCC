@@ -8,14 +8,16 @@ import javax.persistence.Entity;
 public class SalaAtendimento extends GenericDomain{
 
 	@Column(length = 10, nullable = false)
-	private String numeroSala;
+	private String descricao;
 
-	public String getNumeroSala() {
-		return numeroSala;
+	public String getDescricao() {
+		return descricao;
 	}
 
-	public void setNumeroSala(String numeroSala) {
-		this.numeroSala = numeroSala;
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
+
+	
 	
 }
