@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import org.omnifaces.util.Messages;
 import org.primefaces.context.RequestContext;
 
+import com.roberto.tcc.clinica.dao.FuncaoDAO;
 import com.roberto.tcc.clinica.domain.Funcao;
 
 @SuppressWarnings("serial")

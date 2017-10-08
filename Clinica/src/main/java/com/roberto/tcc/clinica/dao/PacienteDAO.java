@@ -8,6 +8,7 @@ import org.hibernate.criterion.Restrictions;
 import com.roberto.tcc.clinica.domain.Endereco;
 import com.roberto.tcc.clinica.domain.Paciente;
 import com.roberto.tcc.clinica.domain.Pessoa;
+import com.roberto.tcc.clinica.domain.Responsavel;
 import com.roberto.tcc.clinica.util.HibernateUtil;
 
 @SuppressWarnings("serial")
@@ -59,6 +60,9 @@ public class PacienteDAO extends GenericDAO<Paciente>{
 			transacao = sessao.beginTransaction();
 			paciente.getPessoa().setEndereco((Endereco) sessao.merge(paciente.getPessoa().getEndereco()));
 			paciente.setPessoa((Pessoa) sessao.merge(paciente.getPessoa()));
+			if(paciente.getResponsavel() != null) {
+				paciente.setResponsavel((Responsavel) sessao.merge(paciente.getResponsavel()));
+			}	
 			Paciente retorno = (Paciente) sessao.merge(paciente);
 			transacao.commit();
 			return retorno;

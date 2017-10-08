@@ -2,6 +2,7 @@ package com.roberto.tcc.clinica.domain;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -29,7 +30,7 @@ public class Paciente extends GenericDomain {
 	@Column(length = 80, nullable = false)
 	private String nomeMae;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private Responsavel responsavel;
 
 	@Column(length = 100)

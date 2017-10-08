@@ -24,6 +24,7 @@ import com.roberto.tcc.clinica.domain.Endereco;
 import com.roberto.tcc.clinica.domain.Estado;
 import com.roberto.tcc.clinica.domain.Paciente;
 import com.roberto.tcc.clinica.domain.Pessoa;
+import com.roberto.tcc.clinica.domain.Responsavel;
 import com.roberto.tcc.clinica.util.CEPUtil;
 
 @ManagedBean(name = "MBPaciente")
@@ -38,6 +39,7 @@ public class PacienteBean implements Serializable {
 	private Pessoa pessoa = null;
 	private Endereco endereco = null;
 	private Estado estado = null;
+	private Responsavel responsavel = null;
 
 	private List<Estado> estados = null;
 	private List<Paciente> pacientes = null;
@@ -45,12 +47,15 @@ public class PacienteBean implements Serializable {
 	private PacienteDAO pacienteDAO = null;
 	private PessoaDAO pessoaDAO = null;
 	private EstadoDAO estadoDAO = null;
+	
+	private boolean responsavelAtivo = false;
 
 	public void iniciarDomain() {
 		paciente = new Paciente();
 		pessoa = new Pessoa();
 		endereco = new Endereco();
 		estado = new Estado();
+		responsavel = new Responsavel();
 	}
 
 	public void iniciarDAO() {
@@ -82,7 +87,11 @@ public class PacienteBean implements Serializable {
 				this.pessoa = pessoa;
 				this.endereco = pessoa.getEndereco();
 				this.estado = this.endereco.getEstado();
+			}else {
+				this.pessoa = new Pessoa();
+				this.pessoa.setCPF(cpf);
 			}
+			
 
 		} catch (RuntimeException erro) {
 			logger.error("Erro ao verificar CPF: " + erro);
@@ -181,10 +190,24 @@ public class PacienteBean implements Serializable {
 
 	public void salvar() {
 		try {
-
+			
+			if(!responsavel.getNome().equals("")) {
+				if((responsavel.getCelular() == null || responsavel.getCelular().equals("")) || 
+						(responsavel.getTelefone() == null || responsavel.getTelefone().equals(""))) {
+					Messages.addGlobalWarn("É necessario um Telefone ou Celular para o Responsavel!");
+					return;
+				}else {
+					this.paciente.setResponsavel(this.responsavel);
+				}
+				
+			}else {
+				this.paciente.setResponsavel(null);
+			}
+			
 			this.endereco.setEstado(this.estado);
 			this.pessoa.setEndereco(this.endereco);
 			this.paciente.setPessoa(this.pessoa);
+			
 			this.paciente.setDataCadastro(new Date());
 			pacienteDAO.salvarPessoa(this.paciente);
 			RequestContext.getCurrentInstance().execute("PF('dlgConfirma').show();");
@@ -251,6 +274,14 @@ public class PacienteBean implements Serializable {
 		return endereco;
 	}
 
+	public Responsavel getResponsavel() {
+		return responsavel;
+	}
+
+	public void setResponsavel(Responsavel responsavel) {
+		this.responsavel = responsavel;
+	}
+	
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
 	}
@@ -277,6 +308,14 @@ public class PacienteBean implements Serializable {
 
 	public void setPacientes(List<Paciente> pacientes) {
 		this.pacientes = pacientes;
+	}
+
+	public boolean isResponsavelAtivo() {
+		return responsavelAtivo;
+	}
+
+	public void setResponsavelAtivo(boolean responsavelAtivo) {
+		this.responsavelAtivo = responsavelAtivo;
 	}
 
 }

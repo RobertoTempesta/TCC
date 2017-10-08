@@ -103,7 +103,7 @@
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText id="cidade" value="#{MBPaciente.cidade.nome}"
+									<p:inputText id="cidade" value="#{MBPaciente.endereco.cidade}"
 										required="true" maxlength="50"
 										requiredMessage="É necessário informar a cidade" />
 									<label>Cidade</label>
@@ -145,14 +145,14 @@
 									<label>Telefone (Opcional)</label>
 								</h:panelGroup>
 
+								<p:outputLabel value="" />
+
 								<h:panelGroup styleClass="md-inputfield">
 									<p:inputText id="email" value="#{MBPaciente.pessoa.email}"
 										required="true" maxlength="100"
 										requiredMessage="É necessário digitar um Email" />
 									<label>Email</label>
 								</h:panelGroup>
-
-								<p:outputLabel value="" />
 
 								<p:selectOneMenu id="escol"
 									requiredMessage="É necessario selecionar a escolaridade do Paciente"
@@ -195,9 +195,9 @@
 							<!-- 							<p:separator /> -->
 
 							<h3>Dados Clinicos</h3>
-							<p:panelGrid id="pgDadosPaciente" layout="grid" columns="3"
+							<p:panelGrid id="pgDadosPaciente" layout="grid" columns="2"
 								styleClass="ui-panelgrid-blank form-group"
-								columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4">
+								columnClasses="ui-grid-col-6,ui-grid-col-6">
 
 								<h:panelGroup styleClass="md-inputfield">
 									<p:inputText value="#{MBPaciente.paciente.ocupacao}"
@@ -222,7 +222,6 @@
 									<p:inputText value="#{MBPaciente.paciente.nomeMae}"
 										maxlength="80" required="true"
 										requiredMessage="É necessário digitar o nome d do Paciente" />
-
 									<label>Nome da Mãe</label>
 								</h:panelGroup>
 
@@ -232,13 +231,24 @@
 										requiredMessage="É necessário digitar o nome do Pai do Paciente" />
 									<label>Nome do Pai</label>
 								</h:panelGroup>
+							</p:panelGrid>
+
+							<p:panelGrid id="pgDadosPaciente2" layout="grid" columns="3"
+								styleClass="ui-panelgrid-blank form-group"
+								columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4">
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputTextarea rows="5" cols="50" maxlength="300"
-										value="#{MBPaciente.paciente.conhecimentoCentro}"
-										queryDelay="750" minQueryLength="4" required="true"
-										requiredMessage="É necessário digitar como conheceu o centro" />
-									<label>Como conheceu o centro?</label>
+									<p:inputTextarea rows="5" cols="50" maxlength="100"
+										value="#{MBPaciente.paciente.medicamento}" queryDelay="750"
+										minQueryLength="4" />
+									<label>Uso continuo de medicamentos?</label>
+								</h:panelGroup>
+
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputTextarea rows="5" cols="50" maxlength="100"
+										value="#{MBPaciente.paciente.necessidadesEspeciais}"
+										queryDelay="750" minQueryLength="4" />
+									<label>Necessidades Especiais?</label>
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
@@ -248,11 +258,40 @@
 									<label>Observações</label>
 								</h:panelGroup>
 							</p:panelGrid>
+							
+							<br/>
+							
+							<h3>Responsavel</h3>
+							
+							<br/>
+							
+							<p:fieldset legend="Adicionar" toggleable="true" toggleSpeed="500">
+								 <p:ajax event="toggle" update="growl" />
+								<p:panelGrid id="pgResponsavel" layout="grid" columns="3"
+									styleClass="ui-panelgrid-blank form-group"
+									columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4">
 
-							<div align="center">
+									<h:panelGroup styleClass="md-inputfield">
+										<p:inputText value="#{MBPaciente.responsavel.nome}" maxlength="50" />
+										<label>Nome do Responsavel</label>
+									</h:panelGroup>
+
+									<h:panelGroup styleClass="md-inputfield">
+										<p:inputText value="#{MBPaciente.responsavel.telefone}" maxlength="13" />
+										<label>Telefone</label>
+									</h:panelGroup>
+
+									<h:panelGroup styleClass="md-inputfield">
+										<p:inputText value="#{MBPaciente.responsavel.celular}" maxlength="13" />
+										<label>Celular</label>
+									</h:panelGroup>
+								</p:panelGrid>
+							</p:fieldset>
+
+							<div align="center" style="margin-top: 50px">
 								<p:commandButton value="Salvar" styleClass="green-btn"
 									style="width:30%" actionListener="#{MBPaciente.salvar}"
-									update=":frmNovo:pgDadosPessoa,pgDadosPaciente :growl" />
+									update=":frmNovo:pgDadosPessoa,pgDadosPaciente,pgDadosPaciente2,pgResponsavel :growl" />
 							</div>
 						</div>
 					</h:form>
@@ -266,8 +305,8 @@
 					style="margin: 1em auto" />
 				<div align="center">
 					<p:commandButton value="Confirmar" styleClass="red-btn"
-						style="width:100%; margin-top: 20px"
-						actionListener="#{MBUsuario.telaInicial}" update=":growl" />
+						style="width:100%;"
+						actionListener="#{MBPaciente.telaInicial}" update=":growl" />
 				</div>
 			</h:form>
 		</p:dialog>

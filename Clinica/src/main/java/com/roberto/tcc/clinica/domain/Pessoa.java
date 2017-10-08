@@ -2,6 +2,7 @@ package com.roberto.tcc.clinica.domain;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -35,7 +36,7 @@ public class Pessoa extends GenericDomain{
 	@Column(length = 100, nullable = false)
 	private String escolaridade;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(nullable = false)
 	private Endereco endereco;
 	

@@ -19,6 +19,7 @@ import org.primefaces.context.RequestContext;
 
 import com.roberto.tcc.clinica.dao.AlunoDAO;
 import com.roberto.tcc.clinica.dao.EstadoDAO;
+import com.roberto.tcc.clinica.dao.FuncaoDAO;
 import com.roberto.tcc.clinica.dao.PessoaDAO;
 import com.roberto.tcc.clinica.dao.SupervisorDAO;
 import com.roberto.tcc.clinica.domain.Aluno;
@@ -47,12 +48,6 @@ public class AlunoBean implements Serializable {
 	private List<Funcao> funcoes = null;
 	private List<Supervisor> supervisores = null;
 
-	private AlunoDAO alunoDAO = null;
-	private PessoaDAO pessoaDAO = null;
-	private EstadoDAO estadoDAO = null;
-	private FuncaoDAO funcaoDAO = null;
-	private SupervisorDAO supervisorDAO = null;
-
 	public void iniciarDomain() {
 		aluno = new Aluno();
 		pessoa = new Pessoa();
@@ -60,16 +55,7 @@ public class AlunoBean implements Serializable {
 		estado = new Estado();
 	}
 
-	public void iniciarDAO() {
-		alunoDAO = new AlunoDAO();
-		estadoDAO = new EstadoDAO();
-		pessoaDAO = new PessoaDAO();
-		funcaoDAO = new FuncaoDAO();
-		supervisorDAO = new SupervisorDAO();
-	}
-
 	public void inicial() {
-		iniciarDAO();
 		iniciarDomain();
 	}
 
@@ -96,7 +82,8 @@ public class AlunoBean implements Serializable {
 			this.pessoa.setEndereco(this.endereco);
 			this.aluno.setPessoa(this.pessoa);
 			this.aluno.setDataCadastro(new Date());
-			alunoDAO.merge(this.aluno);
+			AlunoDAO aDAO = new AlunoDAO();
+			aDAO.salvarPessoa(this.aluno);
 			
 			RequestContext.getCurrentInstance().execute("PF('dlgConfirma').show();");
 		} catch (RuntimeException erro) {
@@ -108,8 +95,9 @@ public class AlunoBean implements Serializable {
 	public void excluir(ActionEvent evento) {
 		try {
 			Aluno aluno = (Aluno) evento.getComponent().getAttributes().get("alunoSelecionado");
-			alunoDAO.excluir(aluno);
-			alunos = alunoDAO.listar();
+			AlunoDAO aDAO = new AlunoDAO();
+			aDAO.excluir(aluno);
+			alunos = aDAO.listar();
 			Messages.addGlobalInfo("Aluno excluido com sucesso");
 		} catch (RuntimeException erro) {
 			logger.error("Ocorreu um erro ao tentar excluir aluno: "+erro);
@@ -128,10 +116,10 @@ public class AlunoBean implements Serializable {
 				Messages.addGlobalWarn("Informe um CPF!");
 				return;
 			}
-
-			Pessoa pessoa = pessoaDAO.buscarCPF(this.pessoa.getCPF());
+			
+			Pessoa pessoa = new PessoaDAO().buscarCPF(this.pessoa.getCPF());
 			if (pessoa != null) {
-				Aluno aluno = alunoDAO.buscarCodigoPes(pessoa.getCodigo());
+				Aluno aluno = new AlunoDAO().buscarCodigoPes(pessoa.getCodigo());
 				if(aluno != null && this.aluno.getCodigo() == null) {
 					Messages.addGlobalWarn("Essa Pessoa já é um Aluno Cadastrado no Sistema!");
 					this.pessoa = new Pessoa();
@@ -140,6 +128,9 @@ public class AlunoBean implements Serializable {
 				this.pessoa = pessoa;
 				this.endereco = pessoa.getEndereco();
 				this.estado = this.endereco.getEstado();
+			}else {
+				this.pessoa = new Pessoa();
+				this.pessoa.setCPF(cpf);
 			}
 
 		} catch (RuntimeException erro) {
@@ -165,7 +156,7 @@ public class AlunoBean implements Serializable {
 	public void iniciaEdicao() {
 		Long codigo = (Long) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("codigo");
 		if (codigo != null) {
-			this.aluno = alunoDAO.buscar(codigo);
+			this.aluno = new AlunoDAO().buscar(codigo);
 			this.pessoa = aluno.getPessoa();
 			this.endereco = pessoa.getEndereco();
 			this.estado = endereco.getEstado();
@@ -200,7 +191,7 @@ public class AlunoBean implements Serializable {
 
 			endereco.setCidade(json.getString("localidade"));
 			
-			estado = estadoDAO.buscarSigla(json.getString("uf"));
+			estado = new EstadoDAO().buscarSigla(json.getString("uf"));
 
 		} catch (MalformedURLException erro) {
 			logger.error("Erro ao buscar o CEP: " + erro);
@@ -213,7 +204,7 @@ public class AlunoBean implements Serializable {
 
 	public void listarAlunos() {
 		try {
-			alunos = alunoDAO.listar();
+			alunos = new AlunoDAO().listar();
 		} catch (RuntimeException erro) {
 			logger.error("Ocorreu um erro aomlistar os alunos: " + erro);
 		}
@@ -221,7 +212,7 @@ public class AlunoBean implements Serializable {
 
 	public void listarFuncoes() {
 		try {
-			funcoes = funcaoDAO.listar();
+			funcoes = new FuncaoDAO().listar();
 		} catch (RuntimeException erro) {
 			logger.error("Ocorreu um erro ao listar os Cargos: " + erro);
 		}
@@ -229,7 +220,7 @@ public class AlunoBean implements Serializable {
 
 	public void listarSupervisores() {
 		try {
-			supervisores = supervisorDAO.listar();
+			supervisores = new SupervisorDAO().listar();
 		} catch (RuntimeException erro) {
 			logger.error("Ocorreu um erro ao listar os Supervisores: " + erro);
 		}
@@ -237,7 +228,7 @@ public class AlunoBean implements Serializable {
 
 	public void carregarEstados() {
 		try {
-			estados = estadoDAO.listar();
+			estados = new EstadoDAO().listar();
 		} catch (RuntimeException erro) {
 			logger.error("Erro ao listar os estados: " + erro);
 			Messages.addGlobalError("Ocorreu um erro ao listar os Estados");

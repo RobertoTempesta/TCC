@@ -1,6 +1,5 @@
-package com.roberto.tcc.clinica.bean;
+package com.roberto.tcc.clinica.dao;
 
-import com.roberto.tcc.clinica.dao.GenericDAO;
 import com.roberto.tcc.clinica.domain.Funcao;
 
 @SuppressWarnings("serial")

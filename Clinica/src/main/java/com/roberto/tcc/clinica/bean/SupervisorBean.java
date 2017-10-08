@@ -144,6 +144,9 @@ public class SupervisorBean implements Serializable {
 				this.pessoa = pessoa;
 				this.endereco = pessoa.getEndereco();
 				this.estado = this.endereco.getEstado();
+			}else {
+				this.pessoa = new Pessoa();
+				this.pessoa.setCPF(cpf);
 			}
 
 		} catch (RuntimeException erro) {

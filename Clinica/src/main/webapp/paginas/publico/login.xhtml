@@ -21,37 +21,47 @@
 <h:body styleClass="login-body">
 	<div class="card login-panel ui-fluid">
 		<div class="ui-g">
-		<p:growl id="growl" />
+			<p:growl id="growl" />
 			<h:form id="frmLogin">
-				
-					<p:graphicImage name="CEPP6.png" width="70%"
-						library="imagens" />
-				
+
+				<p:graphicImage name="logo.png" width="50%" library="imagens" />
+
 				<div class="ui-g-12">
 					<h:panelGroup styleClass="md-inputfield">
-						<p:inputMask value="#{MBLogin.usuario.pessoa.CPF}" mask="999.999.999-99" required="true"
-							requiredMessage="É necessario digitar o CPF"/>
+						<p:inputMask value="#{MBLogin.usuario.pessoa.CPF}"
+							mask="999.999.999-99" required="true"
+							requiredMessage="É necessario digitar o CPF" />
 						<label>CPF</label>
 					</h:panelGroup>
 				</div>
 				<div class="ui-g-12">
 					<h:panelGroup styleClass="md-inputfield">
 						<p:password value="#{MBLogin.usuario.senha}" required="true"
-							requiredMessage="É necessario digitar a senha"/>
+							requiredMessage="É necessario digitar a senha" />
 						<label>Senha</label>
 					</h:panelGroup>
 				</div>
 				<div class="ui-g-12">
-					<p:commandButton value="Logar/Entrar" actionListener="#{MBLogin.login}"
-						icon="ui-icon-person" update=":frmLogin :growl"/>
-<!-- 					<p:button value="Esqueci minha senha" icon="ui-icon-help" -->
-<!-- 						styleClass="secondary" /> -->
+					<p:commandButton value="Logar/Entrar"
+						actionListener="#{MBLogin.login}" icon="ui-icon-person"
+						update=":frmLogin :growl" />
+					<!-- 					<p:button value="Esqueci minha senha" icon="ui-icon-help" -->
+					<!-- 						styleClass="secondary" /> -->
 				</div>
 			</h:form>
 		</div>
 	</div>
 
-<!-- 	<div class="login-footer">Centro de Estudos e Práticas em Psicologia das FIO</div> -->
+	<p:ajaxStatus style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
+           <f:facet name="start">
+               <i class="fa fa-circle-o-notch fa-spin ajax-loader" aria-hidden="true"></i>
+           </f:facet>
+
+           <f:facet name="complete">
+               <h:outputText value="" />
+           </f:facet>
+       </p:ajaxStatus>
+
 
 	<h:outputStylesheet name="css/ripple.css" library="ultima-layout" />
 	<h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css"
