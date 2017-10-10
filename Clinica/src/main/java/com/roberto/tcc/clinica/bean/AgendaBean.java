@@ -1,7 +1,6 @@
 package com.roberto.tcc.clinica.bean;
 
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -14,12 +13,14 @@ import javax.faces.context.FacesContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleModel;
 
 import com.roberto.tcc.clinica.dao.AlunoDAO;
 import com.roberto.tcc.clinica.dao.PacienteDAO;
 import com.roberto.tcc.clinica.dao.SalaAtendimentoDAO;
+import com.roberto.tcc.clinica.dao.SessaoDAO;
 import com.roberto.tcc.clinica.domain.Aluno;
 import com.roberto.tcc.clinica.domain.Paciente;
 import com.roberto.tcc.clinica.domain.SalaAtendimento;
@@ -32,7 +33,7 @@ import com.roberto.tcc.clinica.util.Constantes;
 public class AgendaBean implements Serializable {
 
 	private static final Logger logger = LogManager.getLogger(AgendaBean.class);
-	private ScheduleModel sessoes;
+	private ScheduleModel sessoesMarcadas;
 
 	private Sessao sessao;
 	private int anoCorrente = Constantes.ANO_CORRENTE;
@@ -40,11 +41,35 @@ public class AgendaBean implements Serializable {
 	private List<Aluno> alunos;
 	private List<SalaAtendimento> salas;
 	private List<Paciente> pacientes;
+	private List<Sessao> sessoes;
 
 	@PostConstruct
 	public void listar() {
-		sessoes = new DefaultScheduleModel();
+		sessoesMarcadas = new DefaultScheduleModel();
+		listarSessoes();
+		for (Sessao s : sessoes) {
+			sessoesMarcadas.addEvent(
+					new DefaultScheduleEvent(s.getPaciente().getPessoa().getNome(), s.getData(), s.getData()));
+		}
+
 	}
+
+	public void listarSessoes() {
+		try {
+			sessoes = new SessaoDAO().listar("data");
+		} catch (RuntimeException erro) {
+			logger.error("Ocorreu um erro ao tentar carregar as sessões: " + erro);
+		}
+	}
+
+//	private Date previousDay8Pm() {
+//		Calendar t = (Calendar) today().clone();
+//		t.set(Calendar.AM_PM, Calendar.PM);
+//		t.set(Calendar.DATE, t.get(Calendar.DATE) - 1);
+//		t.set(Calendar.HOUR, 8);
+//
+//		return t.getTime();
+//	}
 
 	public void novo(SelectEvent evento) {
 		sessao = new Sessao();
@@ -58,25 +83,29 @@ public class AgendaBean implements Serializable {
 			logger.error("Erro ao carregar os objetos da Sessão: " + erro);
 		}
 	}
-	
+
 	public void salvar() {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(sessao.getData());
-		calendar.add(Calendar.DATE, 1);
-		sessao.setData(calendar.getTime());
+		sessao.getPaciente().setNumeroCaso((sessao.getPaciente().getNumeroCaso() + anoCorrente));
+		sessao.setFrequencia('N');
+
+		SessaoDAO dao = new SessaoDAO();
+		dao.merge(sessao);
+		
+		listar();
 	}
 
 	public void onRowSelect(SelectEvent event) {
-		FacesMessage msg = new FacesMessage("Paciente Selecionado", ((Paciente) event.getObject()).getPessoa().getNome());
+		FacesMessage msg = new FacesMessage("Paciente Selecionado",
+				((Paciente) event.getObject()).getPessoa().getNome());
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 
-	public ScheduleModel getSessoes() {
-		return sessoes;
+	public ScheduleModel getSessoesMarcadas() {
+		return sessoesMarcadas;
 	}
 
-	public void setSessoes(ScheduleModel sessoes) {
-		this.sessoes = sessoes;
+	public void setSessoesMarcadas(ScheduleModel sessoes) {
+		this.sessoesMarcadas = sessoes;
 	}
 
 	public Sessao getSessao() {

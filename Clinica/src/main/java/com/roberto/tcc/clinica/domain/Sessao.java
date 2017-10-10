@@ -32,7 +32,7 @@ public class Sessao extends GenericDomain{
 	private Character frequencia;
 	
 	@Column(nullable = false)
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date data;
 	
 

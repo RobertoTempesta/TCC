@@ -9,11 +9,17 @@
 			<div class="ui-g-12">
 				<div class="card">
 
-					<h:form>
-						<p:schedule value="#{MBAgenda.sessoes}">
+					<h:form id="frmPrincipal">
+						<p:schedule value="#{MBAgenda.sessoesMarcadas}">
+
 							<p:ajax event="dateSelect" oncomplete="PF('dlgSessao').show();"
 								listener="#{MBAgenda.novo}"
 								update=":frmNovaSessao :frmPacientes:lista :growl" />
+
+<!-- 							<p:ajax event="eventSelect" -->
+<!-- 								listener="#{scheduleView.onEventSelect}" update="eventDetails" -->
+<!-- 								oncomplete="PF('eventDialog').show();" /> -->
+
 						</p:schedule>
 					</h:form>
 
@@ -26,9 +32,10 @@
 									styleClass="ui-panelgrid-blank form-group">
 
 									<h:panelGroup styleClass="md-inputfield">
-										<p:inputText value="#{MBAgenda.sessao.data}" disabled="true">
+										<p:calendar value="#{MBAgenda.sessao.data}"
+											pattern="dd/MM/yyyy HH:mm">
 											<f:convertDateTime locale="pt_BR" />
-										</p:inputText>
+										</p:calendar>
 										<label>Data:</label>
 									</h:panelGroup>
 
@@ -41,9 +48,9 @@
 											onclick="PF('dlgPaciente').show();" />
 
 									</p:panelGrid>
-									
+
 									<h:outputLabel id="pacienteSelecionado"
-											value="Paciente: #{MBAgenda.sessao.paciente.pessoa.nome}" />
+										value="Paciente: #{MBAgenda.sessao.paciente.pessoa.nome}" />
 
 									<p:panelGrid layout="grid" columns="2"
 										styleClass="ui-panelgrid-blank form-group"
@@ -53,7 +60,7 @@
 											<p:inputText value="#{MBAgenda.sessao.paciente.numeroCaso}" />
 											<label>Numero do Caso:</label>
 										</h:panelGroup>
-										
+
 										<p:outputLabel value="/#{MBAgenda.anoCorrente}" />
 
 									</p:panelGrid>
@@ -78,6 +85,8 @@
 											itemValue="#{aluno}" itemLabel="#{aluno.pessoa.nome}" />
 									</p:selectOneMenu>
 
+
+
 									<h:panelGroup styleClass="md-inputfield">
 										<p:inputTextarea rows="5" cols="50" maxlength="500"
 											value="#{MBAgenda.sessao.observacao}" queryDelay="750"
@@ -89,8 +98,9 @@
 							</div>
 							<h:panelGrid columns="1">
 								<p:commandButton value="Salvar"
+									actionListener="#{MBAgenda.salvar}"
 									oncomplete="PF('dlgSessao').hide();"
-									update=":frmNovaSessao:pgNovaSessao :growl" />
+									update=":frmNovaSessao:pgNovaSessao :frmPrincipal :growl" />
 							</h:panelGrid>
 						</h:form>
 					</p:dialog>
@@ -107,7 +117,8 @@
 								paginator="true">
 
 								<p:ajax event="rowSelect" listener="#{MBAgenda.onRowSelect}"
-									update=":frmNovaSessao:pacienteSelecionado :growl" />
+									update=":frmNovaSessao:pacienteSelecionado :growl"
+									oncomplete="PF('dlgPaciente').hide();" />
 
 								<p:column headerText="Nome" style="text-align: center"
 									filterBy="#{paciente.pessoa.nome}">
