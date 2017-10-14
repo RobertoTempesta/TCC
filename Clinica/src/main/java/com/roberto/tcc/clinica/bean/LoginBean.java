@@ -3,7 +3,6 @@ package com.roberto.tcc.clinica.bean;
 import java.io.IOException;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -17,6 +16,7 @@ import org.omnifaces.util.Messages;
 import com.roberto.tcc.clinica.dao.UsuarioDAO;
 import com.roberto.tcc.clinica.domain.Pessoa;
 import com.roberto.tcc.clinica.domain.Usuario;
+import com.roberto.tcc.clinica.enumeracao.TipoUsuario;
 
 @SuppressWarnings("serial")
 @ManagedBean(name = "MBLogin")
@@ -73,11 +73,9 @@ public class LoginBean implements Serializable {
 		}
 	}
 
-	public boolean temAcesso(List<String> permissoes) {
-		for (String permissao : permissoes) {
-			if (usuarioLogado.getTipo() == permissao.charAt(0)) {
-				return true;
-			}
+	public boolean temAcesso() {
+		if (usuarioLogado.getTipoUsuario().equals(TipoUsuario.GERENCIADOR)) {
+			return true;
 		}
 		return false;
 	}

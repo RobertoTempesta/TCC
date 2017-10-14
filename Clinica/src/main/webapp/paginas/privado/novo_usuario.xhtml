@@ -53,8 +53,8 @@
 								<p:selectOneRadio id="sexo" layout="responsive" columns="2"
 									value="#{MBUsuario.pessoa.sexo}" required="true"
 									requiredMessage="É necessário selecionar o Sexo">
-									<f:selectItem itemLabel="Masculino" itemValue="M" />
-									<f:selectItem itemLabel="Feminino" itemValue="F" />
+									<f:selectItem itemLabel="Masculino" itemValue="MASCULINO" />
+									<f:selectItem itemLabel="Feminino" itemValue="FEMININO" />
 								</p:selectOneRadio>
 
 								<h:panelGroup styleClass="md-inputfield">
@@ -198,11 +198,11 @@
 								columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4">
 
 								<p:selectOneMenu id="tipo" layout="responsive" columns="2"
-									value="#{MBUsuario.usuario.tipo}" required="true"
+									value="#{MBUsuario.usuario.tipoUsuario}" required="true"
 									requiredMessage="É necessário selecionar o tipo de Usuário">
 									<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
-									<f:selectItem itemLabel="Gerênciador" itemValue="G" />
-									<f:selectItem itemLabel="Usuário" itemValue="U" />
+									<f:selectItem itemLabel="Gerênciador" itemValue="GERENCIADOR" />
+									<f:selectItem itemLabel="Usuário" itemValue="USUARIO" />
 								</p:selectOneMenu>
 
 								<p:outputLabel value="" />

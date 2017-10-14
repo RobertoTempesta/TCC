@@ -38,7 +38,7 @@
 					<pu:menu widgetVar="me">
 						<p:menuitem id="inicio" value="Início" icon="&#xE88A;" outcome="/paginas/privado/inicio" />
 						<p:submenu label="Cadastros" icon="&#xE8B8;">
-							<p:menuitem id="usuario" value="Usuários" icon="&#xE55A;" outcome="/paginas/privado/usuarios" rendered="#{MBLogin.temAcesso(['G', 'R'])}"/>
+							<p:menuitem id="usuario" value="Usuários" icon="&#xE55A;" outcome="/paginas/privado/usuarios" rendered="#{MBLogin.temAcesso()}"/>
 							<p:menuitem id="sala" value="Salas de Atendimento" icon="weekend" outcome="/paginas/privado/sala_atendimento"/>
 							<p:menuitem id="cargo" value="Cargos/Funções" icon="work" outcome="/paginas/privado/funcoes" />
 							<p:menuitem id="supervisor" value="Supervisores" icon="group" outcome="/paginas/privado/supervisores" />

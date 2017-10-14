@@ -22,7 +22,7 @@
 							<p:tooltip id="toolTipFade" for="novo"
 								value="Adicionar um novo Paciente" position="top" />
 						</h:panelGrid>
-						
+
 						<p:dataTable id="tabela"
 							emptyMessage="Nenhum registro encontrado....." rows="10"
 							paginator="true" value="#{MBPaciente.pacientes}" var="paciente"
@@ -79,73 +79,134 @@
 
 			</div>
 		</div>
-		<p:dialog header="Paciente" widgetVar="dlgDetalhes" draggable="false"
-			resizable="false" modal="true">
+		<p:dialog header="Detalhes do Paciente" widgetVar="dlgDetalhes"
+			draggable="false" resizable="false" modal="true" width="550">
 			<h:form id="frmDetalhes">
-				<p:panelGrid styleClass="nba-grid">
-					<f:facet name="header">
-						<p:row>
-							<p:column colspan="4" style="font-weight: bold;">Detalhes do Paciente</p:column>
-						</p:row>
-					</f:facet>
 
-					<p:row>
-						<p:column style="font-weight: bold;">Nome:</p:column>
-						<p:column colspan="3">
-							<h:outputText value="#{MBPaciente.paciente.pessoa.nome}" />
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column style="font-weight: bold;">CPF:</p:column>
-						<p:column>
-							<h:outputText value="#{MBPaciente.paciente.pessoa.CPF}" />
-						</p:column>
-						<p:column style="font-weight: bold;">RG:</p:column>
-						<p:column>
-							<h:outputText value="#{MBPaciente.paciente.pessoa.RG}" />
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column style="font-weight: bold;">Sexo:</p:column>
-						<p:column>
-							<h:outputText value="#{MBPaciente.paciente.pessoa.sexo}" />
-						</p:column>
-						<p:column style="font-weight: bold;">Idade:</p:column>
-						<p:column>
-							<h:outputText value="#{MBPaciente.paciente.pessoa.idade}" />
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column style="font-weight: bold;">Email:</p:column>
-						<p:column colspan="3">
-							<h:outputText value="#{MBPaciente.paciente.pessoa.email}" />
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column style="font-weight: bold;">Endereço:</p:column>
-						<p:column colspan="3">
-							<h:outputText
-								value="#{MBPaciente.paciente.pessoa.endereco.rua}, nº 
+				<p:tabView>
+					<p:tab title="Dados Gerais">
+
+						<p:panelGrid style="width:100%" styleClass="nba-grid">
+
+							<p:row>
+								<p:column style="font-weight: bold;">Nome:</p:column>
+								<p:column colspan="3">
+									<h:outputText value="#{MBPaciente.paciente.pessoa.nome}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">CPF:</p:column>
+								<p:column>
+									<h:outputText value="#{MBPaciente.paciente.pessoa.CPF}" />
+								</p:column>
+								<p:column style="font-weight: bold;">RG:</p:column>
+								<p:column>
+									<h:outputText value="#{MBPaciente.paciente.pessoa.RG}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">Sexo:</p:column>
+								<p:column>
+									<h:outputText value="#{MBPaciente.paciente.pessoa.sexo}" />
+								</p:column>
+								<p:column style="font-weight: bold;">Idade:</p:column>
+								<p:column>
+									<h:outputText value="#{MBPaciente.paciente.pessoa.idade}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">Endereço:</p:column>
+								<p:column colspan="3">
+									<h:outputText
+										value="#{MBPaciente.paciente.pessoa.endereco.rua}, nº 
 							#{MBPaciente.paciente.pessoa.endereco.numero}" />
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column style="font-weight: bold;">Bairro:</p:column>
-						<p:column colspan="3">
-							<h:outputText
-								value="#{MBPaciente.paciente.pessoa.endereco.bairro}" />
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column style="font-weight: bold;">Cidade:</p:column>
-						<p:column colspan="3">
-							<h:outputText
-								value="#{MBPaciente.paciente.pessoa.endereco.cidade} - 
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">Bairro:</p:column>
+								<p:column colspan="3">
+									<h:outputText
+										value="#{MBPaciente.paciente.pessoa.endereco.bairro}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">Cidade:</p:column>
+								<p:column colspan="3">
+									<h:outputText
+										value="#{MBPaciente.paciente.pessoa.endereco.cidade} - 
 								#{MBPaciente.paciente.pessoa.endereco.estado.sigla} " />
-						</p:column>
-					</p:row>
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</p:tab>
 
-				</p:panelGrid>
+					<p:tab title="Dados Paciente">
+						<p:panelGrid style="width:100%" styleClass="nba-grid">
+
+							
+
+						</p:panelGrid>
+					</p:tab>
+					<p:tab title="Contato">
+						<p:panelGrid style="width:100%" styleClass="nba-grid">
+
+							<p:row>
+								<p:column style="font-weight: bold;">Email:</p:column>
+								<p:column colspan="3">
+									<h:outputText value="#{MBPaciente.paciente.pessoa.email}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">Telefone:</p:column>
+								<p:column colspan="3">
+									<h:outputText value="#{MBPaciente.paciente.pessoa.telefone1}" />
+								</p:column>
+							</p:row>
+							<p:row rendered="#{MBPaciente.paciente.pessoa.telefone2 != ''}">
+								<p:column style="font-weight: bold;">Telefone:</p:column>
+								<p:column colspan="3">
+									<h:outputText value="#{MBPaciente.paciente.pessoa.telefone2}" />
+								</p:column>
+							</p:row>
+							<p:row rendered="#{MBPaciente.paciente.pessoa.telefone3 != ''}">
+								<p:column style="font-weight: bold;">Telefone:</p:column>
+								<p:column colspan="3">
+									<h:outputText value="#{MBPaciente.paciente.pessoa.telefone3}" />
+								</p:column>
+							</p:row>
+							<p:row rendered="#{MBPaciente.paciente.pessoa.telefone4 != ''}">
+								<p:column style="font-weight: bold;">Telefone:</p:column>
+								<p:column colspan="3">
+									<h:outputText value="#{MBPaciente.paciente.pessoa.telefone4}" />
+								</p:column>
+							</p:row>
+
+						</p:panelGrid>
+					</p:tab>
+					<p:tab title="Responsavel" rendered="#{MBPaciente.paciente.responsavel != null}">
+						<p:panelGrid style="width:100%" styleClass="nba-grid">
+							<p:row>
+								<p:column style="font-weight: bold;">Responsavel:</p:column>
+								<p:column colspan="3">
+									<h:outputText value="#{MBPaciente.paciente.responsavel.nome}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">Telefone:</p:column>
+								<p:column colspan="3">
+									<h:outputText value="#{MBPaciente.paciente.responsavel.telefone}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">Celular:</p:column>
+								<p:column colspan="3">
+									<h:outputText value="#{MBPaciente.paciente.responsavel.celular}" />
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</p:tab>
+				</p:tabView>
+
 			</h:form>
 		</p:dialog>
 	</ui:define>

@@ -44,10 +44,6 @@ public class UsuarioBean implements Serializable {
 	private List<Estado> estados = null;
 	private List<Usuario> usuarios = null;
 
-	private UsuarioDAO usuarioDAO = null;
-	private PessoaDAO pessoaDAO = null;
-	private EstadoDAO estadoDAO = null;
-
 	public void iniciarDomain() {
 		usuario = new Usuario();
 		pessoa = new Pessoa();
@@ -55,20 +51,14 @@ public class UsuarioBean implements Serializable {
 		estado = new Estado();
 	}
 
-	public void iniciarDAO() {
-		usuarioDAO = new UsuarioDAO();
-		pessoaDAO = new PessoaDAO();
-		estadoDAO = new EstadoDAO();
-	}
-
 	public void inicial() {
-		iniciarDAO();
 		iniciarDomain();
 	}
 	
 	public void excluir(ActionEvent evento) {
 		try {
 			Usuario usuario = (Usuario) evento.getComponent().getAttributes().get("usuarioSelecionado");
+			UsuarioDAO usuarioDAO = new UsuarioDAO();
 			usuarioDAO.excluir(usuario);
 
 			usuarios = usuarioDAO.listar();
@@ -81,7 +71,7 @@ public class UsuarioBean implements Serializable {
 	
 	public void listarUsuarios() {
 		try {
-			usuarios = usuarioDAO.listar();
+			usuarios = new UsuarioDAO().listar();
 		}catch(RuntimeException erro) {
 			logger.error("Ocorreu um erro ao tentar listar os usuarios: "+erro);
 		}
@@ -103,7 +93,7 @@ public class UsuarioBean implements Serializable {
 	public void iniciaEdicao() {
 		Long codigo = (Long) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("codigo");
 		if (codigo != null) {
-			this.usuario = usuarioDAO.buscar(codigo);
+			this.usuario = new UsuarioDAO().buscar(codigo);
 			this.pessoa = usuario.getPessoa();
 			this.endereco = pessoa.getEndereco();
 			this.estado = endereco.getEstado();
@@ -120,6 +110,7 @@ public class UsuarioBean implements Serializable {
 			this.usuario = Criptografia.gerarSenhaCrip(this.usuario, this.usuario.getSenha());
 			this.usuario.setPessoa(this.pessoa);
 			
+			UsuarioDAO usuarioDAO = new UsuarioDAO();
 			usuarioDAO.salvarPessoa(this.usuario);
 			RequestContext.getCurrentInstance().execute("PF('dlgConfirma').show();");
 		} catch (RuntimeException | NoSuchAlgorithmException | UnsupportedEncodingException erro) {
@@ -140,9 +131,9 @@ public class UsuarioBean implements Serializable {
 				return;
 			}
 
-			Pessoa pessoa = pessoaDAO.buscarCPF(this.pessoa.getCPF());
+			Pessoa pessoa = new PessoaDAO().buscarCPF(this.pessoa.getCPF());
 			if (pessoa != null) {
-				Usuario user = usuarioDAO.buscarCodigoPes(pessoa.getCodigo());
+				Usuario user = new UsuarioDAO().buscarCodigoPes(pessoa.getCodigo());
 				if(user != null && this.usuario.getCodigo() == null) {
 					Messages.addGlobalWarn("Essa Pessoa já é um Usuário do Sistema!");
 					this.pessoa = new Pessoa();
@@ -190,7 +181,7 @@ public class UsuarioBean implements Serializable {
 
 			endereco.setCidade(json.getString("localidade"));
 			
-			estado = estadoDAO.buscarSigla(json.getString("uf"));
+			estado = new EstadoDAO().buscarSigla(json.getString("uf"));
 
 		} catch (MalformedURLException erro) {
 			logger.error("Erro ao buscar o CEP: " + erro);
@@ -203,7 +194,7 @@ public class UsuarioBean implements Serializable {
 
 	public void carregarEstados() {
 		try {
-			estados = estadoDAO.listar();
+			estados = new EstadoDAO().listar();
 		} catch (RuntimeException erro) {
 			logger.error("Erro ao listar os estados: " + erro);
 			Messages.addGlobalError("Ocorreu um erro ao listar os Estados");
@@ -223,6 +214,18 @@ public class UsuarioBean implements Serializable {
 			FacesContext.getCurrentInstance().getExternalContext().redirect("usuarios.xhtml");
 		} catch (IOException erro) {
 			logger.error("Ocorreu um erro ao tentar redirecionar a tela[usuarios] " + erro);
+		}
+	}
+	
+	public void detalhesUsuario(ActionEvent evento) {
+		try {
+			this.usuario =  (Usuario) evento.getComponent().getAttributes().get("usuarioSelecionado");
+			
+
+			RequestContext.getCurrentInstance().execute("PF('dlgDetalhes').show();");
+		} catch (RuntimeException erro) {
+			logger.error("Erro ao Buscar os detalhes do Usuario: " + erro);
+			Messages.addGlobalError("Ocorreu um erro ao tentar buscar os detalhes do Usuário");
 		}
 	}
 

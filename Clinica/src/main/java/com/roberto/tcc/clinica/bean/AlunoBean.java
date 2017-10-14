@@ -28,6 +28,7 @@ import com.roberto.tcc.clinica.domain.Endereco;
 import com.roberto.tcc.clinica.domain.Estado;
 import com.roberto.tcc.clinica.domain.Pessoa;
 import com.roberto.tcc.clinica.domain.Supervisor;
+import com.roberto.tcc.clinica.domain.Usuario;
 import com.roberto.tcc.clinica.util.CEPUtil;
 
 @ManagedBean(name = "MBAluno")
@@ -232,6 +233,17 @@ public class AlunoBean implements Serializable {
 		} catch (RuntimeException erro) {
 			logger.error("Erro ao listar os estados: " + erro);
 			Messages.addGlobalError("Ocorreu um erro ao listar os Estados");
+		}
+	}
+	
+	public void detalhesAluno(ActionEvent evento) {
+		try {
+			this.aluno =  (Aluno) evento.getComponent().getAttributes().get("alunoSelecionado");
+
+			RequestContext.getCurrentInstance().execute("PF('dlgDetalhes').show();");
+		} catch (RuntimeException erro) {
+			logger.error("Erro ao Buscar os detalhes do Aluno: " + erro);
+			Messages.addGlobalError("Ocorreu um erro ao tentar buscar os detalhes do Aluno");
 		}
 	}
 

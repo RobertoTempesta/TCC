@@ -42,12 +42,7 @@ public class SupervisorBean implements Serializable {
 	private List<Supervisor> supervisores = null;
 	private List<Estado> estados = null;
 
-	private SupervisorDAO supervisorDAO = null;
-	private PessoaDAO pessoaDAO = null;
-	private EstadoDAO estadoDAO = null;
-
 	public void inicial() {
-		iniciarDAO();
 		iniciarDomain();
 	}
 
@@ -56,12 +51,6 @@ public class SupervisorBean implements Serializable {
 		pessoa = new Pessoa();
 		endereco = new Endereco();
 		estado = new Estado();
-	}
-
-	public void iniciarDAO() {
-		supervisorDAO = new SupervisorDAO();
-		estadoDAO = new EstadoDAO();
-		pessoaDAO = new PessoaDAO();
 	}
 
 	public void telaNovoSupervisor() {
@@ -96,7 +85,7 @@ public class SupervisorBean implements Serializable {
 	public void iniciaEdicao() {
 		Long codigo = (Long) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("codigo");
 		if (codigo != null) {
-			this.supervisor = supervisorDAO.buscar(codigo);
+			this.supervisor = new SupervisorDAO().buscar(codigo);
 			this.pessoa = supervisor.getPessoa();
 			this.endereco = pessoa.getEndereco();
 			this.estado =  endereco.getEstado();
@@ -111,6 +100,7 @@ public class SupervisorBean implements Serializable {
 			this.pessoa.setEndereco(this.endereco);
 			this.supervisor.setPessoa(this.pessoa);
 			this.supervisor.setDataCadastro(new Date());
+			SupervisorDAO supervisorDAO = new SupervisorDAO();
 			supervisorDAO.salvarPessoa(this.supervisor);
 
 			RequestContext.getCurrentInstance().execute("PF('dlgConfirma').show();");
@@ -133,9 +123,9 @@ public class SupervisorBean implements Serializable {
 				return;
 			}
 
-			Pessoa pessoa = pessoaDAO.buscarCPF(this.pessoa.getCPF());
+			Pessoa pessoa = new PessoaDAO().buscarCPF(this.pessoa.getCPF());
 			if (pessoa != null) {
-				Supervisor supervisor = supervisorDAO.buscarCodigoPes(pessoa.getCodigo());
+				Supervisor supervisor = new SupervisorDAO().buscarCodigoPes(pessoa.getCodigo());
 				if(supervisor != null && this.supervisor.getCodigo() == null) {
 					Messages.addGlobalWarn("Essa Pessoa já é um Supervisor cadastrado no Sistema!");
 					this.pessoa = new Pessoa();
@@ -181,7 +171,7 @@ public class SupervisorBean implements Serializable {
 			endereco.setRua(json.getString("logradouro"));
 			endereco.setCidade(json.getString("localidade"));
 			
-			estado = estadoDAO.buscarSigla(json.getString("uf"));
+			estado = new EstadoDAO().buscarSigla(json.getString("uf"));
 
 		} catch (MalformedURLException erro) {
 			logger.error("Erro ao buscar o CEP: " + erro);
@@ -203,7 +193,7 @@ public class SupervisorBean implements Serializable {
 
 	public void carregarEstados() {
 		try {
-			estados = estadoDAO.listar();
+			estados = new EstadoDAO().listar();
 		} catch (RuntimeException erro) {
 			logger.error("Erro ao listar os estados: " + erro);
 			Messages.addGlobalError("Ocorreu um erro ao listar os Estados");
@@ -212,7 +202,7 @@ public class SupervisorBean implements Serializable {
 
 	public void listarSupervisores() {
 		try {
-			supervisores = supervisorDAO.listarOrdenado();
+			supervisores = new SupervisorDAO().listarOrdenado();
 		} catch (RuntimeException erro) {
 			logger.error("Erro ao listar os supervisores: " + erro);
 			Messages.addGlobalError("Ocorreu um erro ao tentar listar os Supervisores");
@@ -222,6 +212,7 @@ public class SupervisorBean implements Serializable {
 	public void excluir(ActionEvent evento) {
 		try {
 			Supervisor supervisor = (Supervisor) evento.getComponent().getAttributes().get("supervisorSelecionado");
+			SupervisorDAO supervisorDAO = new SupervisorDAO();
 			supervisorDAO.excluir(supervisor);
 
 			supervisores = supervisorDAO.listarOrdenado();
@@ -229,6 +220,18 @@ public class SupervisorBean implements Serializable {
 		} catch (RuntimeException erro) {
 			logger.error("Erro ao excluir supervisor: " + erro);
 			Messages.addGlobalError("Ocorreu um erro ao tentar deletar o supervisor");
+		}
+	}
+	
+	public void detalhesSupervisor(ActionEvent evento) {
+		try {
+			this.supervisor =  (Supervisor) evento.getComponent().getAttributes().get("supervisorSelecionado");
+			
+
+			RequestContext.getCurrentInstance().execute("PF('dlgDetalhes').show();");
+		} catch (RuntimeException erro) {
+			logger.error("Erro ao buscar Supervisor: " + erro);
+			Messages.addGlobalError("Ocorreu um erro ao tentar buscar os detalhes do Supervisor");
 		}
 	}
 

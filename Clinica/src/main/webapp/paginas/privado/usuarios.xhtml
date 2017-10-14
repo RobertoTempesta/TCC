@@ -34,7 +34,7 @@
 							</p:column>
 
 							<p:column headerText="Tipo">
-								<h:outputText value="#{user.tipoFormatado}" />
+								<h:outputText value="#{user.tipoUsuario.toString()}" />
 							</p:column>
 
 							<p:column headerText="Usuário">
@@ -55,16 +55,18 @@
 									actionListener="#{MBUsuario.editar}">
 									<f:attribute name="usuarioSelecionado" value="#{user}" />
 								</p:commandButton>
-								<p:commandButton id="detalhes" icon="ui-icon-search">
-									
+								<p:commandButton id="detalhes" icon="ui-icon-search"
+									actionListener="#{MBUsuario.detalhesUsuario}"
+									update="frmDetalhes">
+									<f:attribute name="usuarioSelecionado" value="#{user}" />
 								</p:commandButton>
 
-								<p:tooltip id="toolDelete" for="delete"
-								value="Deletar Usuário?" position="top" />
-								<p:tooltip id="toolEditare" for="editar"
-								value="Editar Usuário?" position="top" />
+								<p:tooltip id="toolDelete" for="delete" value="Deletar Usuário?"
+									position="top" />
+								<p:tooltip id="toolEditare" for="editar" value="Editar Usuário?"
+									position="top" />
 								<p:tooltip id="toolDetalhes" for="detalhes"
-								value="Ver detalhes do Usuário?" position="top" />
+									value="Ver detalhes do Usuário?" position="top" />
 							</p:column>
 						</p:dataTable>
 
@@ -79,6 +81,104 @@
 
 			</div>
 		</div>
+		<p:dialog header="Usuário" widgetVar="dlgDetalhes" draggable="false"
+			resizable="false" modal="true" width="550">
+			<h:form id="frmDetalhes">
 
+				<p:tabView>
+					<p:tab title="Dados Gerais">
+						<p:panelGrid style="width:100%" styleClass="nba-grid">
+							<p:row>
+								<p:column style="font-weight: bold;">Nome:</p:column>
+								<p:column colspan="3">
+									<h:outputText value="#{MBUsuario.usuario.pessoa.nome}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">CPF:</p:column>
+								<p:column>
+									<h:outputText value="#{MBUsuario.usuario.pessoa.CPF}" />
+								</p:column>
+								<p:column style="font-weight: bold;">RG:</p:column>
+								<p:column>
+									<h:outputText value="#{MBUsuario.usuario.pessoa.RG}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">Sexo:</p:column>
+								<p:column>
+									<h:outputText value="#{MBUsuario.usuario.pessoa.sexo}" />
+								</p:column>
+								<p:column style="font-weight: bold;">Idade:</p:column>
+								<p:column>
+									<h:outputText value="#{MBUsuario.usuario.pessoa.idade}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">Lougradouro:</p:column>
+								<p:column colspan="3">
+									<h:outputText
+										value="#{MBUsuario.usuario.pessoa.endereco.rua}, nº 
+							#{MBPaciente.paciente.pessoa.endereco.numero}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">Bairro:</p:column>
+								<p:column colspan="3">
+									<h:outputText
+										value="#{MBUsuario.usuario.pessoa.endereco.bairro}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">Cidade:</p:column>
+								<p:column colspan="3">
+									<h:outputText
+										value="#{MBUsuario.usuario.pessoa.endereco.cidade} - 
+								#{MBUsuario.usuario.pessoa.endereco.estado.sigla} " />
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</p:tab>
+					<p:tab title="Contato">
+						<p:panelGrid style="width:100%" styleClass="nba-grid">
+							
+							<p:row>
+								<p:column style="font-weight: bold;">Email:</p:column>
+								<p:column colspan="3">
+									<h:outputText value="#{MBUsuario.usuario.pessoa.email}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">Telefone:</p:column>
+								<p:column colspan="3">
+									<h:outputText value="#{MBUsuario.usuario.pessoa.telefone1}" />
+								</p:column>
+							</p:row>
+							<p:row rendered="#{MBUsuario.usuario.pessoa.telefone2 != ''}">
+								<p:column style="font-weight: bold;">Telefone:</p:column>
+								<p:column colspan="3">
+									<h:outputText value="#{MBUsuario.usuario.pessoa.telefone2}" />
+								</p:column>
+							</p:row>
+							<p:row rendered="#{MBUsuario.usuario.pessoa.telefone3 != ''}">
+								<p:column style="font-weight: bold;">Telefone:</p:column>
+								<p:column colspan="3">
+									<h:outputText value="#{MBUsuario.usuario.pessoa.telefone3}" />
+								</p:column>
+							</p:row>
+							<p:row rendered="#{MBUsuario.usuario.pessoa.telefone4 != ''}">
+								<p:column style="font-weight: bold;">Telefone:</p:column>
+								<p:column colspan="3">
+									<h:outputText value="#{MBUsuario.usuario.pessoa.telefone4}" />
+								</p:column>
+							</p:row>
+							
+						</p:panelGrid>
+					</p:tab>
+
+				</p:tabView>
+			</h:form>
+		</p:dialog>
+		
 	</ui:define>
 </ui:composition>

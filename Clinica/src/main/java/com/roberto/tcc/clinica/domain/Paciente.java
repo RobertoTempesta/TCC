@@ -5,10 +5,14 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.roberto.tcc.clinica.enumeracao.EstadoCivil;
 
 @SuppressWarnings("serial")
 @Entity
@@ -21,8 +25,9 @@ public class Paciente extends GenericDomain {
 	@Column(length = 100, nullable = false)
 	private String ocupacao;
 	
-	@Column(length = 1, nullable = false)
-	private char estadoCivil;
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	private EstadoCivil estadoCivil;
 	
 	@Column(length = 80, nullable = false)
 	private String nomePai;
@@ -63,14 +68,6 @@ public class Paciente extends GenericDomain {
 
 	public void setOcupacao(String ocupacao) {
 		this.ocupacao = ocupacao;
-	}
-
-	public char getEstadoCivil() {
-		return estadoCivil;
-	}
-
-	public void setEstadoCivil(char estadoCivil) {
-		this.estadoCivil = estadoCivil;
 	}
 
 	public String getNomePai() {
@@ -135,5 +132,13 @@ public class Paciente extends GenericDomain {
 
 	public void setNumeroCaso(String numeroCaso) {
 		this.numeroCaso = numeroCaso;
+	}
+
+	public EstadoCivil getEstadoCivil() {
+		return estadoCivil;
+	}
+
+	public void setEstadoCivil(EstadoCivil estadoCivil) {
+		this.estadoCivil = estadoCivil;
 	}
 }

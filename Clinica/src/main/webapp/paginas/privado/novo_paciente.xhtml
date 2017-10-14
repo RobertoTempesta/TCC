@@ -51,10 +51,10 @@
 								</h:panelGroup>
 
 								<p:selectOneRadio id="sexo" layout="responsive" columns="2"
-									value="#{MBPaciente.pessoa.sexo}" required="true"
+									value="#{MBUsuario.pessoa.sexo}" required="true"
 									requiredMessage="É necessário selecionar o Sexo">
-									<f:selectItem itemLabel="Masculino" itemValue="M" />
-									<f:selectItem itemLabel="Feminino" itemValue="F" />
+									<f:selectItem itemLabel="Masculino" itemValue="MASCULINO" />
+									<f:selectItem itemLabel="Feminino" itemValue="FEMININO" />
 								</p:selectOneRadio>
 
 								<h:panelGroup styleClass="md-inputfield">
@@ -211,24 +211,28 @@
 									required="true"
 									requiredMessage="É necessário selecionar o estado civil do paciente">
 									<f:selectItem itemLabel="Estado Civil" noSelectionOption="true" />
-									<f:selectItem itemLabel="Casado" itemValue="C" />
-									<f:selectItem itemLabel="Solteiro" itemValue="S" />
-									<f:selectItem itemLabel="Divorciado" itemValue="D" />
-									<f:selectItem itemLabel="Viuvo" itemValue="V" />
-									<f:selectItem itemLabel="Outros" itemValue="O" />
+									<f:selectItem itemLabel="Casado" itemValue="CASADO" />
+									<f:selectItem itemLabel="Solteiro" itemValue="SOLTEIRO" />
+									<f:selectItem itemLabel="Divorciado" itemValue="DIVORCIADO" />
+									<f:selectItem itemLabel="Viuvo" itemValue="VIUVO" />
+									<f:selectItem itemLabel="Outros" itemValue="OUTROS" />
 								</p:selectOneMenu>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText value="#{MBPaciente.paciente.nomeMae}"
-										maxlength="80" required="true"
-										requiredMessage="É necessário digitar o nome d do Paciente" />
+									<p:inputText id="mae" value="#{MBPaciente.paciente.nomeMae}"
+										maxlength="80" required="true" converter="upperCaseConverter"
+										requiredMessage="É necessário digitar o nome d do Paciente">
+										<p:ajax event="blur" update=":frmNovo:mae" />
+									</p:inputText>
 									<label>Nome da Mãe</label>
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText value="#{MBPaciente.paciente.nomePai}"
-										maxlength="80" required="true"
-										requiredMessage="É necessário digitar o nome do Pai do Paciente" />
+									<p:inputText id="pai" value="#{MBPaciente.paciente.nomePai}"
+										maxlength="80" required="true" converter="upperCaseConverter"
+										requiredMessage="É necessário digitar o nome do Pai do Paciente" >
+										<p:ajax event="blur" update=":frmNovo:pai" />
+									</p:inputText>
 									<label>Nome do Pai</label>
 								</h:panelGroup>
 							</p:panelGrid>
@@ -258,31 +262,37 @@
 									<label>Observações</label>
 								</h:panelGroup>
 							</p:panelGrid>
-							
-							<br/>
-							
+
+							<br />
+
 							<h3>Responsavel</h3>
-							
-							<br/>
-							
-							<p:fieldset legend="Adicionar" toggleable="true" toggleSpeed="500">
-								 <p:ajax event="toggle" update="growl" />
+
+							<br />
+
+							<p:fieldset legend="Adicionar" toggleable="true"
+								toggleSpeed="500">
+								<p:ajax event="toggle" update="growl" />
 								<p:panelGrid id="pgResponsavel" layout="grid" columns="3"
 									styleClass="ui-panelgrid-blank form-group"
 									columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4">
 
 									<h:panelGroup styleClass="md-inputfield">
-										<p:inputText value="#{MBPaciente.responsavel.nome}" maxlength="50" />
+										<p:inputText id="nomeResp" value="#{MBPaciente.responsavel.nome}"
+											maxlength="50" converter="upperCaseConverter">
+											<p:ajax event="blur" update=":frmNovo:nomeResp" />
+										</p:inputText>
 										<label>Nome do Responsavel</label>
 									</h:panelGroup>
 
 									<h:panelGroup styleClass="md-inputfield">
-										<p:inputText value="#{MBPaciente.responsavel.telefone}" maxlength="13" />
+										<p:inputText value="#{MBPaciente.responsavel.telefone}"
+											maxlength="13" />
 										<label>Telefone</label>
 									</h:panelGroup>
 
 									<h:panelGroup styleClass="md-inputfield">
-										<p:inputText value="#{MBPaciente.responsavel.celular}" maxlength="13" />
+										<p:inputText value="#{MBPaciente.responsavel.celular}"
+											maxlength="13" />
 										<label>Celular</label>
 									</h:panelGroup>
 								</p:panelGrid>
@@ -305,8 +315,8 @@
 					style="margin: 1em auto" />
 				<div align="center">
 					<p:commandButton value="Confirmar" styleClass="red-btn"
-						style="width:100%;"
-						actionListener="#{MBPaciente.telaInicial}" update=":growl" />
+						style="width:100%;" actionListener="#{MBPaciente.telaInicial}"
+						update=":growl" />
 				</div>
 			</h:form>
 		</p:dialog>

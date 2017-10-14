@@ -17,8 +17,8 @@
 					<h:form id="frmListagem">
 
 						<h:panelGrid style="margin: 1em auto">
-							<p:commandButton id="novo" icon="ui-icon-add" value="Novo Supervisor"
-								actionListener="#{MBSupervisor.novo}" />
+							<p:commandButton id="novo" icon="ui-icon-add"
+								value="Novo Supervisor" actionListener="#{MBSupervisor.novo}" />
 							<p:tooltip id="toolTipFade" for="novo"
 								value="Adicionar um novo Supervisor?" position="top" />
 						</h:panelGrid>
@@ -55,13 +55,16 @@
 										type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
 									<f:attribute name="supervisorSelecionado" value="#{superv}" />
 								</p:commandButton>
-								<p:commandButton id="detalhes" icon="ui-icon-search">
+								<p:commandButton id="detalhes" icon="ui-icon-search"
+									actionListener="#{MBSupervisor.detalhesSupervisor}"
+									update=":frmDetalhes">
+									<f:attribute name="supervisorSelecionado" value="#{superv}" />
 								</p:commandButton>
 
-								<p:tooltip id="toolDelete" for="delete" value="Deletar Supervisor?"
-									position="top" />
-								<p:tooltip id="toolEditare" for="editar" value="Editar Supervisor?"
-									position="top" />
+								<p:tooltip id="toolDelete" for="delete"
+									value="Deletar Supervisor?" position="top" />
+								<p:tooltip id="toolEditare" for="editar"
+									value="Editar Supervisor?" position="top" />
 								<p:tooltip id="toolDetalhes" for="detalhes"
 									value="Ver detalhes do Supervisor?" position="top" />
 							</p:column>
@@ -78,6 +81,141 @@
 				</div>
 			</div>
 		</div>
+
+		<p:dialog header="Detalhes do Supervisor" widgetVar="dlgDetalhes"
+			draggable="false" resizable="false" modal="true" width="550">
+			<h:form id="frmDetalhes">
+
+				<p:tabView>
+					<p:tab title="Dados Gerais">
+						<p:panelGrid style="width:100%" styleClass="nba-grid">
+							<p:row>
+								<p:column style="font-weight: bold;">Nome:</p:column>
+								<p:column colspan="3">
+									<h:outputText value="#{MBSupervisor.supervisor.pessoa.nome}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">CPF:</p:column>
+								<p:column>
+									<h:outputText value="#{MBSupervisor.supervisor.pessoa.CPF}" />
+								</p:column>
+								<p:column style="font-weight: bold;">RG:</p:column>
+								<p:column>
+									<h:outputText value="#{MBSupervisor.supervisor.pessoa.RG}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">Sexo:</p:column>
+								<p:column>
+									<h:outputText value="#{MBSupervisor.supervisor.pessoa.sexo}" />
+								</p:column>
+								<p:column style="font-weight: bold;">Idade:</p:column>
+								<p:column>
+									<h:outputText value="#{MBSupervisor.supervisor.pessoa.idade}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">Lougradouro:</p:column>
+								<p:column colspan="3">
+									<h:outputText
+										value="#{MBSupervisor.supervisor.pessoa.endereco.rua}, nº 
+							#{MBSupervisor.supervisor.pessoa.endereco.numero}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">Bairro:</p:column>
+								<p:column colspan="3">
+									<h:outputText
+										value="#{MBSupervisor.supervisor.pessoa.endereco.bairro}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">Cidade:</p:column>
+								<p:column colspan="3">
+									<h:outputText
+										value="#{MBSupervisor.supervisor.pessoa.endereco.cidade} - 
+								#{MBSupervisor.supervisor.pessoa.endereco.estado.sigla} " />
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</p:tab>
+
+					<p:tab title="Dados Professor">
+						<p:panelGrid style="width:100%" styleClass="nba-grid">
+
+							<p:row>
+								<p:column style="font-weight: bold;">Data do Cadastro:</p:column>
+								<p:column colspan="3">
+									<h:outputText value="#{MBSupervisor.supervisor.dataCadastro}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputText>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">Ensino:</p:column>
+								<p:column colspan="3">
+									<h:outputText
+										value="#{MBSupervisor.supervisor.pessoa.escolaridade}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">CRP:</p:column>
+								<p:column colspan="3">
+									<h:outputText value="#{MBSupervisor.supervisor.CRP}" />
+								</p:column>
+							</p:row>
+
+						</p:panelGrid>
+					</p:tab>
+
+					<p:tab title="Contato">
+						<p:panelGrid style="width:100%" styleClass="nba-grid">
+
+							<p:row>
+								<p:column style="font-weight: bold;">Email:</p:column>
+								<p:column colspan="3">
+									<h:outputText value="#{MBSupervisor.supervisor.pessoa.email}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;">Telefone:</p:column>
+								<p:column colspan="3">
+									<h:outputText
+										value="#{MBSupervisor.supervisor.pessoa.telefone1}" />
+								</p:column>
+							</p:row>
+							<p:row
+								rendered="#{MBSupervisor.supervisor.pessoa.telefone2 != ''}">
+								<p:column style="font-weight: bold;">Telefone:</p:column>
+								<p:column colspan="3">
+									<h:outputText
+										value="#{MBSupervisor.supervisor.pessoa.telefone2}" />
+								</p:column>
+							</p:row>
+							<p:row
+								rendered="#{MBSupervisor.supervisor.pessoa.telefone3 != ''}">
+								<p:column style="font-weight: bold;">Telefone:</p:column>
+								<p:column colspan="3">
+									<h:outputText
+										value="#{MBSupervisor.supervisor.pessoa.telefone3}" />
+								</p:column>
+							</p:row>
+							<p:row
+								rendered="#{MBSupervisor.supervisor.pessoa.telefone4 != ''}">
+								<p:column style="font-weight: bold;">Telefone:</p:column>
+								<p:column colspan="3">
+									<h:outputText
+										value="#{MBSupervisor.supervisor.pessoa.telefone4}" />
+								</p:column>
+							</p:row>
+
+						</p:panelGrid>
+					</p:tab>
+
+				</p:tabView>
+			</h:form>
+		</p:dialog>
 
 	</ui:define>
 </ui:composition>

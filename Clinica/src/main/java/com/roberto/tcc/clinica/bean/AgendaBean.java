@@ -94,7 +94,7 @@ public class AgendaBean implements Serializable {
 	public void salvar() {
 
 		sessao.getPaciente().setNumeroCaso((sessao.getPaciente().getNumeroCaso() + anoCorrente));
-		sessao.setFrequencia('N');
+//		sessao.setFrequencia('N');
 
 		SessaoDAO dao = new SessaoDAO();
 		dao.salvarPrimeiraSessao(sessao);

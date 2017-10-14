@@ -5,10 +5,14 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.roberto.tcc.clinica.enumeracao.Sexo;
 
 @SuppressWarnings("serial")
 @Entity
@@ -23,8 +27,9 @@ public class Pessoa extends GenericDomain{
 	@Column(length = 12, nullable = false)
 	private String RG;
 
-	@Column(length = 1,nullable = false)
-	private Character sexo;
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	private Sexo sexo;
 	
 	@Column(nullable = true)
 	@Temporal(TemporalType.DATE)
@@ -79,9 +84,7 @@ public class Pessoa extends GenericDomain{
 		RG = rG;
 	}
 
-	public Character getSexo() {
-		return sexo;
-	}public String getTelefone1() {
+	public String getTelefone1() {
 		return telefone1;
 	}
 
@@ -111,10 +114,6 @@ public class Pessoa extends GenericDomain{
 
 	public void setTelefone4(String telefone4) {
 		this.telefone4 = telefone4;
-	}
-
-	public void setSexo(Character sexo) {
-		this.sexo = sexo;
 	}
 
 	public Integer getIdade() {
@@ -155,6 +154,14 @@ public class Pessoa extends GenericDomain{
 
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
+	}
+
+	public Sexo getSexo() {
+		return sexo;
+	}
+
+	public void setSexo(Sexo sexo) {
+		this.sexo = sexo;
 	}
 
 

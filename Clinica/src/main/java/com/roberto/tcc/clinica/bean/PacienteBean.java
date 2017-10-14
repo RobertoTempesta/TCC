@@ -43,10 +43,6 @@ public class PacienteBean implements Serializable {
 
 	private List<Estado> estados = null;
 	private List<Paciente> pacientes = null;
-
-	private PacienteDAO pacienteDAO = null;
-	private PessoaDAO pessoaDAO = null;
-	private EstadoDAO estadoDAO = null;
 	
 	private boolean responsavelAtivo = false;
 
@@ -56,12 +52,6 @@ public class PacienteBean implements Serializable {
 		endereco = new Endereco();
 		estado = new Estado();
 		responsavel = new Responsavel();
-	}
-
-	public void iniciarDAO() {
-		pacienteDAO = new PacienteDAO();
-		pessoaDAO = new PessoaDAO();
-		estadoDAO = new EstadoDAO();
 	}
 
 	public void verificaCPF() {
@@ -76,9 +66,9 @@ public class PacienteBean implements Serializable {
 				return;
 			}
 
-			Pessoa pessoa = pessoaDAO.buscarCPF(this.pessoa.getCPF());
+			Pessoa pessoa = new PessoaDAO().buscarCPF(this.pessoa.getCPF());
 			if (pessoa != null) {
-				Paciente paciente = pacienteDAO.buscarCodigoPes(pessoa.getCodigo());
+				Paciente paciente = new PacienteDAO().buscarCodigoPes(pessoa.getCodigo());
 				if(paciente != null && this.paciente.getCodigo() == null) {
 					Messages.addGlobalWarn("Essa Pessoa já é um Paciente cadastrado no Sistema!");
 					this.pessoa = new Pessoa();
@@ -103,12 +93,11 @@ public class PacienteBean implements Serializable {
 	public void detalhesPaciente(ActionEvent evento) {
 		try {
 			this.paciente =  (Paciente) evento.getComponent().getAttributes().get("pacienteSelecionado");
-			pacienteDAO.buscar(paciente.getCodigo());
 
 			RequestContext.getCurrentInstance().execute("PF('dlgDetalhes').show();");
 		} catch (RuntimeException erro) {
-			logger.error("Erro ao excluir Paciente: " + erro);
-			Messages.addGlobalError("Ocorreu um erro ao tentar deletar o Paciente");
+			logger.error("Erro ao buscar Paciente: " + erro);
+			Messages.addGlobalError("Ocorreu um erro ao tentar buscar detalhes do Paciente");
 		}
 	}
 
@@ -139,7 +128,7 @@ public class PacienteBean implements Serializable {
 
 			endereco.setCidade(json.getString("localidade"));
 			
-			estado = estadoDAO.buscarSigla(json.getString("uf"));
+			estado = new EstadoDAO().buscarSigla(json.getString("uf"));
 
 		} catch (MalformedURLException erro) {
 			logger.error("Erro ao buscar o CEP: " + erro);
@@ -152,7 +141,7 @@ public class PacienteBean implements Serializable {
 
 	public void carregarEstados() {
 		try {
-			estados = estadoDAO.listar();
+			estados = new EstadoDAO().listar();
 		} catch (RuntimeException erro) {
 			logger.error("Erro ao listar os estados: " + erro);
 			Messages.addGlobalError("Ocorreu um erro ao listar os Estados");
@@ -176,13 +165,12 @@ public class PacienteBean implements Serializable {
 	}
 
 	public void inicial() {
-		iniciarDAO();
 		iniciarDomain();
 	}
 
 	public void carregarPacientes() {
 		try {
-			pacientes = pacienteDAO.listar();
+			pacientes = new PacienteDAO().listar();
 		} catch (RuntimeException erro) {
 			logger.error("Ocorreu um erro ao tentar carregar a lista de pacientes: " + erro);
 		}
@@ -209,6 +197,7 @@ public class PacienteBean implements Serializable {
 			this.paciente.setPessoa(this.pessoa);
 			
 			this.paciente.setDataCadastro(new Date());
+			PacienteDAO pacienteDAO = new PacienteDAO();
 			pacienteDAO.salvarPessoa(this.paciente);
 			RequestContext.getCurrentInstance().execute("PF('dlgConfirma').show();");
 		} catch (RuntimeException erro) {
@@ -220,6 +209,7 @@ public class PacienteBean implements Serializable {
 	public void excluir(ActionEvent evento) {
 		try {
 			Paciente paciente =  (Paciente) evento.getComponent().getAttributes().get("pacienteSelecionado");
+			PacienteDAO pacienteDAO = new PacienteDAO();
 			pacienteDAO.excluir(paciente);
 
 			pacientes = pacienteDAO.listar();
@@ -246,10 +236,11 @@ public class PacienteBean implements Serializable {
 	public void iniciaEdicao() {
 		Long codigo = (Long) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("codigo");
 		if (codigo != null) {
-			this.paciente = pacienteDAO.buscar(codigo);
+			this.paciente = new PacienteDAO().buscar(codigo);
 			this.pessoa = paciente.getPessoa();
 			this.endereco = pessoa.getEndereco();
 			this.estado = endereco.getEstado();
+			this.responsavel = paciente.getResponsavel();
 		}
 
 	}
