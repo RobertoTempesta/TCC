@@ -10,7 +10,7 @@ import com.roberto.tcc.clinica.util.HibernateUtil;
 @SuppressWarnings("serial")
 public class SessaoDAO extends GenericDAO<Sessao>{
 
-	public Sessao merge(Sessao s) {
+	public Sessao salvarPrimeiraSessao(Sessao s) {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		Transaction transacao = null;
 

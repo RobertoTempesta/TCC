@@ -43,38 +43,45 @@ public class AgendaBean implements Serializable {
 	private List<Paciente> pacientes;
 	private List<Sessao> sessoes;
 
+	private Date hora;
+
 	@PostConstruct
 	public void listar() {
 		sessoesMarcadas = new DefaultScheduleModel();
 		listarSessoes();
 		for (Sessao s : sessoes) {
-			sessoesMarcadas.addEvent(
-					new DefaultScheduleEvent(s.getPaciente().getPessoa().getNome(), s.getData(), s.getData()));
+
+			 DefaultScheduleEvent evento = new DefaultScheduleEvent();
+			 evento.setEndDate(s.getDataFim());
+			 evento.setStartDate(s.getDataInicio());
+			 evento.setData(s.getDataInicio());
+			 evento.setTitle(s.getPaciente().getPessoa().getNome());
+			 evento.setDescription(s.getPaciente().getNumeroCaso());
+			 evento.setAllDay(false);
+			 evento.setEditable(false);
+
+
+//			sessoesMarcadas.addEvent(
+//					new DefaultScheduleEvent(s.getPaciente().getPessoa().getNome(), s.getData(), s.getData()));
+			 sessoesMarcadas.addEvent(evento);
+
 		}
 
 	}
 
 	public void listarSessoes() {
 		try {
-			sessoes = new SessaoDAO().listar("data");
+			sessoes = new SessaoDAO().listar();
 		} catch (RuntimeException erro) {
 			logger.error("Ocorreu um erro ao tentar carregar as sessões: " + erro);
 		}
 	}
 
-//	private Date previousDay8Pm() {
-//		Calendar t = (Calendar) today().clone();
-//		t.set(Calendar.AM_PM, Calendar.PM);
-//		t.set(Calendar.DATE, t.get(Calendar.DATE) - 1);
-//		t.set(Calendar.HOUR, 8);
-//
-//		return t.getTime();
-//	}
-
 	public void novo(SelectEvent evento) {
 		sessao = new Sessao();
 		try {
-			sessao.setData((Date) evento.getObject());
+			sessao.setDataInicio((Date) evento.getObject());
+			sessao.setDataFim((Date) evento.getObject());
 			sessao.setPaciente(new Paciente());
 			alunos = new AlunoDAO().listar();
 			salas = new SalaAtendimentoDAO().listar();
@@ -85,12 +92,13 @@ public class AgendaBean implements Serializable {
 	}
 
 	public void salvar() {
+
 		sessao.getPaciente().setNumeroCaso((sessao.getPaciente().getNumeroCaso() + anoCorrente));
 		sessao.setFrequencia('N');
 
 		SessaoDAO dao = new SessaoDAO();
-		dao.merge(sessao);
-		
+		dao.salvarPrimeiraSessao(sessao);
+
 		listar();
 	}
 
@@ -146,6 +154,14 @@ public class AgendaBean implements Serializable {
 
 	public void setAnoCorrente(int anoCorrente) {
 		this.anoCorrente = anoCorrente;
+	}
+
+	public Date getHora() {
+		return hora;
+	}
+
+	public void setHora(Date hora) {
+		this.hora = hora;
 	}
 
 }

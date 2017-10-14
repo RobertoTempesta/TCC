@@ -33,7 +33,11 @@ public class Sessao extends GenericDomain{
 	
 	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date data;
+	private Date dataInicio;
+	
+	@Column(nullable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataFim;
 	
 
 	public SalaAtendimento getSala() {
@@ -76,12 +80,24 @@ public class Sessao extends GenericDomain{
 		this.frequencia = frequencia;
 	}
 
-	public Date getData() {
-		return data;
+	public Date getDataInicio() {
+		return dataInicio;
 	}
 
-	public void setData(Date data) {
-		this.data = data;
+	public void setDataInicio(Date dataInicio) {
+		this.dataInicio = dataInicio;
+	}
+
+	public Date getDataFim() {
+		return dataFim;
+	}
+
+	public void setDataFim(Date dataFim) {
+		this.dataFim = dataFim;
+	}
+
+	public void setFrequencia(Character frequencia) {
+		this.frequencia = frequencia;
 	}
 	
 	

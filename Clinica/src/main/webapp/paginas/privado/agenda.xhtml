@@ -10,15 +10,12 @@
 				<div class="card">
 
 					<h:form id="frmPrincipal">
-						<p:schedule value="#{MBAgenda.sessoesMarcadas}">
+						<p:schedule value="#{MBAgenda.sessoesMarcadas}" locale="pt_BR"
+							timeZone="America/Sao_Paulo">
 
 							<p:ajax event="dateSelect" oncomplete="PF('dlgSessao').show();"
 								listener="#{MBAgenda.novo}"
 								update=":frmNovaSessao :frmPacientes:lista :growl" />
-
-<!-- 							<p:ajax event="eventSelect" -->
-<!-- 								listener="#{scheduleView.onEventSelect}" update="eventDetails" -->
-<!-- 								oncomplete="PF('eventDialog').show();" /> -->
 
 						</p:schedule>
 					</h:form>
@@ -32,11 +29,15 @@
 									styleClass="ui-panelgrid-blank form-group">
 
 									<h:panelGroup styleClass="md-inputfield">
-										<p:calendar value="#{MBAgenda.sessao.data}"
-											pattern="dd/MM/yyyy HH:mm">
-											<f:convertDateTime locale="pt_BR" />
-										</p:calendar>
-										<label>Data:</label>
+										<p:calendar value="#{MBAgenda.sessao.dataInicio}" locale="pt_BR"
+											timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy HH:mm" />
+										<label>Início:</label>
+									</h:panelGroup>
+									
+									<h:panelGroup styleClass="md-inputfield">
+										<p:calendar value="#{MBAgenda.sessao.dataFim}" locale="pt_BR"
+											timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy HH:mm" />
+										<label>Término:</label>
 									</h:panelGroup>
 
 									<p:panelGrid id="pgPaciente" layout="grid" columns="2"
@@ -49,10 +50,10 @@
 
 									</p:panelGrid>
 
-									<h:outputLabel id="pacienteSelecionado"
+									<h:outputLabel id="pacienteSelec"
 										value="Paciente: #{MBAgenda.sessao.paciente.pessoa.nome}" />
 
-									<p:panelGrid layout="grid" columns="2"
+									<p:panelGrid id="caso" layout="grid" columns="2"
 										styleClass="ui-panelgrid-blank form-group"
 										columnClasses="ui-grid-col-6,ui-grid-col-6">
 
@@ -62,7 +63,6 @@
 										</h:panelGroup>
 
 										<p:outputLabel value="/#{MBAgenda.anoCorrente}" />
-
 									</p:panelGrid>
 
 									<p:selectOneMenu id="sala" value="#{MBAgenda.sessao.sala}"
@@ -117,7 +117,7 @@
 								paginator="true">
 
 								<p:ajax event="rowSelect" listener="#{MBAgenda.onRowSelect}"
-									update=":frmNovaSessao:pacienteSelecionado :growl"
+									update=":frmNovaSessao:pacienteSelec :frmNovaSessao:caso :growl"
 									oncomplete="PF('dlgPaciente').hide();" />
 
 								<p:column headerText="Nome" style="text-align: center"
