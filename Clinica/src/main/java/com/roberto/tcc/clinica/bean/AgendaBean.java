@@ -5,16 +5,17 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.omnifaces.util.Messages;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
+import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
 import com.roberto.tcc.clinica.dao.AlunoDAO;
@@ -33,7 +34,7 @@ import com.roberto.tcc.clinica.util.Constantes;
 public class AgendaBean implements Serializable {
 
 	private static final Logger logger = LogManager.getLogger(AgendaBean.class);
-	private ScheduleModel sessoesMarcadas;
+	private ScheduleModel lista;
 
 	private Sessao sessao;
 	private int anoCorrente = Constantes.ANO_CORRENTE;
@@ -43,77 +44,98 @@ public class AgendaBean implements Serializable {
 	private List<Paciente> pacientes;
 	private List<Sessao> sessoes;
 
-	private Date hora;
-
 	@PostConstruct
-	public void listar() {
-		sessoesMarcadas = new DefaultScheduleModel();
-		listarSessoes();
-		for (Sessao s : sessoes) {
+	public void init() {
+		lista = new DefaultScheduleModel();
 
-			 DefaultScheduleEvent evento = new DefaultScheduleEvent();
-			 evento.setEndDate(s.getDataFim());
-			 evento.setStartDate(s.getDataInicio());
-			 evento.setData(s.getDataInicio());
-			 evento.setTitle(s.getPaciente().getPessoa().getNome());
-			 evento.setDescription(s.getPaciente().getNumeroCaso());
-			 evento.setAllDay(false);
-			 evento.setEditable(false);
-
-
-//			sessoesMarcadas.addEvent(
-//					new DefaultScheduleEvent(s.getPaciente().getPessoa().getNome(), s.getData(), s.getData()));
-			 sessoesMarcadas.addEvent(evento);
-
-		}
-
-	}
-
-	public void listarSessoes() {
 		try {
+
 			sessoes = new SessaoDAO().listar();
+
+			for (Sessao s : sessoes) {
+
+				DefaultScheduleEvent evento = new DefaultScheduleEvent();
+				evento.setEndDate(s.getDataFim());
+				evento.setStartDate(s.getDataInicio());
+				evento.setData(s.getCodigo());
+				evento.setTitle(s.getPaciente().getPessoa().getNome());
+				evento.setDescription(s.getPaciente().getNumeroCaso());
+				evento.setAllDay(false);
+				evento.setEditable(false);
+
+				lista.addEvent(evento);
+
+			}
+
 		} catch (RuntimeException erro) {
 			logger.error("Ocorreu um erro ao tentar carregar as sessões: " + erro);
+			Messages.addGlobalError("Ocorreu um erro ao carregar as Sessões");
 		}
+
 	}
 
 	public void novo(SelectEvent evento) {
-		sessao = new Sessao();
+
 		try {
+			sessao = new Sessao();
+			sessao.setAluno(new Aluno());
+			sessao.setPaciente(new Paciente());
+			sessao.setSala(new SalaAtendimento());
+
 			sessao.setDataInicio((Date) evento.getObject());
 			sessao.setDataFim((Date) evento.getObject());
-			sessao.setPaciente(new Paciente());
+
 			alunos = new AlunoDAO().listar();
 			salas = new SalaAtendimentoDAO().listar();
 			pacientes = new PacienteDAO().listar();
+
 		} catch (RuntimeException erro) {
-			logger.error("Erro ao carregar os objetos da Sessão: " + erro);
+			logger.error("Erro ao carregar as datas da Sessão/Alunos/Salas/Pacientes: " + erro);
+			Messages.addGlobalError("Ocorreu um erro ao carregar a data selecionada");
 		}
 	}
 
 	public void salvar() {
 
-		sessao.getPaciente().setNumeroCaso((sessao.getPaciente().getNumeroCaso() + anoCorrente));
-//		sessao.setFrequencia('N');
+		// sessao.getPaciente().setNumeroCaso((sessao.getPaciente().getNumeroCaso() +
+		// anoCorrente));
 
 		SessaoDAO dao = new SessaoDAO();
 		dao.salvarPrimeiraSessao(sessao);
-
-		listar();
+		sessoes = new SessaoDAO().listar();
+		RequestContext.getCurrentInstance().execute("PF('dlgSessao').hide();");
 	}
 
 	public void onRowSelect(SelectEvent event) {
-		FacesMessage msg = new FacesMessage("Paciente Selecionado",
-				((Paciente) event.getObject()).getPessoa().getNome());
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+		Messages.addGlobalInfo("Paciente Selecionado");
 	}
 
-	public ScheduleModel getSessoesMarcadas() {
-		return sessoesMarcadas;
+	public void eventoSelecionado(SelectEvent selectEvent) {
+		ScheduleEvent evento = (ScheduleEvent) selectEvent.getObject();
+
+		sessao = new Sessao();
+		sessao.setAluno(new Aluno());
+		sessao.setPaciente(new Paciente());
+		sessao.setSala(new SalaAtendimento());
+
+		alunos = new AlunoDAO().listar();
+		salas = new SalaAtendimentoDAO().listar();
+		pacientes = new PacienteDAO().listar();
+
+		for (Sessao sessao : sessoes) {
+			if (sessao.getCodigo() == (Long) evento.getData()) {
+				this.sessao = sessao;
+				break;
+			}
+		}
 	}
 
-	public void setSessoesMarcadas(ScheduleModel sessoes) {
-		this.sessoesMarcadas = sessoes;
+	public ScheduleModel getLista() {
+		return lista;
+	}
+
+	public void setLista(ScheduleModel lista) {
+		this.lista = lista;
 	}
 
 	public Sessao getSessao() {
@@ -156,12 +178,12 @@ public class AgendaBean implements Serializable {
 		this.anoCorrente = anoCorrente;
 	}
 
-	public Date getHora() {
-		return hora;
+	public List<Sessao> getSessoes() {
+		return sessoes;
 	}
 
-	public void setHora(Date hora) {
-		this.hora = hora;
+	public void setSessoes(List<Sessao> sessoes) {
+		this.sessoes = sessoes;
 	}
 
 }

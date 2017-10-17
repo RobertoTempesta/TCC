@@ -28,7 +28,6 @@ import com.roberto.tcc.clinica.domain.Endereco;
 import com.roberto.tcc.clinica.domain.Estado;
 import com.roberto.tcc.clinica.domain.Pessoa;
 import com.roberto.tcc.clinica.domain.Supervisor;
-import com.roberto.tcc.clinica.domain.Usuario;
 import com.roberto.tcc.clinica.util.CEPUtil;
 
 @ManagedBean(name = "MBAluno")
