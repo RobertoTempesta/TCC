@@ -97,12 +97,15 @@ public class AgendaBean implements Serializable {
 
 	public void salvar() {
 
-		// sessao.getPaciente().setNumeroCaso((sessao.getPaciente().getNumeroCaso() +
-		// anoCorrente));
+		if (this.sessao.getPaciente().getNumeroCaso() == null 
+				|| this.sessao.getPaciente().getNumeroCaso().equals("")) {
+			Messages.addGlobalError("Informe o Numero do Caso");
+			return;
+		}
 
 		SessaoDAO dao = new SessaoDAO();
 		dao.salvarPrimeiraSessao(sessao);
-		sessoes = new SessaoDAO().listar();
+		init();
 		RequestContext.getCurrentInstance().execute("PF('dlgSessao').hide();");
 	}
 

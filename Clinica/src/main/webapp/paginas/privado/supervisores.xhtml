@@ -5,7 +5,6 @@
 	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
 
 	<f:metadata>
-		<f:viewAction action="#{MBSupervisor.inicial}" />
 		<f:viewAction action="#{MBSupervisor.listarSupervisores}" />
 	</f:metadata>
 
@@ -17,8 +16,8 @@
 					<h:form id="frmListagem">
 
 						<h:panelGrid style="margin: 1em auto">
-							<p:commandButton id="novo" icon="ui-icon-add"
-								value="Novo Supervisor" actionListener="#{MBSupervisor.novo}" />
+							<p:button id="novo" icon="ui-icon-add" value="Novo Supervisor"
+								outcome="novo_supervisor" styleClass="secondary"/>
 							<p:tooltip id="toolTipFade" for="novo"
 								value="Adicionar um novo Supervisor?" position="top" />
 						</h:panelGrid>
@@ -40,8 +39,8 @@
 							</p:column>
 
 							<p:column headerText="Opções">
-								<p:commandButton id="delete" icon="ui-icon-delete"
-									update=":frmListagem :growl"
+								<p:commandButton styleClass="red-btn" id="delete"
+									icon="ui-icon-delete" update=":frmListagem :growl"
 									actionListener="#{MBSupervisor.excluir}">
 									<p:confirm header="Confirmação"
 										message="Deseja excluir o Supervisor selecionado?"
@@ -49,10 +48,8 @@
 									<f:attribute name="supervisorSelecionado" value="#{superv}" />
 								</p:commandButton>
 								<p:commandButton id="editar" icon="ui-icon-mode-edit"
-									update=":frmListagem :growl"
-									actionListener="#{MBSupervisor.editar}">
-									<f:actionListener
-										type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+									update=":growl" action="novo_supervisor"
+									actionListener="#{MBNovoSupervisor.editar}">
 									<f:attribute name="supervisorSelecionado" value="#{superv}" />
 								</p:commandButton>
 								<p:commandButton id="detalhes" icon="ui-icon-search"

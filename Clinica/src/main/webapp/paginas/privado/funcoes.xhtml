@@ -11,7 +11,8 @@
 
 					<h:form id="frmListagem">
 						<h:panelGrid style="margin: 1em auto">
-							<p:commandButton id="novo" icon="ui-icon-add" value="Nova Função"
+							<p:commandButton id="novo" styleClass="secondary"
+								icon="ui-icon-add" value="Nova Função"
 								actionListener="#{MBFuncao.novo}"
 								oncomplete="PF('dlgNovo').show();" update=":frmNovo">
 								<f:actionListener
@@ -22,7 +23,8 @@
 						</h:panelGrid>
 
 						<p:dataTable emptyMessage="Nenhum registro encontrado..."
-							value="#{MBFuncao.funcoes}" var="funcao" rows="10" paginator="true">
+							value="#{MBFuncao.funcoes}" var="funcao" rows="10"
+							paginator="true">
 
 							<p:column headerText="Código">
 								<h:outputText value="#{funcao.codigo}" />
@@ -33,14 +35,14 @@
 
 							<p:column headerText="Opções">
 								<p:commandButton id="delete" icon="ui-icon-delete"
-									actionListener="#{MBFuncao.excluir}"
+									actionListener="#{MBFuncao.excluir}" styleClass="red-btn"
 									update=":frmListagem :growl">
 									<p:confirm header="Confirmação"
 										message="Deseja excluir o função selecionada?"
 										icon="ui-icon-alert" />
 									<f:attribute name="funcaoSelecionado" value="#{funcao}" />
 								</p:commandButton>
-								
+
 								<p:commandButton id="editar" icon="ui-icon-mode-edit"
 									actionListener="#{MBFuncao.editar}" update=":frmNovo :growl"
 									oncomplete="PF('dlgNovo').show();">
@@ -48,10 +50,10 @@
 									<f:actionListener
 										type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
 								</p:commandButton>
-								<p:tooltip id="toolDelete" for="delete"
-								value="Deletar Função?" position="top" />
-								<p:tooltip id="toolEditare" for="editar"
-								value="Editar Função?" position="top" />
+								<p:tooltip id="toolDelete" for="delete" value="Deletar Função?"
+									position="top" />
+								<p:tooltip id="toolEditare" for="editar" value="Editar Função?"
+									position="top" />
 							</p:column>
 						</p:dataTable>
 

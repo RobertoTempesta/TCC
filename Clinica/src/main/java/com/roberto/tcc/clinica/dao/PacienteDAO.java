@@ -3,12 +3,12 @@ package com.roberto.tcc.clinica.dao;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.roberto.tcc.clinica.domain.Endereco;
 import com.roberto.tcc.clinica.domain.Paciente;
 import com.roberto.tcc.clinica.domain.Pessoa;
-import com.roberto.tcc.clinica.domain.Responsavel;
 import com.roberto.tcc.clinica.util.HibernateUtil;
 
 @SuppressWarnings("serial")
@@ -60,9 +60,6 @@ public class PacienteDAO extends GenericDAO<Paciente>{
 			transacao = sessao.beginTransaction();
 			paciente.getPessoa().setEndereco((Endereco) sessao.merge(paciente.getPessoa().getEndereco()));
 			paciente.setPessoa((Pessoa) sessao.merge(paciente.getPessoa()));
-			if(paciente.getResponsavel() != null) {
-				paciente.setResponsavel((Responsavel) sessao.merge(paciente.getResponsavel()));
-			}	
 			Paciente retorno = (Paciente) sessao.merge(paciente);
 			transacao.commit();
 			return retorno;
@@ -76,6 +73,22 @@ public class PacienteDAO extends GenericDAO<Paciente>{
 			sessao.close();
 		}
 	
+	}
+	
+	public Number buscaNumeroPacientes() {
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		Number resultado = 0;
+		try {
+
+			Criteria consulta = sessao.createCriteria(Paciente.class);
+			resultado = (Number) consulta.setProjection(Projections.rowCount()).uniqueResult();
+			return resultado;
+
+		} catch (RuntimeException exception) {
+			throw exception;
+		} finally {
+			sessao.close();
+		}
 	}
 	
 }

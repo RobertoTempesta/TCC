@@ -4,11 +4,6 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
 
-	<f:metadata>
-		<f:viewAction action="#{MBUsuario.inicial}" />
-		<f:viewAction action="#{MBUsuario.listarUsuarios}" />
-	</f:metadata>
-
 	<ui:define name="content">
 		<div class="ui-g">
 			<div class="ui-g-12">
@@ -17,9 +12,8 @@
 					<h:form id="frmListagem">
 
 						<h:panelGrid style="margin: 1em auto">
-							<p:commandButton id="novo" icon="ui-icon-add"
-								value="Novo Usuário"
-								actionListener="#{MBUsuario.telaNovoUsuario}" />
+							<p:button id="novo" icon="ui-icon-add" styleClass="secondary"
+								value="Novo Usuário" outcome="novo_usuario" />
 							<p:tooltip id="toolTipFade" for="novo"
 								value="Adicionar um novo Usuário?" position="top" />
 						</h:panelGrid>
@@ -34,7 +28,7 @@
 							</p:column>
 
 							<p:column headerText="Tipo">
-								<h:outputText value="#{user.tipoUsuario.toString()}" />
+								<h:outputText value="#{user.tipoUsuario}" />
 							</p:column>
 
 							<p:column headerText="Usuário">
@@ -43,18 +37,19 @@
 
 							<p:column headerText="Opções">
 								<p:commandButton id="delete" icon="ui-icon-delete"
-									update=":frmListagem :growl"
+									update=":frmListagem :growl" styleClass="red-btn"
 									actionListener="#{MBUsuario.excluir}">
 									<p:confirm header="Confirmação"
 										message="Deseja excluir o Usuário selecionado?"
 										icon="ui-icon-alert" />
 									<f:attribute name="usuarioSelecionado" value="#{user}" />
 								</p:commandButton>
+
 								<p:commandButton id="editar" icon="ui-icon-mode-edit"
-									update=":frmListagem :growl"
-									actionListener="#{MBUsuario.editar}">
+									action="novo_usuario" actionListener="#{MBNovoUsuario.editar}">
 									<f:attribute name="usuarioSelecionado" value="#{user}" />
 								</p:commandButton>
+
 								<p:commandButton id="detalhes" icon="ui-icon-search"
 									actionListener="#{MBUsuario.detalhesUsuario}"
 									update="frmDetalhes">
@@ -141,7 +136,7 @@
 					</p:tab>
 					<p:tab title="Contato">
 						<p:panelGrid style="width:100%" styleClass="nba-grid">
-							
+
 							<p:row>
 								<p:column style="font-weight: bold;">Email:</p:column>
 								<p:column colspan="3">
@@ -172,13 +167,13 @@
 									<h:outputText value="#{MBUsuario.usuario.pessoa.telefone4}" />
 								</p:column>
 							</p:row>
-							
+
 						</p:panelGrid>
 					</p:tab>
 
 				</p:tabView>
 			</h:form>
 		</p:dialog>
-		
+
 	</ui:define>
 </ui:composition>

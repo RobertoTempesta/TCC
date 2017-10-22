@@ -39,7 +39,6 @@
 		<mapping class="com.roberto.tcc.clinica.domain.Funcao" />
 		<mapping class="com.roberto.tcc.clinica.domain.Paciente" />
 		<mapping class="com.roberto.tcc.clinica.domain.Pessoa" />
-		<mapping class="com.roberto.tcc.clinica.domain.Responsavel" />
 		<mapping class="com.roberto.tcc.clinica.domain.SalaAtendimento" />
 		<mapping class="com.roberto.tcc.clinica.domain.Sessao" />
 		<mapping class="com.roberto.tcc.clinica.domain.Supervisor" />

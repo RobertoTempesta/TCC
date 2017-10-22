@@ -10,9 +10,10 @@
 				<div class="card">
 
 					<h:form id="frmSala">
-					
+
 						<h:panelGrid style="margin: 1em auto">
-							<p:commandButton id="novo" icon="ui-icon-add" value="Nova Sala"
+							<p:commandButton styleClass="secondary" id="novo"
+								icon="ui-icon-add" value="Nova Sala"
 								actionListener="#{MBSala.novo}"
 								oncomplete="PF('dlgNovo').show();" update=":frmNovo">
 								<f:actionListener
@@ -21,7 +22,7 @@
 									value="Adicionar uma nova Sala?" position="top" />
 							</p:commandButton>
 						</h:panelGrid>
-						
+
 						<p:dataTable emptyMessage="Nenhum registro encontrado..."
 							value="#{MBSala.salas}" var="sala" rows="10" paginator="true">
 
@@ -33,8 +34,9 @@
 							</p:column>
 
 							<p:column headerText="Opções">
-								<p:commandButton id="delete" icon="ui-icon-delete"
-									actionListener="#{MBSala.excluir}" update=":frmSala :growl">
+								<p:commandButton id="delete" styleClass="red-btn"
+									icon="ui-icon-delete" actionListener="#{MBSala.excluir}"
+									update=":frmSala :growl">
 									<p:confirm header="Confirmação"
 										message="Deseja excluir a Sala?" icon="ui-icon-alert" />
 									<f:attribute name="salaSelecionada" value="#{sala}" />

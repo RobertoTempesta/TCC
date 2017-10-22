@@ -3,6 +3,7 @@ package com.roberto.tcc.clinica.dao;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.roberto.tcc.clinica.domain.Aluno;
@@ -54,6 +55,22 @@ public class AlunoDAO extends GenericDAO<Aluno>{
 			sessao.close();
 		}
 	
+	}
+	
+	public Number buscaNumeroAlunos() {
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		Number resultado = 0;
+		try {
+
+			Criteria consulta = sessao.createCriteria(Aluno.class);
+			resultado = (Number) consulta.setProjection(Projections.rowCount()).uniqueResult();
+			return resultado;
+
+		} catch (RuntimeException exception) {
+			throw exception;
+		} finally {
+			sessao.close();
+		}
 	}
 	
 }

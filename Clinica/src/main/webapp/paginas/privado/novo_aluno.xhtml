@@ -4,13 +4,9 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
 
-	<f:metadata>
-		<f:viewAction action="#{MBAluno.inicial}" />
-		<f:viewAction action="#{MBAluno.carregarEstados}" />
-		<f:viewAction action="#{MBAluno.listarFuncoes}" />
-		<f:viewAction action="#{MBAluno.listarSupervisores}" />
-		<f:viewAction action="#{MBAluno.iniciaEdicao}" />
-	</f:metadata>
+	<ui:define name="head">
+		<h:outputScript name="scripts.js" library="js" />
+	</ui:define>
 
 	<ui:define name="content">
 		<div class="ui-g">
@@ -27,10 +23,10 @@
 								columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4">
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputMask id="cpf" value="#{MBAluno.pessoa.CPF}"
+									<p:inputMask id="cpf" value="#{MBNovoAluno.aluno.pessoa.CPF}"
 										mask="999.999.999-99" required="true"
 										requiredMessage="É necessário digitar um CPF">
-										<p:ajax event="blur" listener="#{MBAluno.verificaCPF}"
+										<p:ajax event="blur" listener="#{MBNovoAluno.verificaCPF}"
 											update=":frmNovo:pgDadosPessoa  :growl" />
 									</p:inputMask>
 									<label>CPF</label>
@@ -38,13 +34,13 @@
 
 								<h:panelGroup styleClass="md-inputfield">
 									<p:inputMask id="rg" mask="99.999.999-9" size="10"
-										value="#{MBAluno.pessoa.RG}" required="true"
+										value="#{MBNovoAluno.aluno.pessoa.RG}" required="true"
 										requiredMessage="É necessário digitar um RG" />
 									<label>RG</label>
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText id="nome" value="#{MBAluno.pessoa.nome}"
+									<p:inputText id="nome" value="#{MBNovoAluno.aluno.pessoa.nome}"
 										required="true"
 										requiredMessage="É necessário digitar o Nome do Aluno"
 										maxlength="50" converter="upperCaseConverter">
@@ -54,27 +50,32 @@
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText id="ra" value="#{MBAluno.aluno.RA}" maxlength="14"
+									<p:inputText id="ra" value="#{MBNovoAluno.aluno.RA}" maxlength="14"
 										required="true" requiredMessage="É necessário digitar o RA" />
 									<label>RA</label>
 								</h:panelGroup>
 
-								<p:selectOneRadio id="sexo" layout="responsive" columns="2"
-									value="#{MBUsuario.pessoa.sexo}" required="true"
-									requiredMessage="É necessário selecionar o Sexo">
+								<p:selectOneMenu id="sexo" layout="responsive" columns="2"
+									value="#{MBNovoAluno.aluno.pessoa.sexo}" required="true"
+									requiredMessage="É necessário selecionar o estado civil do paciente">
+									<f:selectItem itemLabel="Sexo" noSelectionOption="true" />
 									<f:selectItem itemLabel="Masculino" itemValue="MASCULINO" />
 									<f:selectItem itemLabel="Feminino" itemValue="FEMININO" />
-								</p:selectOneRadio>
+								</p:selectOneMenu>
 
 								<h:panelGroup styleClass="md-inputfield">
 									<p:calendar id="data" pattern="dd/MM/yyyy" mask="true"
-										value="#{MBAluno.pessoa.dataNascimento}" required="true"
-										requiredMessage="É necessário digitar a Data de Nascimento" />
+										value="#{MBNovoAluno.aluno.pessoa.dataNascimento}" required="true"
+										requiredMessage="É necessário digitar a Data de Nascimento"
+										converterMessage="Digite uma data Válida">
+										<p:ajax event="blur" listener="#{MBNovoAluno.calculaIdade}" 
+											update=":frmNovo:idade :growl" />
+									</p:calendar>
 									<label>Data de Nascimento</label>
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText id="idade" value="#{MBAluno.pessoa.idade}"
+									<p:inputText id="idade" value="#{MBNovoAluno.aluno.pessoa.idade}"
 										required="true" requiredMessage="É necessário digitar a Idade"
 										maxlength="3" />
 									<label>Idade</label>
@@ -82,16 +83,16 @@
 
 								<h:panelGroup styleClass="md-inputfield">
 									<p:inputMask id="cep" mask="99999-999"
-										value="#{MBAluno.endereco.CEP}" required="true"
+										value="#{MBNovoAluno.aluno.pessoa.endereco.CEP}" required="true"
 										requiredMessage="Necessario digitar um CEP">
-										<p:ajax event="blur" listener="#{MBAluno.carregarCEP}"
+										<p:ajax event="blur" listener="#{MBNovoAluno.carregarCEP}"
 											update=":frmNovo:rua,bairro,num,cidade,estado  :growl" />
 									</p:inputMask>
 									<label>CEP</label>
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText id="rua" value="#{MBAluno.endereco.rua}"
+									<p:inputText id="rua" value="#{MBNovoAluno.aluno.pessoa.endereco.rua}"
 										maxlength="50" required="true"
 										requiredMessage="É necessário digitar Rua" />
 									<label>Lougradouro</label>
@@ -99,32 +100,32 @@
 
 								<h:panelGroup styleClass="md-inputfield">
 									<p:inputText id="bairro" maxlength="30"
-										value="#{MBAluno.endereco.bairro}" required="true"
+										value="#{MBNovoAluno.aluno.pessoa.endereco.bairro}" required="true"
 										requiredMessage="É necessário digitar Bairro" />
 									<label>Bairro</label>
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText id="num" value="#{MBAluno.endereco.numero}"
+									<p:inputText id="num" value="#{MBNovoAluno.aluno.pessoa.endereco.numero}"
 										required="true" requiredMessage="É necessário digitar Numero"
 										maxlength="6" />
 									<label>Numero</label>
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText id="cidade" value="#{MBAluno.endereco.cidade}"
+									<p:inputText id="cidade" value="#{MBNovoAluno.aluno.pessoa.endereco.cidade}"
 										required="true" maxlength="50"
 										requiredMessage="É necessário informar a cidade" />
 									<label>Cidade</label>
 								</h:panelGroup>
 
-								<p:selectOneMenu id="estado" value="#{MBAluno.estado}"
+								<p:selectOneMenu id="estado" value="#{MBNovoAluno.aluno.pessoa.endereco.estado}"
 									required="true"
 									requiredMessage="É necessário selecionar o Estado"
 									converter="omnifaces.SelectItemsConverter">
 									<f:selectItem itemLabel="Selecione o Estado"
 										noSelectionOption="true" />
-									<f:selectItems value="#{MBAluno.estados}" var="estado"
+									<f:selectItems value="#{MBNovoAluno.estados}" var="estado"
 										itemValue="#{estado}"
 										itemLabel="#{estado.nome} - #{estado.sigla}" />
 								</p:selectOneMenu>
@@ -132,27 +133,27 @@
 								<h:panelGroup styleClass="md-inputfield">
 									<p:inputText id="tel1" required="true" maxlength="13"
 										requiredMessage="É nescessario inserir o telefone"
-										value="#{MBAluno.pessoa.telefone1}" />
+										value="#{MBNovoAluno.aluno.pessoa.telefone1}" />
 									<label>Telefone</label>
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText value="#{MBAluno.pessoa.telefone2}" maxlength="13" />
+									<p:inputText value="#{MBNovoAluno.aluno.pessoa.telefone2}" maxlength="13" />
 									<label>Telefone (Opcional)</label>
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText value="#{MBAluno.pessoa.telefone3}" maxlength="13" />
+									<p:inputText value="#{MBNovoAluno.aluno.pessoa.telefone3}" maxlength="13" />
 									<label>Telefone (Opcional)</label>
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText value="#{MBAluno.pessoa.telefone4}" maxlength="13" />
+									<p:inputText value="#{MBNovoAluno.aluno.pessoa.telefone4}" maxlength="13" />
 									<label>Telefone (Opcional)</label>
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText id="email" value="#{MBAluno.pessoa.email}"
+									<p:inputText id="email" value="#{MBNovoAluno.aluno.pessoa.email}"
 										required="true" maxlength="100"
 										requiredMessage="É necessário digitar um Email" />
 									<label>Email</label>
@@ -161,29 +162,36 @@
 								<p:selectOneMenu id="cargo"
 									converter="omnifaces.SelectItemsConverter"
 									requiredMessage="Selecione uma função para o Aluno"
-									value="#{MBAluno.aluno.funcao}" required="true">
+									value="#{MBNovoAluno.aluno.funcao}" required="true">
 									<f:selectItem itemLabel="Selecione a Função"
 										noSelectionOption="true" />
-									<f:selectItems value="#{MBAluno.funcoes}" var="funcao"
+									<f:selectItems value="#{MBNovoAluno.funcoes}" var="funcao"
 										itemLabel="#{funcao.descricao}" itemValue="#{funcao}" />
 								</p:selectOneMenu>
 
 
 								<p:selectOneMenu id="super"
 									converter="omnifaces.SelectItemsConverter"
-									value="#{MBAluno.aluno.supervisor}" required="true"
+									value="#{MBNovoAluno.aluno.supervisor}" required="true"
 									requiredMessage="Selecione uma Supervisor para Aluno">
 									<f:selectItem itemLabel="Selecione o Supervisor"
 										noSelectionOption="true" />
-									<f:selectItems value="#{MBAluno.supervisores}" var="superv"
+									<f:selectItems value="#{MBNovoAluno.supervisores}" var="superv"
 										itemLabel="#{superv.pessoa.nome}" itemValue="#{superv}" />
 								</p:selectOneMenu>
 
-								<p:outputLabel value="" />
+								<h:panelGroup styleClass="md-inputfield">
+									<p:calendar id="dataCadastro" pattern="dd/MM/yyyy" mask="true"
+										value="#{MBNovoAluno.aluno.dataCadastro}"
+										required="true"
+										requiredMessage="É necessário digitar a Data de Nascimento"
+										converterMessage="Digite uma data Válida" />
+									<label>Data do Cadastro</label>
+								</h:panelGroup>
 
 								<p:selectOneMenu id="escol"
 									requiredMessage="É necessario selecionar a escolaridade do Paciente"
-									value="#{MBAluno.pessoa.escolaridade}" required="true"
+									value="#{MBNovoAluno.aluno.pessoa.escolaridade}" required="true"
 									style="width: 50%">
 									<f:selectItem itemLabel="Selecione a Escolaridade"
 										noSelectionOption="true" />
@@ -222,7 +230,7 @@
 
 							<div align="center">
 								<p:commandButton value="Salvar" styleClass="green-btn"
-									style="width:30%" actionListener="#{MBAluno.salvar}"
+									style="width:30%" actionListener="#{MBNovoAluno.salvar}"
 									update=":frmNovo:pgDadosPessoa :growl" />
 							</div>
 						</div>
@@ -230,15 +238,16 @@
 				</div>
 			</div>
 		</div>
-		<p:dialog header="Atenção!" widgetVar="dlgConfirma" minHeight="40" width="350"
-			modal="true" closable="false">
+		<p:dialog header="Atenção" closable="false" draggable="false"
+			modal="true" resizable="false" widgetVar="dlgConfirma" width="25%">
 			<h:form>
-				<h:outputText value="Aluno Salvo com Sucesso!"
-					style="margin: 1em auto" />
+
 				<div align="center">
-					<p:commandButton value="Confirmar" styleClass="blue-btn"
-						style="width:50%; margin-top: 20px"
-						actionListener="#{MBAluno.telaInicialAluno}" update=":growl" />
+					<h2>Aluno Salvo com Sucesso!</h2>
+				</div>
+
+				<div align="center">
+					<p:commandButton action="alunos" value="Comfirmar" />
 				</div>
 			</h:form>
 		</p:dialog>

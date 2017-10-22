@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
@@ -14,19 +14,21 @@
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 	</f:facet>
 	<title>CEPP</title>
+	<link rel="shortcut icon" href="resources/imagens/cad.ico" />
 	<h:outputScript name="js/ripple.js" library="ultima-layout" />
 	<h:outputScript name="js/layout.js" library="ultima-layout" />
 </h:head>
 
 <h:body styleClass="login-body">
-	
-	<div class="card login-panel ui-fluid">
-		<div class="ui-g">
-			<p:growl id="growl" />
-			<h:form id="frmLogin">
-				
-				<p:graphicImage name="logo.png" width="50%" library="imagens" />
-
+	<p:growl id="growl" autoUpdate="true" closable="true" />
+	<h:form id="frmLogin">
+		
+		<div class="card login-panel ui-fluid">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<p:graphicImage name="logo2.png" library="imagens"
+						styleClass="logoLogin" />
+				</div>
 				<div class="ui-g-12">
 					<h:panelGroup styleClass="md-inputfield">
 						<p:inputMask value="#{MBLogin.usuario.pessoa.CPF}"
@@ -42,31 +44,33 @@
 						<label>Senha</label>
 					</h:panelGroup>
 				</div>
-				<div class="ui-g-12">
+				<div class="ui-g-12 .margin-div-botoes">
 					<p:commandButton value="Logar/Entrar"
 						actionListener="#{MBLogin.login}" icon="ui-icon-person"
 						update=":frmLogin :growl" />
-					<!-- 					<p:button value="Esqueci minha senha" icon="ui-icon-help" -->
-					<!-- 						styleClass="secondary" /> -->
+					<p:button value="Esqueci Minha Senha" icon="ui-icon-help" styleClass="red-btn"/>
 				</div>
-			</h:form>
+			</div>
 		</div>
-	</div>
+		<div class="login-footer"></div>
+	</h:form>
 
-	<p:ajaxStatus style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
-           <f:facet name="start">
-               <i class="fa fa-circle-o-notch fa-spin ajax-loader" aria-hidden="true"></i>
-           </f:facet>
+	<p:ajaxStatus
+		style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
+		<f:facet name="start">
+			<i class="fa fa-circle-o-notch fa-spin ajax-loader"
+				aria-hidden="true"></i>
+		</f:facet>
 
-           <f:facet name="complete">
-               <h:outputText value="" />
-           </f:facet>
-       </p:ajaxStatus>
-
+		<f:facet name="complete">
+			<h:outputText value="" />
+		</f:facet>
+	</p:ajaxStatus>
 
 	<h:outputStylesheet name="css/ripple.css" library="ultima-layout" />
 	<h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css"
 		library="ultima-layout" />
+	<h:outputStylesheet library="css" name="styles.css" />
 </h:body>
 
 </html>

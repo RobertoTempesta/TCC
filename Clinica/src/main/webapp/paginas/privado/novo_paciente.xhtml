@@ -3,12 +3,10 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
-
-	<f:metadata>
-		<f:viewAction action="#{MBPaciente.inicial}" />
-		<f:viewAction action="#{MBPaciente.carregarEstados}" />
-		<f:viewAction action="#{MBPaciente.iniciaEdicao}" />
-	</f:metadata>
+	
+	<ui:define name="head">
+		<h:outputScript name="scripts.js" library="js" />
+	</ui:define>
 
 	<ui:define name="content">
 		<div class="ui-g">
@@ -24,10 +22,11 @@
 								columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4">
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputMask id="cpf" value="#{MBPaciente.pessoa.CPF}"
+									<p:inputMask id="cpf"
+										value="#{MBNovoPaciente.paciente.pessoa.CPF}"
 										mask="999.999.999-99" required="true"
 										requiredMessage="É necessário digitar um CPF">
-										<p:ajax event="blur" listener="#{MBPaciente.verificaCPF}"
+										<p:ajax event="blur" listener="#{MBNovoPaciente.verificaCPF}"
 											update=":frmNovo:pgDadosPessoa  :growl" />
 									</p:inputMask>
 									<label>CPF</label>
@@ -35,14 +34,14 @@
 
 								<h:panelGroup styleClass="md-inputfield">
 									<p:inputMask id="rg" mask="99.999.999-9" size="10"
-										value="#{MBPaciente.pessoa.RG}" required="true"
+										value="#{MBNovoPaciente.paciente.pessoa.RG}" required="true"
 										requiredMessage="É necessário digitar um RG" />
 									<label>RG</label>
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText id="nome" value="#{MBPaciente.pessoa.nome}"
-										required="true"
+									<p:inputText id="nome"
+										value="#{MBNovoPaciente.paciente.pessoa.nome}" required="true"
 										requiredMessage="É necessário digitar o Nome do Paciente"
 										maxlength="50" converter="upperCaseConverter">
 										<p:ajax event="blur" update=":frmNovo:nome" />
@@ -50,22 +49,29 @@
 									<label>Nome do Paciente</label>
 								</h:panelGroup>
 
-								<p:selectOneRadio id="sexo" layout="responsive" columns="2"
-									value="#{MBUsuario.pessoa.sexo}" required="true"
-									requiredMessage="É necessário selecionar o Sexo">
+								<p:selectOneMenu id="sexo" layout="responsive" columns="2"
+									value="#{MBNovoPaciente.paciente.pessoa.sexo}" required="true"
+									requiredMessage="É necessário selecionar o estado civil do paciente">
+									<f:selectItem itemLabel="Sexo" noSelectionOption="true" />
 									<f:selectItem itemLabel="Masculino" itemValue="MASCULINO" />
 									<f:selectItem itemLabel="Feminino" itemValue="FEMININO" />
-								</p:selectOneRadio>
+								</p:selectOneMenu>
 
 								<h:panelGroup styleClass="md-inputfield">
 									<p:calendar id="data" pattern="dd/MM/yyyy" mask="true"
-										value="#{MBPaciente.pessoa.dataNascimento}" required="true"
-										requiredMessage="É necessário digitar a Data de Nascimento" />
+										value="#{MBNovoPaciente.paciente.pessoa.dataNascimento}"
+										required="true"
+										requiredMessage="É necessário digitar a Data de Nascimento"
+										converterMessage="Digite uma data Válida">
+										<p:ajax event="blur" listener="#{MBNovoPaciente.calculaIdade}"
+											update=":frmNovo:idade  :growl" />
+									</p:calendar>
 									<label>Data de Nascimento</label>
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText id="idade" value="#{MBPaciente.pessoa.idade}"
+									<p:inputText id="idade"
+										value="#{MBNovoPaciente.paciente.pessoa.idade}"
 										required="true" requiredMessage="É necessário digitar a Idade"
 										maxlength="3" />
 									<label>Idade</label>
@@ -73,16 +79,17 @@
 
 								<h:panelGroup styleClass="md-inputfield">
 									<p:inputMask id="cep" mask="99999-999"
-										value="#{MBPaciente.endereco.CEP}" required="true"
-										requiredMessage="Necessario digitar um CEP">
-										<p:ajax event="blur" listener="#{MBPaciente.carregarCEP}"
+										value="#{MBNovoPaciente.paciente.pessoa.endereco.CEP}"
+										required="true" requiredMessage="Necessario digitar um CEP">
+										<p:ajax event="blur" listener="#{MBNovoPaciente.carregarCEP}"
 											update=":frmNovo:rua,bairro,num,cidade,estado  :growl" />
 									</p:inputMask>
 									<label>CEP</label>
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText id="rua" value="#{MBPaciente.endereco.rua}"
+									<p:inputText id="rua"
+										value="#{MBNovoPaciente.paciente.pessoa.endereco.rua}"
 										maxlength="50" required="true"
 										requiredMessage="É necessário digitar Rua" />
 									<label>Lougradouro</label>
@@ -90,32 +97,35 @@
 
 								<h:panelGroup styleClass="md-inputfield">
 									<p:inputText id="bairro" maxlength="30"
-										value="#{MBPaciente.endereco.bairro}" required="true"
-										requiredMessage="É necessário digitar Bairro" />
+										value="#{MBNovoPaciente.paciente.pessoa.endereco.bairro}"
+										required="true" requiredMessage="É necessário digitar Bairro" />
 									<label>Bairro</label>
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText id="num" value="#{MBPaciente.endereco.numero}"
+									<p:inputText id="num"
+										value="#{MBNovoPaciente.paciente.pessoa.endereco.numero}"
 										required="true" requiredMessage="É necessário digitar Numero"
 										maxlength="6" />
 									<label>Numero</label>
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText id="cidade" value="#{MBPaciente.endereco.cidade}"
+									<p:inputText id="cidade"
+										value="#{MBNovoPaciente.paciente.pessoa.endereco.cidade}"
 										required="true" maxlength="50"
 										requiredMessage="É necessário informar a cidade" />
 									<label>Cidade</label>
 								</h:panelGroup>
 
-								<p:selectOneMenu id="estado" value="#{MBPaciente.estado}"
+								<p:selectOneMenu id="estado"
+									value="#{MBNovoPaciente.paciente.pessoa.endereco.estado}"
 									required="true"
 									requiredMessage="É necessário selecionar o Estado"
 									converter="omnifaces.SelectItemsConverter">
-									<f:selectItem itemLabel="Selecione o Estado"
+									<f:selectItem itemLabel="Selecione um Estado"
 										noSelectionOption="true" />
-									<f:selectItems value="#{MBPaciente.estados}" var="estado"
+									<f:selectItems value="#{MBNovoPaciente.estados}" var="estado"
 										itemValue="#{estado}"
 										itemLabel="#{estado.nome} - #{estado.sigla}" />
 								</p:selectOneMenu>
@@ -123,32 +133,43 @@
 								<h:panelGroup styleClass="md-inputfield">
 									<p:inputText id="tel1" required="true" maxlength="13"
 										requiredMessage="É nescessario inserir o telefone"
-										value="#{MBPaciente.pessoa.telefone1}" />
+										value="#{MBNovoPaciente.paciente.pessoa.telefone1}" />
 									<label>Telefone</label>
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText value="#{MBPaciente.pessoa.telefone2}"
+									<p:inputText
+										value="#{MBNovoPaciente.paciente.pessoa.telefone2}"
 										maxlength="13" />
 									<label>Telefone (Opcional)</label>
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText value="#{MBPaciente.pessoa.telefone3}"
+									<p:inputText
+										value="#{MBNovoPaciente.paciente.pessoa.telefone3}"
 										maxlength="13" />
 									<label>Telefone (Opcional)</label>
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText value="#{MBPaciente.pessoa.telefone4}"
+									<p:inputText
+										value="#{MBNovoPaciente.paciente.pessoa.telefone4}"
 										maxlength="13" />
 									<label>Telefone (Opcional)</label>
 								</h:panelGroup>
 
-								<p:outputLabel value="" />
+								<h:panelGroup styleClass="md-inputfield">
+									<p:calendar id="dataCadastro" pattern="dd/MM/yyyy" mask="true"
+										value="#{MBNovoPaciente.paciente.dataCadastro}"
+										required="true"
+										requiredMessage="É necessário digitar a Data de Nascimento"
+										converterMessage="Digite uma data Válida" />
+									<label>Data do Cadastro</label>
+								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText id="email" value="#{MBPaciente.pessoa.email}"
+									<p:inputText id="email"
+										value="#{MBNovoPaciente.paciente.pessoa.email}"
 										required="true" maxlength="100"
 										requiredMessage="É necessário digitar um Email" />
 									<label>Email</label>
@@ -156,8 +177,8 @@
 
 								<p:selectOneMenu id="escol"
 									requiredMessage="É necessario selecionar a escolaridade do Paciente"
-									value="#{MBPaciente.pessoa.escolaridade}" required="true"
-									style="width: 50%">
+									value="#{MBNovoPaciente.paciente.pessoa.escolaridade}"
+									required="true" style="width: 50%">
 									<f:selectItem itemLabel="Selecione a Escolaridade"
 										noSelectionOption="true" />
 									<f:selectItem itemLabel="Fundamental - Incompleto"
@@ -200,27 +221,31 @@
 								columnClasses="ui-grid-col-6,ui-grid-col-6">
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText value="#{MBPaciente.paciente.ocupacao}"
+									<p:inputText id="ocupa" value="#{MBNovoPaciente.paciente.ocupacao}"
 										maxlength="100" required="true"
-										requiredMessage="É necessario digitar a ocupação deste Paciente" />
+										requiredMessage="É necessario digitar a ocupação deste Paciente"
+										converter="upperCaseConverter">
+										<p:ajax event="blur" update=":frmNovo:ocupa" />
+									</p:inputText>
 									<label>Ocupação</label>
 								</h:panelGroup>
 
 								<p:selectOneMenu id="estadoCivil" layout="responsive"
-									columns="2" value="#{MBPaciente.paciente.estadoCivil}"
+									columns="2" value="#{MBNovoPaciente.paciente.estadoCivil}"
 									required="true"
 									requiredMessage="É necessário selecionar o estado civil do paciente">
 									<f:selectItem itemLabel="Estado Civil" noSelectionOption="true" />
-									<f:selectItem itemLabel="Casado" itemValue="CASADO" />
-									<f:selectItem itemLabel="Solteiro" itemValue="SOLTEIRO" />
-									<f:selectItem itemLabel="Divorciado" itemValue="DIVORCIADO" />
-									<f:selectItem itemLabel="Viuvo" itemValue="VIUVO" />
+									<f:selectItem itemLabel="Casado(a)" itemValue="CASADO" />
+									<f:selectItem itemLabel="Solteiro(a)" itemValue="SOLTEIRO" />
+									<f:selectItem itemLabel="Divorciado(a)" itemValue="DIVORCIADO" />
+									<f:selectItem itemLabel="Viuvo(a)" itemValue="VIUVO" />
 									<f:selectItem itemLabel="Outros" itemValue="OUTROS" />
 								</p:selectOneMenu>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText id="mae" value="#{MBPaciente.paciente.nomeMae}"
-										maxlength="80" required="true" converter="upperCaseConverter"
+									<p:inputText id="mae"
+										value="#{MBNovoPaciente.paciente.nomeMae}" maxlength="80"
+										required="true" converter="upperCaseConverter"
 										requiredMessage="É necessário digitar o nome d do Paciente">
 										<p:ajax event="blur" update=":frmNovo:mae" />
 									</p:inputText>
@@ -228,9 +253,10 @@
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText id="pai" value="#{MBPaciente.paciente.nomePai}"
-										maxlength="80" required="true" converter="upperCaseConverter"
-										requiredMessage="É necessário digitar o nome do Pai do Paciente" >
+									<p:inputText id="pai"
+										value="#{MBNovoPaciente.paciente.nomePai}" maxlength="80"
+										required="true" converter="upperCaseConverter"
+										requiredMessage="É necessário digitar o nome do Pai do Paciente">
 										<p:ajax event="blur" update=":frmNovo:pai" />
 									</p:inputText>
 									<label>Nome do Pai</label>
@@ -242,23 +268,32 @@
 								columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4">
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputTextarea rows="5" cols="50" maxlength="100"
-										value="#{MBPaciente.paciente.medicamento}" queryDelay="750"
-										minQueryLength="4" />
+									<p:inputTextarea id="medica" rows="5" cols="50" maxlength="100"
+										value="#{MBNovoPaciente.paciente.medicamento}"
+										queryDelay="750" minQueryLength="4"
+										converter="upperCaseConverter" >
+										<p:ajax event="blur" update=":frmNovo:medica" />
+									</p:inputTextarea>
 									<label>Uso continuo de medicamentos?</label>
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputTextarea rows="5" cols="50" maxlength="100"
-										value="#{MBPaciente.paciente.necessidadesEspeciais}"
-										queryDelay="750" minQueryLength="4" />
+									<p:inputTextarea id="esp" rows="5" cols="50" maxlength="100"
+										value="#{MBNovoPaciente.paciente.necessidadesEspeciais}"
+										queryDelay="750" minQueryLength="4"
+										converter="upperCaseConverter">
+										<p:ajax event="blur" update=":frmNovo:esp" />
+									</p:inputTextarea>
 									<label>Necessidades Especiais?</label>
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputTextarea rows="5" cols="50" maxlength="500"
-										value="#{MBPaciente.paciente.observacao}" queryDelay="750"
-										minQueryLength="4" />
+									<p:inputTextarea id="obs" rows="5" cols="50" maxlength="500"
+										converter="upperCaseConverter"
+										value="#{MBNovoPaciente.paciente.observacao}" queryDelay="750"
+										minQueryLength="4">
+										<p:ajax event="blur" update=":frmNovo:obs" />
+									</p:inputTextarea>
 									<label>Observações</label>
 								</h:panelGroup>
 							</p:panelGrid>
@@ -269,56 +304,56 @@
 
 							<br />
 
-							<p:fieldset legend="Adicionar" toggleable="true"
-								toggleSpeed="500">
-								<p:ajax event="toggle" update="growl" />
-								<p:panelGrid id="pgResponsavel" layout="grid" columns="3"
-									styleClass="ui-panelgrid-blank form-group"
-									columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4">
+							<p:panelGrid id="pgResponsavel" layout="grid" columns="3"
+								styleClass="ui-panelgrid-blank form-group"
+								columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4">
 
-									<h:panelGroup styleClass="md-inputfield">
-										<p:inputText id="nomeResp" value="#{MBPaciente.responsavel.nome}"
-											maxlength="50" converter="upperCaseConverter">
-											<p:ajax event="blur" update=":frmNovo:nomeResp" />
-										</p:inputText>
-										<label>Nome do Responsavel</label>
-									</h:panelGroup>
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputText id="nomeResp"
+										value="#{MBNovoPaciente.paciente.responsavelNome}"
+										maxlength="50" converter="upperCaseConverter">
+										<p:ajax event="blur" update=":frmNovo:nomeResp" />
+									</p:inputText>
+									<label>Nome do Responsavel</label>
+								</h:panelGroup>
 
-									<h:panelGroup styleClass="md-inputfield">
-										<p:inputText value="#{MBPaciente.responsavel.telefone}"
-											maxlength="13" />
-										<label>Telefone</label>
-									</h:panelGroup>
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputMask mask="(99)99999999"
+										value="#{MBNovoPaciente.paciente.responsavelTel}"
+										maxlength="13" />
+									<label>Telefone</label>
+								</h:panelGroup>
 
-									<h:panelGroup styleClass="md-inputfield">
-										<p:inputText value="#{MBPaciente.responsavel.celular}"
-											maxlength="13" />
-										<label>Celular</label>
-									</h:panelGroup>
-								</p:panelGrid>
-							</p:fieldset>
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputMask mask="(99)999999999"
+										value="#{MBNovoPaciente.paciente.responsavelCel}"
+										maxlength="13" />
+									<label>Celular</label>
+								</h:panelGroup>
+							</p:panelGrid>
 
 							<div align="center" style="margin-top: 50px">
 								<p:commandButton value="Salvar" styleClass="green-btn"
-									style="width:30%" actionListener="#{MBPaciente.salvar}"
+									style="width:30%" actionListener="#{MBNovoPaciente.salvar}"
 									update=":frmNovo:pgDadosPessoa,pgDadosPaciente,pgDadosPaciente2,pgResponsavel :growl" />
 							</div>
 						</div>
 					</h:form>
+					<p:dialog header="Atenção" closable="false" draggable="false"
+						modal="true" resizable="false" widgetVar="dlgConfirma" width="25%">
+						<h:form>
+							<div align="center">
+								<h2>Paciente Salvo com Sucesso!</h2>
+							</div>
+
+							<div align="center">
+								<p:commandButton action="pacientes" value="Comfirmar" />
+							</div>
+						</h:form>
+					</p:dialog>
 				</div>
 			</div>
 		</div>
-		<p:dialog header="Atenção!" widgetVar="dlgConfirma" minHeight="40"
-			modal="true" closable="false">
-			<h:form>
-				<h:outputText value="Paciente Salvo com Sucesso!"
-					style="margin: 1em auto" />
-				<div align="center">
-					<p:commandButton value="Confirmar" styleClass="red-btn"
-						style="width:100%;" actionListener="#{MBPaciente.telaInicial}"
-						update=":growl" />
-				</div>
-			</h:form>
-		</p:dialog>
+
 	</ui:define>
 </ui:composition>

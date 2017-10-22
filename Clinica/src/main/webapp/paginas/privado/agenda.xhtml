@@ -3,6 +3,42 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	
+	<ui:define name="head">
+		<script type="text/javascript">
+        PrimeFaces.locales['pt'] = {
+            closeText : 'Fechar',
+            prevText : 'Anterior',
+            nextText : 'Próximo',
+            currentText : 'Começo',
+            monthNames : [ 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio',
+                    'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro',
+                    'Novembro', 'Dezembro' ],
+            monthNamesShort : [ 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+                    'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez' ],
+            dayNames : [ 'Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta',
+                    'Sexta', 'Sábado' ],
+            dayNamesShort : [ 'Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb' ],
+            dayNamesMin : [ 'D', 'S', 'T', 'Q', 'Q', 'S', 'S' ],
+            weekHeader : 'Semana',
+            firstDay : 1,
+            isRTL : false,
+            showMonthAfterYear : false,
+            yearSuffix : '',
+            timeOnlyTitle : 'Só Horas',
+            timeText : 'Tempo',
+            hourText : 'Hora',
+            minuteText : 'Minuto',
+            secondText : 'Segundo',
+            currentText : 'Data Atual',
+            ampm : false,
+            month : 'Mês',
+            week : 'Semana',
+            day : 'Dia',
+            allDayText : 'Todo Dia'
+        };
+    </script>
+	</ui:define>
 
 	<ui:define name="content">
 		<div class="ui-g">
@@ -10,17 +46,23 @@
 				<div class="card">
 
 					<h:form id="frmSchedule">
-						<p:schedule value="#{MBAgenda.lista}" locale="pt_BR"
+						<p:schedule value="#{MBAgenda.lista}" locale="pt"
 							timeZone="America/Sao_Paulo">
 
 							<p:ajax event="dateSelect" oncomplete="PF('dlgSessao').show();"
 								listener="#{MBAgenda.novo}"
-								update=":frmNovo :frmPacientes :growl" />
+								update=":frmNovo :frmPacientes :growl">
+								<f:actionListener
+									type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+							</p:ajax>
 
 							<p:ajax event="eventSelect"
 								listener="#{MBAgenda.eventoSelecionado}"
 								update=":frmNovo :frmPacientes :growl"
-								oncomplete="PF('dlgSessao').show();" />
+								oncomplete="PF('dlgSessao').show();">
+								<f:actionListener
+									type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+							</p:ajax>
 
 						</p:schedule>
 					</h:form>
@@ -29,8 +71,10 @@
 			</div>
 		</div>
 
+		<!-- //////////////////// JANELA COM A LISTA DE PACIENTES ////////////////////////// -->
+
 		<p:dialog header="Pacientes" closable="true" draggable="false"
-			modal="true" resizable="false" widgetVar="dlgPaciente" width="600">
+			modal="true" resizable="false" widgetVar="dlgPaciente" width="70%">
 			<h:form id="frmPacientes">
 
 				<p:dataTable id="lista" selectionMode="single"
@@ -50,9 +94,6 @@
 					<p:column headerText="CPF" style="text-align: center">
 						<h:outputText value="#{paciente.pessoa.CPF}" />
 					</p:column>
-					<p:column headerText="Idade" width="10%" style="text-align: center">
-						<h:outputText value="#{paciente.pessoa.idade}" />
-					</p:column>
 					<p:column headerText="Data do Cadastro"
 						sortBy="#{paciente.dataCadastro}" style="text-align: center">
 						<h:outputText value="#{paciente.dataCadastro}">
@@ -65,8 +106,10 @@
 			</h:form>
 		</p:dialog>
 
+		<!-- //////////////////// JANELA PARA MARCAR CONSULTA ////////////////////////// -->
+
 		<p:dialog header="Marcar Sessão" closable="true" draggable="false"
-			modal="true" resizable="false" widgetVar="dlgSessao" width="35%">
+			modal="true" resizable="false" widgetVar="dlgSessao" width="40%">
 			<h:form id="frmNovo">
 
 				<p:tabView id="tabView">
@@ -77,13 +120,13 @@
 								columns="1" styleClass="ui-panelgrid-blank form-group">
 								<h:panelGroup styleClass="md-inputfield">
 									<p:calendar value="#{MBAgenda.sessao.dataInicio}"
-										locale="pt_BR" timeZone="America/Sao_Paulo"
+										locale="pt" timeZone="America/Sao_Paulo"
 										pattern="dd/MM/yyyy HH:mm" />
 									<label>Início:</label>
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:calendar value="#{MBAgenda.sessao.dataFim}" locale="pt_BR"
+									<p:calendar value="#{MBAgenda.sessao.dataFim}" locale="pt"
 										timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy HH:mm" />
 									<label>Término:</label>
 								</h:panelGroup>
@@ -134,7 +177,7 @@
 							columnClasses="ui-grid-col-6,ui-grid-col-6">
 
 							<p:outputLabel value="Selecione um Paciente: " />
-							<p:commandButton icon="fa fa-search" update=":growl"
+							<p:commandButton icon="fa fa-search"
 								onclick="PF('dlgPaciente').show();" />
 
 							<h:outputLabel value="Paciente" />
@@ -142,12 +185,10 @@
 
 							<h:panelGroup styleClass="md-inputfield">
 								<p:inputText value="#{MBAgenda.sessao.paciente.numeroCaso}"
-									disabled="#{MBAgenda.sessao.paciente.numeroCaso != null}"
-									required="true"
-									requiredMessage="Digite um numero para este caso" />
+									disabled="#{MBAgenda.sessao.paciente.numeroCaso != null}" />
 								<label>Numero do Caso:</label>
 							</h:panelGroup>
-							<p:outputLabel value="/#{MBAgenda.anoCorrente}" />
+							<p:outputLabel value="/#{MBAgenda.anoCorrente}" rendered="#{MBAgenda.sessao.paciente.numeroCaso == null}"/>
 
 						</p:panelGrid>
 
@@ -171,6 +212,5 @@
 
 			</h:form>
 		</p:dialog>
-
 	</ui:define>
 </ui:composition>

@@ -16,8 +16,8 @@
 					<h:form id="frmListagem">
 
 						<h:panelGrid style="margin: 1em auto">
-							<p:commandButton id="novo" icon="ui-icon-add" value="Novo Aluno"
-								actionListener="#{MBAluno.novo}" />
+							<p:button id="novo" styleClass="secondary" icon="ui-icon-add"
+								value="Novo Aluno" outcome="novo_aluno" />
 							<p:tooltip id="toolTipFade" for="novo"
 								value="Adicionar um novo Aluno?" position="top" />
 						</h:panelGrid>
@@ -37,18 +37,21 @@
 
 
 							<p:column headerText="Opções">
-								<p:commandButton id="delete" icon="ui-icon-delete"
-									update=":frmListagem :growl"
+								<p:commandButton styleClass="red-btn" id="delete"
+									icon="ui-icon-delete" update=":frmListagem :growl"
 									actionListener="#{MBAluno.excluir}">
 									<p:confirm header="Confirmação"
 										message="Deseja excluir o Aluno selecionado?"
 										icon="ui-icon-alert" />
 									<f:attribute name="alunoSelecionado" value="#{aluno}" />
 								</p:commandButton>
+
 								<p:commandButton id="editar" icon="ui-icon-mode-edit"
-									update=":frmListagem :growl" actionListener="#{MBAluno.editar}">
+									action="novo_aluno" update=":growl"
+									actionListener="#{MBNovoAluno.editar}">
 									<f:attribute name="alunoSelecionado" value="#{aluno}" />
 								</p:commandButton>
+
 								<p:commandButton id="detalhes" icon="ui-icon-search"
 									update=":frmDetalhes" actionListener="#{MBAluno.detalhesAluno}">
 									<f:attribute name="alunoSelecionado" value="#{aluno}" />
@@ -76,8 +79,8 @@
 			</div>
 		</div>
 
-		<p:dialog header="Detalhes do Aluno" widgetVar="dlgDetalhes" draggable="false"
-			resizable="false" modal="true" width="550">
+		<p:dialog header="Detalhes do Aluno" widgetVar="dlgDetalhes"
+			draggable="false" resizable="false" modal="true" width="550">
 			<h:form id="frmDetalhes">
 
 				<p:tabView>

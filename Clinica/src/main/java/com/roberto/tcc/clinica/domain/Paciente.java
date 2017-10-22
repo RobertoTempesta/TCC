@@ -2,7 +2,6 @@ package com.roberto.tcc.clinica.domain;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -35,9 +34,6 @@ public class Paciente extends GenericDomain {
 	@Column(length = 80, nullable = false)
 	private String nomeMae;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	private Responsavel responsavel;
-
 	@Column(length = 100)
 	private String medicamento;
 	
@@ -53,6 +49,15 @@ public class Paciente extends GenericDomain {
 	
 	@Column(length = 50)
 	private String numeroCaso;
+	
+	@Column(length = 80, nullable = false)
+	private String responsavelNome;
+	
+	@Column(length = 13)
+	private String responsavelTel;
+	
+	@Column(length = 13)
+	private String responsavelCel;
 
 	public Pessoa getPessoa() {
 		return pessoa;
@@ -84,14 +89,6 @@ public class Paciente extends GenericDomain {
 
 	public void setNomeMae(String nomeMae) {
 		this.nomeMae = nomeMae;
-	}
-
-	public Responsavel getResponsavel() {
-		return responsavel;
-	}
-
-	public void setResponsavel(Responsavel responsavel) {
-		this.responsavel = responsavel;
 	}
 
 	public String getMedicamento() {
@@ -140,5 +137,29 @@ public class Paciente extends GenericDomain {
 
 	public void setEstadoCivil(EstadoCivil estadoCivil) {
 		this.estadoCivil = estadoCivil;
+	}
+
+	public String getResponsavelNome() {
+		return responsavelNome;
+	}
+
+	public void setResponsavelNome(String responsavelNome) {
+		this.responsavelNome = responsavelNome;
+	}
+
+	public String getResponsavelTel() {
+		return responsavelTel;
+	}
+
+	public void setResponsavelTel(String responsavelTel) {
+		this.responsavelTel = responsavelTel;
+	}
+
+	public String getResponsavelCel() {
+		return responsavelCel;
+	}
+
+	public void setResponsavelCel(String responsavelCel) {
+		this.responsavelCel = responsavelCel;
 	}
 }

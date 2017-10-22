@@ -1,7 +1,14 @@
 package com.roberto.tcc.clinica.dao;
 
+import java.util.Date;
+import java.util.List;
+
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
 import com.roberto.tcc.clinica.domain.Paciente;
 import com.roberto.tcc.clinica.domain.Sessao;
@@ -29,6 +36,41 @@ public class SessaoDAO extends GenericDAO<Sessao>{
 			sessao.close();
 		}
 	
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Sessao> listar(Date data, Date data2) throws RuntimeException {
+
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		try {
+
+			Criteria consulta = sessao.createCriteria(Sessao.class);
+			consulta.add(Restrictions.between("dataInicio", data, data2));
+			consulta.addOrder(Order.asc("dataInicio"));
+			List<Sessao> resultado = consulta.list();
+			return resultado;
+
+		} catch (RuntimeException exception) {
+			throw exception;
+		} finally {
+			sessao.close();
+		}
+	}
+	
+	public Number buscaNumeroSessoes() {
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		Number resultado = 0;
+		try {
+
+			Criteria consulta = sessao.createCriteria(Sessao.class);
+			resultado = (Number) consulta.setProjection(Projections.rowCount()).uniqueResult();
+			return resultado;
+
+		} catch (RuntimeException exception) {
+			throw exception;
+		} finally {
+			sessao.close();
+		}
 	}
 	
 }
