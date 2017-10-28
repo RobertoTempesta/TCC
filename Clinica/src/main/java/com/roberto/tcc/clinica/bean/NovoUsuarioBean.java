@@ -82,7 +82,10 @@ public class NovoUsuarioBean implements Serializable {
 
 	public void salvar() {
 		try {
-
+//			if(usuario.getSenha() == null) {
+//				Messages.addGlobalError("Digite uma senha");
+//				return;
+//			}
 			this.usuario = Criptografia.gerarSenhaCrip(this.usuario, this.usuario.getSenha());
 
 			UsuarioDAO usuarioDAO = new UsuarioDAO();

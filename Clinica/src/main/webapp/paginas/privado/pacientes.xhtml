@@ -135,8 +135,6 @@
 						<p:selectOneMenu id="frequencia"
 							value="#{MBPaciente.sessao.frequencia}" required="true"
 							requiredMessage="É necessário selecionar a frequência do Paciente">
-							<f:selectItem itemLabel="Selecione a presença do Paciente"
-								noSelectionOption="true" />
 							<f:selectItem itemLabel="Aguadando acolhimento"
 								itemValue="AGUARDANDO" />
 							<f:selectItem itemLabel="Presente" itemValue="PRESENTE" />
@@ -178,7 +176,7 @@
 				</div>
 
 				<div align="center">
-					<p:commandButton value="Salvar"
+					<p:commandButton value="Salvar" style="width: 30%"
 						actionListener="#{MBPaciente.salvar}" update=":frmNovo :growl" />
 				</div>
 

@@ -55,7 +55,7 @@ public class NovoAlunoBean implements Serializable {
 		carregarEstados();
 		listarFuncoes();
 		listarSupervisores();
-		Aluno aluno = (Aluno) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("usuario");
+		Aluno aluno = (Aluno) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("aluno");
 		if (aluno != null) {
 			this.aluno = aluno;
 		}
@@ -63,7 +63,7 @@ public class NovoAlunoBean implements Serializable {
 
 	public void editar(ActionEvent evento) {
 		Aluno aluno = (Aluno) evento.getComponent().getAttributes().get("alunoSelecionado");
-		FacesContext.getCurrentInstance().getExternalContext().getFlash().put("paciente", aluno);
+		FacesContext.getCurrentInstance().getExternalContext().getFlash().put("aluno", aluno);
 	}
 
 	public void carregarEstados() {

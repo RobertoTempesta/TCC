@@ -102,4 +102,22 @@ public class UsuarioDAO extends GenericDAO<Usuario> {
 	
 	}
 
+	public Usuario buscarUsuario(Usuario usuario) {
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		try {
+
+			Criteria consulta = sessao.createCriteria(Usuario.class);
+			consulta.createAlias("pessoa", "p");
+			consulta.add(Restrictions.eq("p.CPF", usuario.getPessoa().getCPF()));
+			consulta.add(Restrictions.eq("p.RG", usuario.getPessoa().getRG()));
+			Usuario resultado = (Usuario) consulta.uniqueResult();
+			return resultado;
+
+		} catch (RuntimeException exception) {
+			throw exception;
+		} finally {
+			sessao.close();
+		}
+	}
+
 }

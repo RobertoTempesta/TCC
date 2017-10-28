@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.omnifaces.util.Faces;
@@ -55,7 +56,8 @@ public class LoginBean implements Serializable {
 			}
 
 			this.usuarioLogado = user;
-			logger.info("Usuario logado: " + this.usuario.getPessoa().getCPF());
+			LogManager.getLogger(LoginBean.class).log(Level.INFO,
+					"Usuario Logado: " + this.usuario.getPessoa().getCPF());
 			Faces.redirect("./paginas/privado/inicio.xhtml");
 
 		} catch (IOException | NoSuchAlgorithmException erro) {
@@ -81,6 +83,9 @@ public class LoginBean implements Serializable {
 	}
 
 	public Usuario getUsuarioLogado() {
+		if (usuarioLogado == null) {
+			usuarioLogado = new Usuario();
+		}
 		return usuarioLogado;
 	}
 

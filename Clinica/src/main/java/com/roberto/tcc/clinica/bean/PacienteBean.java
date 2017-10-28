@@ -79,7 +79,7 @@ public class PacienteBean implements Serializable {
 			sessao.setPaciente(paciente);
 			sessaoDAO.salvarPrimeiraSessao(sessao);
 			Messages.addGlobalInfo("Sessão salva com Sucesso!");
-			RequestContext.getCurrentInstance().execute("PF('dlgSessao').show();");
+			RequestContext.getCurrentInstance().execute("PF('dlgSessao').hide();");
 		} catch (RuntimeException erro) {
 			LogManager.getLogger(PacienteBean.class).log(Level.ERROR, "Erro ao salvar a Sessão: ", erro);
 			Messages.addGlobalError("Ocorreu um erro ao Salvar a Sessão");

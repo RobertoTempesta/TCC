@@ -21,17 +21,13 @@
 
 <h:body styleClass="login-body">
 	<p:growl id="growl" autoUpdate="true" closable="true" />
-	<h:form id="frmLogin">
+	<h:form id="frm">
 
 		<div class="card login-panel ui-fluid">
 			<div class="ui-g">
 				<div class="ui-g-12">
-					<p:graphicImage name="logo2.png" library="imagens"
-						styleClass="logoLogin" />
-				</div>
-				<div class="ui-g-12">
 					<h:panelGroup styleClass="md-inputfield">
-						<p:inputMask value="#{MBLogin.usuario.pessoa.CPF}"
+						<p:inputMask value="#{MBEsqueceuSenha.usuario.pessoa.CPF}"
 							mask="999.999.999-99" required="true"
 							requiredMessage="É necessario digitar o CPF" />
 						<label>CPF</label>
@@ -39,17 +35,33 @@
 				</div>
 				<div class="ui-g-12">
 					<h:panelGroup styleClass="md-inputfield">
-						<p:password value="#{MBLogin.usuario.senha}" required="true"
-							requiredMessage="É necessario digitar a senha" />
+						<p:inputMask id="rg" mask="99.999.999-9" size="10"
+							value="#{MBEsqueceuSenha.usuario.pessoa.RG}" required="true"
+							requiredMessage="É necessário digitar um RG" />
+						<label>RG</label>
+					</h:panelGroup>
+				</div>
+				<div class="ui-g-12">
+					<h:panelGroup styleClass="md-inputfield">
+						<p:password id="pwd1" value="#{MBEsqueceuSenha.usuario.senha}"
+							match="pwd2" label="Senha de login" required="true"
+							feedback="true" requiredMessage="É necessario disgitar a senha" />
 						<label>Senha</label>
 					</h:panelGroup>
 				</div>
+				<div class="ui-g-12">
+					<h:panelGroup styleClass="md-inputfield">
+						<p:password id="pwd2" value="#{MBEsqueceuSenha.usuario.senha}"
+							required="true" feedback="true"
+							requiredMessage="É necessario disgitar a senha novamente" />
+						<label>Senha Novamente</label>
+					</h:panelGroup>
+				</div>
 				<div class="ui-g-12 .margin-div-botoes">
-					<p:commandButton value="Logar/Entrar"
-						actionListener="#{MBLogin.login}" icon="ui-icon-person"
-						update=":frmLogin :growl" />
-					<p:button value="Esqueci Minha Senha" icon="ui-icon-help"
-						outcome="esqueci_senha" styleClass="red-btn" />
+					<p:commandButton value="Salvar" icon="ui-icon-vpn-key"
+						update=":frm :growl" actionListener="#{MBEsqueceuSenha.salvar}" />
+					<p:button value="Voltar" icon="ui-icon-reply"
+						outcome="login" styleClass="red-btn" />
 				</div>
 			</div>
 		</div>

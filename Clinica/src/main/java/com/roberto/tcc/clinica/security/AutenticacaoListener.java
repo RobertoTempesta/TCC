@@ -15,7 +15,6 @@ public class AutenticacaoListener implements PhaseListener {
 	@Override
 	public void afterPhase(PhaseEvent event) {
 
-
 		if (!ehPaginaPublica()) {
 			// Pega o atributo da sessão
 			LoginBean autenticacaoBean = Faces.getSessionAttribute("MBLogin");
@@ -42,17 +41,20 @@ public class AutenticacaoListener implements PhaseListener {
 	public PhaseId getPhaseId() {
 		return PhaseId.ANY_PHASE;
 	}
-	
+
 	private boolean ehPaginaPublica() {
 		// Pega a pagina atual da sessão
 		String paginaAtual = Faces.getViewId();
 
-		if(paginaAtual.contains("login.xhtml") || paginaAtual.contains("404.xhtml") 
-				|| paginaAtual.contains("access.xhtml") || paginaAtual.contains("error.xhtml")) {
-			
+		if (paginaAtual.contains("login.xhtml") 
+				|| paginaAtual.contains("404.xhtml")
+				|| paginaAtual.contains("access.xhtml") 
+				|| paginaAtual.contains("error.xhtml")
+				|| paginaAtual.contains("esqueci_senha.xhtml")) {
+
 			return true;
 		}
-		
+
 		return false;
 	}
 

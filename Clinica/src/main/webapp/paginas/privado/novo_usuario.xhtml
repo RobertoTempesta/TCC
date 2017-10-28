@@ -228,15 +228,12 @@
 
 								<h:panelGroup styleClass="md-inputfield">
 									<p:password id="pwd1" value="#{MBNovoUsuario.usuario.senha}"
-										match="pwd2" label="Senha de login" required="true"
-										requiredMessage="É necessario disgitar a senha" />
+										match="pwd2" label="Senha de login" />
 									<label>Senha</label>
 								</h:panelGroup>
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:password id="pwd2" value="#{MBNovoUsuario.usuario.senha}"
-										required="true"
-										requiredMessage="É necessario disgitar a senha novamente" />
+									<p:password id="pwd2" value="#{MBNovoUsuario.usuario.senha}" />
 									<label>Senha Novamente</label>
 								</h:panelGroup>
 							</p:panelGrid>
