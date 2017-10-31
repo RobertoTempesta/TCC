@@ -3,7 +3,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
-	
+
 	<ui:define name="head">
 		<h:outputScript name="scripts.js" library="js" />
 	</ui:define>
@@ -221,8 +221,9 @@
 								columnClasses="ui-grid-col-6,ui-grid-col-6">
 
 								<h:panelGroup styleClass="md-inputfield">
-									<p:inputText id="ocupa" value="#{MBNovoPaciente.paciente.ocupacao}"
-										maxlength="100" required="true"
+									<p:inputText id="ocupa"
+										value="#{MBNovoPaciente.paciente.ocupacao}" maxlength="100"
+										required="true"
 										requiredMessage="É necessario digitar a ocupação deste Paciente"
 										converter="upperCaseConverter">
 										<p:ajax event="blur" update=":frmNovo:ocupa" />
@@ -271,7 +272,7 @@
 									<p:inputTextarea id="medica" rows="5" cols="50" maxlength="100"
 										value="#{MBNovoPaciente.paciente.medicamento}"
 										queryDelay="750" minQueryLength="4"
-										converter="upperCaseConverter" >
+										converter="upperCaseConverter">
 										<p:ajax event="blur" update=":frmNovo:medica" />
 									</p:inputTextarea>
 									<label>Uso continuo de medicamentos?</label>
@@ -296,6 +297,16 @@
 									</p:inputTextarea>
 									<label>Observações</label>
 								</h:panelGroup>
+								
+								<p:selectOneMenu id="situacao"
+									value="#{MBNovoPaciente.paciente.situacao}"
+									required="true"
+									requiredMessage="É necessário selecionar a situação"
+									converter="omnifaces.SelectItemsConverter">
+									<f:selectItem itemValue="AGUARDANDO" itemLabel="Fila de Espera" />
+									<f:selectItem itemValue="FINALIZADO" itemLabel="Finalizado" />
+								</p:selectOneMenu>
+								
 							</p:panelGrid>
 
 							<br />
@@ -330,6 +341,16 @@
 										maxlength="13" />
 									<label>Celular</label>
 								</h:panelGroup>
+
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputText
+										value="#{MBNovoPaciente.paciente.pessoaAutorizada}"
+										maxlength="50" converter="upperCaseConverter">
+										<p:ajax event="blur" update=":frmNovo:nomeResp" />
+									</p:inputText>
+									<label>Pessoa Autorizada</label>
+								</h:panelGroup>
+
 							</p:panelGrid>
 
 							<div align="center" style="margin-top: 50px">
@@ -339,6 +360,7 @@
 							</div>
 						</div>
 					</h:form>
+
 					<p:dialog header="Atenção" closable="false" draggable="false"
 						modal="true" resizable="false" widgetVar="dlgConfirma" width="25%">
 						<h:form>

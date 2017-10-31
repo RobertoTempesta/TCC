@@ -2,22 +2,20 @@ package com.roberto.tcc.clinica.enumeracao;
 
 public enum TipoUsuario {
 
-	GERENCIADOR, USUARIO;
+	GERENCIADOR("Gerênciador"), USUARIO("Usuário");
 
-	@Override
-	public String toString() {
-		switch (this) {
+	private String descricao;
 
-		case GERENCIADOR:
-			return "Gerênciador";
+	private TipoUsuario(String descricao) {
+		this.descricao = descricao;
+	}
 
-		case USUARIO:
-			return "Usuário";
+	public String getDescricao() {
+		return descricao;
+	}
 
-		default:
-			return null;
-		}
-
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
 }

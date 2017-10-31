@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.4.3.final using JasperReports Library version 6.4.3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacao_pacientes" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="41ecc9ea-5943-4e06-9a9f-cd92393eba6d">
+	<property name="com.jaspersoft.studio.data.sql.tables">
+		<![CDATA[YmRfdGVzdGUucGVzc29hIEFTICwzMTAsMiw0OTA1NDEzNy1lZGFjLTRkY2ItOTcwMi1mYjU1NTRi
+OTI3NTg7YmRfdGVzdGUucGFjaWVudGUgQVMgLDQ0LDE5LGNhNDkwYTEwLTcwNjQtNDgzYy05MTcw
+LTQ3YTFlOTM2YTM1Njs=]]>
+	</property>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="203"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="788"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="BANCO"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="663"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="323"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT bd_teste.paciente.`dataCadastro`,
+	bd_teste.paciente.`numeroCaso`,
+	bd_teste.pessoa.sexo,
+	bd_teste.pessoa.nome,
+	bd_teste.pessoa.idade,
+	bd_teste.pessoa.escolaridade,
+	bd_teste.pessoa.telefone1,
+	bd_teste.paciente.`estadoCivil`,
+	bd_teste.paciente.ocupacao,
+	bd_teste.paciente.`responsavelNome`
+FROM bd_teste.paciente
+	INNER JOIN bd_teste.pessoa ON 
+	 bd_teste.paciente.pessoa_codigo = bd_teste.pessoa.codigo]]>
+	</queryString>
+	<field name="dataCadastro" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.label" value="dataCadastro"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="paciente"/>
+	</field>
+	<field name="numeroCaso" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="numeroCaso"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="paciente"/>
+	</field>
+	<field name="sexo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="sexo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pessoa"/>
+	</field>
+	<field name="nome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="nome"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pessoa"/>
+	</field>
+	<field name="idade" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="idade"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pessoa"/>
+	</field>
+	<field name="escolaridade" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="escolaridade"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pessoa"/>
+	</field>
+	<field name="telefone1" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="telefone1"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pessoa"/>
+	</field>
+	<field name="estadoCivil" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="estadoCivil"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="paciente"/>
+	</field>
+	<field name="ocupacao" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ocupacao"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="paciente"/>
+	</field>
+	<field name="responsavelNome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="responsavelNome"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="paciente"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="23" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="48" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="16" width="185" height="16" uuid="fe4ff02a-e89d-47ab-a00d-fbe4c9150e60">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="75cfcc61-b8fa-4e35-828a-2576ef32ae08"/>
+				</reportElement>
+				<textFieldExpression><![CDATA["Data do Cadastro: "+$F{dataCadastro}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="230" y="0" width="90" height="16" uuid="ecc5a85f-0c66-4e67-bb3f-f14724f21df3">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="657df15a-4ef0-4400-afec-75182835f347"/>
+				</reportElement>
+				<textFieldExpression><![CDATA["Caso: "+$F{numeroCaso}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="390" y="0" width="160" height="16" uuid="0067aac9-74a0-42d7-a522-042c376db9c8">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ee1faa82-27ae-48d2-81f7-fa4c5ee7d307"/>
+				</reportElement>
+				<textFieldExpression><![CDATA["Sexo: "+$F{sexo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="230" height="16" uuid="3b3ad8e5-0c24-4f7f-b6ba-7f0853f943e2">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0f4edd65-7657-4dab-a158-9d9a1a52dd82"/>
+				</reportElement>
+				<textFieldExpression><![CDATA["Paciente: "+$F{nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="320" y="0" width="70" height="16" uuid="28d5a3be-4657-4a8e-9b0b-eafaf42bd287">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bd9813fa-9fb1-41c9-b5b7-ad77896a3659"/>
+				</reportElement>
+				<textFieldExpression><![CDATA["Idade: "+$F{idade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="320" y="16" width="230" height="16" uuid="a2b14f57-ad90-47f6-aceb-16050ef8c08f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c92bcca1-d8a4-4345-ad5d-f0b75d7d172d"/>
+				</reportElement>
+				<textFieldExpression><![CDATA["Nível de Ensino: "+$F{escolaridade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="320" y="32" width="205" height="16" uuid="d7dde451-d514-4980-a1fd-84417f64bece">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bf96b053-f7f4-42f3-9c3d-8c2261c1d817"/>
+				</reportElement>
+				<textFieldExpression><![CDATA["Telefone: " + $F{telefone1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="230" y="16" width="90" height="16" uuid="4cc4f17d-ffda-4ad6-96b0-2b5296f53c55">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2d628311-62f3-4ee4-b1bd-9725e600042e"/>
+				</reportElement>
+				<textFieldExpression><![CDATA["Estado Civil: "+$F{estadoCivil}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="32" width="320" height="16" uuid="4b6f8ec3-5446-4d8d-b935-1c24c32384c9">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="be4b82ce-84ac-4023-a9cb-b38646bbbde9"/>
+				</reportElement>
+				<textFieldExpression><![CDATA["Ocupação: "+$F{ocupacao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

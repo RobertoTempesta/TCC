@@ -8,8 +8,8 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.omnifaces.util.Messages;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -26,6 +26,8 @@ import com.roberto.tcc.clinica.domain.Aluno;
 import com.roberto.tcc.clinica.domain.Paciente;
 import com.roberto.tcc.clinica.domain.SalaAtendimento;
 import com.roberto.tcc.clinica.domain.Sessao;
+import com.roberto.tcc.clinica.enumeracao.Frequencia;
+import com.roberto.tcc.clinica.enumeracao.Situacao;
 import com.roberto.tcc.clinica.util.Constantes;
 
 @SuppressWarnings("serial")
@@ -33,7 +35,6 @@ import com.roberto.tcc.clinica.util.Constantes;
 @ViewScoped
 public class AgendaBean implements Serializable {
 
-	private static final Logger logger = LogManager.getLogger(AgendaBean.class);
 	private ScheduleModel lista;
 
 	private Sessao sessao;
@@ -44,8 +45,11 @@ public class AgendaBean implements Serializable {
 	private List<Paciente> pacientes;
 	private List<Sessao> sessoes;
 
+	private String numeroCaso = null;
+
 	@PostConstruct
 	public void init() {
+		numeroCaso = null;
 		lista = new DefaultScheduleModel();
 
 		try {
@@ -68,7 +72,7 @@ public class AgendaBean implements Serializable {
 			}
 
 		} catch (RuntimeException erro) {
-			logger.error("Ocorreu um erro ao tentar carregar as sessões: " + erro);
+			LogManager.getLogger().log(Level.ERROR, "Ocorreu um erro ao tentar carregar as sessões:", erro);
 			Messages.addGlobalError("Ocorreu um erro ao carregar as Sessões");
 		}
 
@@ -81,7 +85,7 @@ public class AgendaBean implements Serializable {
 			sessao.setAluno(new Aluno());
 			sessao.setPaciente(new Paciente());
 			sessao.setSala(new SalaAtendimento());
-
+			numeroCaso = null;
 			sessao.setDataInicio((Date) evento.getObject());
 			sessao.setDataFim((Date) evento.getObject());
 
@@ -90,26 +94,42 @@ public class AgendaBean implements Serializable {
 			pacientes = new PacienteDAO().listar();
 
 		} catch (RuntimeException erro) {
-			logger.error("Erro ao carregar as datas da Sessão/Alunos/Salas/Pacientes: " + erro);
+			LogManager.getLogger().log(Level.ERROR, "Erro ao carregar as datas da Sessão/Alunos/Salas/Pacientes:",
+					erro);
 			Messages.addGlobalError("Ocorreu um erro ao carregar a data selecionada");
 		}
 	}
 
 	public void salvar() {
 
-		if (this.sessao.getPaciente().getNumeroCaso() == null 
-				|| this.sessao.getPaciente().getNumeroCaso().equals("")) {
+		if (numeroCaso == null || numeroCaso.equals("")) {
 			Messages.addGlobalError("Informe o Numero do Caso");
 			return;
 		}
 
 		SessaoDAO dao = new SessaoDAO();
+		sessao.getPaciente().setFaltas_injustificadas(Integer.valueOf(
+				dao.buscaNumeroFaltas(sessao.getPaciente().getCodigo(), Frequencia.FALTA_INJUSTIFICADA).toString()));
+		if (sessao.getPaciente().getSituacao().equals(Situacao.AGUARDANDO)) {
+			sessao.getPaciente().setSituacao(Situacao.EM_ANDAMENTO);
+		}
+
+		if (sessao.getPaciente().getNumeroCaso() == null || sessao.getPaciente().getNumeroCaso().equals("")) {
+			sessao.getPaciente().setNumeroCaso(numeroCaso + anoCorrente);
+		}
+
 		dao.salvarPrimeiraSessao(sessao);
 		init();
 		RequestContext.getCurrentInstance().execute("PF('dlgSessao').hide();");
 	}
 
 	public void onRowSelect(SelectEvent event) {
+		// adaptação tecnica para pegar o numero do caso
+		if (sessao.getPaciente().getNumeroCaso() == null || sessao.getPaciente().getNumeroCaso().equals("")) {
+			numeroCaso = null;
+		} else {
+			numeroCaso = sessao.getPaciente().getNumeroCaso();
+		}
 		Messages.addGlobalInfo("Paciente Selecionado");
 	}
 
@@ -123,11 +143,12 @@ public class AgendaBean implements Serializable {
 
 		alunos = new AlunoDAO().listar();
 		salas = new SalaAtendimentoDAO().listar();
-		pacientes = new PacienteDAO().listar();
+		pacientes = new PacienteDAO().listar("dataCadastro");
 
 		for (Sessao sessao : sessoes) {
 			if (sessao.getCodigo() == (Long) evento.getData()) {
 				this.sessao = sessao;
+				numeroCaso = sessao.getPaciente().getNumeroCaso();
 				break;
 			}
 		}
@@ -155,6 +176,14 @@ public class AgendaBean implements Serializable {
 
 	public void setAlunos(List<Aluno> alunos) {
 		this.alunos = alunos;
+	}
+
+	public String getNumeroCaso() {
+		return numeroCaso;
+	}
+
+	public void setNumeroCaso(String numeroCaso) {
+		this.numeroCaso = numeroCaso;
 	}
 
 	public List<SalaAtendimento> getSalas() {

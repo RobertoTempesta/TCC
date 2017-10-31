@@ -85,19 +85,31 @@
 					paginator="true">
 
 					<p:ajax event="rowSelect" listener="#{MBAgenda.onRowSelect}"
-						update=":frmNovo:tabView :growl"
+						update=":frmNovo:tabView:pgPaciente :growl"
 						oncomplete="PF('dlgPaciente').hide();" />
 
 					<p:column headerText="Nome" style="text-align: center"
 						filterBy="#{paciente.pessoa.nome}">
-						<h:outputText value="#{paciente.pessoa.nome}" />
+						<h:outputText value="#{paciente.pessoa.nome}"
+							style="#{paciente.css}" />
 					</p:column>
-					<p:column headerText="CPF" style="text-align: center">
-						<h:outputText value="#{paciente.pessoa.CPF}" />
+					<p:column headerText="Nº do Caso" style="text-align: center"
+						sortBy="#{paciente.numeroCaso}">
+						<h:outputText value="#{paciente.numeroCaso}" />
 					</p:column>
-					<p:column headerText="Data do Cadastro"
-						sortBy="#{paciente.dataCadastro}" style="text-align: center">
-						<h:outputText value="#{paciente.dataCadastro}">
+					<p:column headerText="Nº de Faltas" style="text-align: center">
+						<h:outputText value="#{paciente.faltas_injustificadas}"
+							style="#{paciente.css}" />
+					</p:column>
+					<p:column headerText="Situação" style="text-align: center"
+						sortBy="#{paciente.situacao.descricao}">
+						<h:outputText value="#{paciente.situacao.descricao}"
+							style="#{paciente.situacao.css}" />
+					</p:column>
+					<p:column headerText="Data do Cadastro" style="text-align: center"
+						sortBy="#{paciente.situacao.descricao}">
+						<h:outputText value="#{paciente.dataCadastro}"
+							style="#{paciente.css}">
 							<f:convertDateTime pattern="dd/MM/yyyy" />
 						</h:outputText>
 					</p:column>
@@ -144,7 +156,7 @@
 								</p:selectOneMenu>
 
 								<p:selectOneMenu id="sala" value="#{MBAgenda.sessao.sala}"
-									required="true"
+									required="true" filter="true"
 									requiredMessage="É necessário selecionar uma Sala para o Atendimento"
 									converter="omnifaces.SelectItemsConverter">
 									<f:selectItem itemLabel="Selecione a Sala de Atendimento"
@@ -154,13 +166,14 @@
 								</p:selectOneMenu>
 
 								<p:selectOneMenu id="aluno" value="#{MBAgenda.sessao.aluno}"
-									required="true"
+									required="true" filter="true"
 									requiredMessage="É necessário selecionar um Aluno"
 									converter="omnifaces.SelectItemsConverter">
 									<f:selectItem itemLabel="Selecione o Aluno Responsável"
 										noSelectionOption="true" />
 									<f:selectItems value="#{MBAgenda.alunos}" var="aluno"
-										itemValue="#{aluno}" itemLabel="#{aluno.pessoa.nome}" />
+										itemValue="#{aluno}"
+										itemLabel="#{aluno.pessoa.nome} (#{aluno.supervisor.pessoa.nome})" />
 								</p:selectOneMenu>
 
 							</p:panelGrid>
@@ -182,12 +195,12 @@
 							<h:outputText value="#{MBAgenda.sessao.paciente.pessoa.nome}" />
 
 							<h:panelGroup styleClass="md-inputfield">
-								<p:inputText value="#{MBAgenda.sessao.paciente.numeroCaso}"
-									disabled="#{MBAgenda.sessao.paciente.numeroCaso != null}" />
+								<p:inputText value="#{MBAgenda.numeroCaso}"
+									disabled="#{MBAgenda.numeroCaso != null}" />
 								<label>Numero do Caso:</label>
 							</h:panelGroup>
 							<p:outputLabel value="/#{MBAgenda.anoCorrente}"
-								rendered="#{MBAgenda.sessao.paciente.numeroCaso == null}" />
+								rendered="#{MBAgenda.numeroCaso == null}" />
 
 						</p:panelGrid>
 
@@ -206,6 +219,7 @@
 					<p:commandButton style="margin: 1em auto; width:30%" value="Salvar"
 						actionListener="#{MBAgenda.salvar}"
 						update=":frmNovo :frmSchedule :growl" />
+
 				</div>
 			</h:form>
 		</p:dialog>

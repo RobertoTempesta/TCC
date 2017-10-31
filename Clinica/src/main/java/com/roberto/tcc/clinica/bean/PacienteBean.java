@@ -22,6 +22,8 @@ import com.roberto.tcc.clinica.domain.Estado;
 import com.roberto.tcc.clinica.domain.Paciente;
 import com.roberto.tcc.clinica.domain.SalaAtendimento;
 import com.roberto.tcc.clinica.domain.Sessao;
+import com.roberto.tcc.clinica.enumeracao.Frequencia;
+import com.roberto.tcc.clinica.enumeracao.Situacao;
 import com.roberto.tcc.clinica.util.Constantes;
 
 @ManagedBean(name = "MBPaciente")
@@ -51,7 +53,7 @@ public class PacienteBean implements Serializable {
 
 	public void carregarPacientes() {
 		try {
-			pacientes = new PacienteDAO().listar();
+			pacientes = new PacienteDAO().listar("dataCadastro");
 		} catch (RuntimeException erro) {
 			LogManager.getLogger(PacienteBean.class).log(Level.ERROR, "Erro ao listar os Pacientes", erro);
 			Messages.addGlobalError("Ocorreu um erro ao tentar carregar os pacientes.");
@@ -67,7 +69,7 @@ public class PacienteBean implements Serializable {
 			Messages.addGlobalError("Ocorreu um erro ao carregar os objetos da Tela!");
 		}
 	}
-	
+
 	public void capturaPaciente(ActionEvent evento) {
 		this.paciente = (Paciente) evento.getComponent().getAttributes().get("pacienteSelecionado");
 		carregarObjetosSessao();
@@ -76,6 +78,11 @@ public class PacienteBean implements Serializable {
 	public void salvar() {
 		try {
 			SessaoDAO sessaoDAO = new SessaoDAO();
+			sessao.getPaciente().setFaltas_injustificadas(Integer.valueOf(sessaoDAO
+					.buscaNumeroFaltas(sessao.getPaciente().getCodigo(), Frequencia.FALTA_INJUSTIFICADA).toString()));
+			if (sessao.getPaciente().getSituacao().equals(Situacao.AGUARDANDO)) {
+				sessao.getPaciente().setSituacao(Situacao.EM_ANDAMENTO);
+			}
 			sessao.setPaciente(paciente);
 			sessaoDAO.salvarPrimeiraSessao(sessao);
 			Messages.addGlobalInfo("Sessão salva com Sucesso!");
@@ -109,6 +116,18 @@ public class PacienteBean implements Serializable {
 			LogManager.getLogger(PacienteBean.class).log(Level.ERROR, "Erro ao excluir Paciente: ", erro);
 			Messages.addGlobalError("Ocorreu um erro ao tentar deletar o Paciente!");
 		}
+	}
+
+	public String cssCampo(Paciente paciente) {
+
+		if (paciente.getNumeroCaso() == null || paciente.getNumeroCaso().equals("")) {
+			return "color: #20B2AA";
+		} else if (paciente.getFaltas_injustificadas() >= 4) {
+			return "color: red";
+		} else {
+			return "";
+		}
+
 	}
 
 	public Paciente getPaciente() {

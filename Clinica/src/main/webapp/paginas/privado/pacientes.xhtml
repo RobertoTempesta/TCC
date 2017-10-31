@@ -4,12 +4,45 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
 
+	<!-- 	<ui:define name="head"> -->
+	<!-- 		<h:outputStylesheet library="css" name="estilo.css" /> -->
+	<!-- 	</ui:define> -->
+
 	<ui:define name="content">
 		<div class="ui-g">
 			<div class="ui-g-12">
 				<div class="card card-w-title">
 
 					<h:form id="frmListagem">
+
+						<div class="ui-g dashboard">
+							<div class="ui-g-12 ui-md-6">
+								<div class="ui-g card colorbox colorbox-1">
+									<div class="ui-g-4">
+										<i class="material-icons">mood</i>
+									</div>
+									<div class="ui-g-8">
+										<span class="colorbox-name">Pacientes com 3 ou mais
+											faltas.</span> <span class="colorbox-count"></span>
+									</div>
+								</div>
+							</div>
+							<div class="ui-g-12 ui-md-6">
+								<div class="ui-g card colorbox colorbox-2">
+									<div class="ui-g-4">
+										<i class="material-icons">school</i>
+									</div>
+									<div class="ui-g-8">
+										<span class="colorbox-name">Pacientes aguardando para
+											serem chamados.</span> <span class="colorbox-count"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<p style="color: red"></p>
+						<p style="color: blue"></p>
+
 						<h:panelGrid style="margin: 1em auto">
 							<p:button id="novo" icon="ui-icon-add" styleClass="secondary"
 								value="Novo Paciente" outcome="novo_paciente" />
@@ -22,23 +55,25 @@
 							paginator="true" value="#{MBPaciente.pacientes}" var="paciente"
 							style="margin: 0em auto;">
 
-							<p:column headerText="Paciente" style="text-align: center">
-								<h:outputText value="#{paciente.pessoa.nome}" />
+							<p:column headerText="Paciente" style="text-align: center;">
+								<h:outputText value="#{paciente.pessoa.nome}"
+									style="#{paciente.css}" />
 							</p:column>
-							<p:column headerText="CPF" style="text-align: center">
-								<h:outputText value="#{paciente.pessoa.CPF}" />
-							</p:column>
-							<p:column headerText="Idade" width="10%"
-								style="text-align: center">
-								<h:outputText value="#{paciente.pessoa.idade}" />
+							<p:column headerText="Nº de Faltas" style="text-align: center">
+								<h:outputText value="#{paciente.faltas_injustificadas}"
+									style="#{paciente.css}" />
 							</p:column>
 							<p:column headerText="Data do Cadastro"
 								style="text-align: center">
-								<h:outputText value="#{paciente.dataCadastro}">
+								<h:outputText value="#{paciente.dataCadastro}"
+									style="#{paciente.css}">
 									<f:convertDateTime pattern="dd/MM/yyyy" />
 								</h:outputText>
 							</p:column>
-
+							<p:column headerText="Situação" style="text-align: center" sortBy="#{paciente.situacao.descricao}">
+								<h:outputText value="#{paciente.situacao.descricao}"
+									style="#{paciente.situacao.css}" />
+							</p:column>
 							<p:column headerText="Opções" style="text-align: center">
 								<p:commandButton id="delete" icon="ui-icon-delete"
 									update=":frmListagem :growl" styleClass="red-btn"

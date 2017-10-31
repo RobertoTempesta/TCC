@@ -64,4 +64,12 @@ public class AlterarSenhaBean implements Serializable {
 		this.usuario = usuario;
 	}
 
+	public LoginBean getLoginBean() {
+		return loginBean;
+	}
+
+	public void setLoginBean(LoginBean loginBean) {
+		this.loginBean = loginBean;
+	}
+
 }

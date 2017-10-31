@@ -12,6 +12,7 @@ import org.hibernate.criterion.Restrictions;
 
 import com.roberto.tcc.clinica.domain.Paciente;
 import com.roberto.tcc.clinica.domain.Sessao;
+import com.roberto.tcc.clinica.enumeracao.Frequencia;
 import com.roberto.tcc.clinica.util.HibernateUtil;
 
 @SuppressWarnings("serial")
@@ -63,6 +64,25 @@ public class SessaoDAO extends GenericDAO<Sessao>{
 		try {
 
 			Criteria consulta = sessao.createCriteria(Sessao.class);
+			resultado = (Number) consulta.setProjection(Projections.rowCount()).uniqueResult();
+			return resultado;
+
+		} catch (RuntimeException exception) {
+			throw exception;
+		} finally {
+			sessao.close();
+		}
+	}
+	
+	public Number buscaNumeroFaltas(Long codigoPaciente, Frequencia frequencia) {
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		Number resultado = 0;
+		try {
+
+			Criteria consulta = sessao.createCriteria(Sessao.class);
+			consulta.createAlias("paciente", "p");
+			consulta.add(Restrictions.eq("p.codigo", codigoPaciente));
+			consulta.add(Restrictions.eq("frequencia", frequencia));
 			resultado = (Number) consulta.setProjection(Projections.rowCount()).uniqueResult();
 			return resultado;
 

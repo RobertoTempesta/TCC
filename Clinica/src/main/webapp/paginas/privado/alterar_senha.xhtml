@@ -35,14 +35,24 @@
 									<p:outputLabel style="font-weight: bold;" value="CPF:" />
 								</p:column>
 								<p:column>
-									<h:outputText value="" />
+									<h:outputText value="#{MBAlteraSenha.usuario.pessoa.CPF}" />
 								</p:column>
 
 								<p:column>
 									<p:outputLabel style="font-weight: bold;" value="RG:" />
 								</p:column>
 								<p:column>
-									<h:outputText value="" />
+									<h:outputText value="#{MBAlteraSenha.usuario.pessoa.RG}" />
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column colspan="1">
+									<p:outputLabel style="font-weight: bold;"
+										value="Tipo de Usuário" />
+								</p:column>
+								<p:column colspan="3">
+									<h:outputText value="#{MBAlteraSenha.usuario.tipoUsuario}" />
 								</p:column>
 							</p:row>
 
@@ -71,7 +81,8 @@
 									</h:panelGroup>
 								</p:panelGrid>
 
-								<p:commandButton value="Salvar Nova Senha" style="width:200px" />
+								<p:commandButton value="Salvar Nova Senha" style="width:200px"
+									actionListener="#{MBAlteraSenha.salvar}" update=":growl :frmPrincipal" />
 
 							</p:panel>
 						</div>
