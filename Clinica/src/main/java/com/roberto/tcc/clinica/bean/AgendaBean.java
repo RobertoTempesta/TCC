@@ -107,7 +107,35 @@ public class AgendaBean implements Serializable {
 			return;
 		}
 
+		if (sessao.getSala() == null || sessao.getSala().equals("")) {
+			Messages.addGlobalError("É necessário selecionar uma Sala para o Atendimento");
+			return;
+		}
+
+		if (sessao.getAluno() == null || sessao.getAluno().equals("")) {
+			Messages.addGlobalError("É necessário selecionar um Aluno");
+			return;
+		}
+
 		SessaoDAO dao = new SessaoDAO();
+		if (sessao.getCodigo() == null) {
+
+			List<Sessao> listaSessao = dao.verificaPossibilidade(sessao);
+
+			for (Sessao s : listaSessao) {
+
+				if (s.getSala().getCodigo() == sessao.getSala().getCodigo()) {
+					Messages.addGlobalError(
+							"Não é possivel salvar essa Sessão, verifique se a Sala selecionada já não está em uso!");
+					return;
+				}
+				if (s.getAluno().getCodigo() == sessao.getAluno().getCodigo()) {
+					Messages.addGlobalError(
+							"Não é possivel salvar essa Sessão, verifique se Aluno selecionada já não está atendendo!");
+					return;
+				}
+			}
+		}
 		sessao.getPaciente().setFaltas_injustificadas(Integer.valueOf(
 				dao.buscaNumeroFaltas(sessao.getPaciente().getCodigo(), Frequencia.FALTA_INJUSTIFICADA).toString()));
 		if (sessao.getPaciente().getSituacao().equals(Situacao.AGUARDANDO)) {

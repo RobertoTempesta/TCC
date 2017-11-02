@@ -86,7 +86,7 @@
 
 					<p:ajax event="rowSelect" listener="#{MBAgenda.onRowSelect}"
 						update=":frmNovo:tabView:pgPaciente :growl"
-						oncomplete="PF('dlgPaciente').hide();" />
+						oncomplete="PF('dlgPaciente').hide();" process="@this" />
 
 					<p:column headerText="Nome" style="text-align: center"
 						filterBy="#{paciente.pessoa.nome}">
@@ -144,8 +144,7 @@
 								</h:panelGroup>
 
 								<p:selectOneMenu id="frequencia"
-									value="#{MBAgenda.sessao.frequencia}" required="true"
-									requiredMessage="É necessário selecionar a frequência do Paciente">
+									value="#{MBAgenda.sessao.frequencia}">
 									<f:selectItem itemLabel="Aguadando acolhimento"
 										itemValue="AGUARDANDO" />
 									<f:selectItem itemLabel="Presente" itemValue="PRESENTE" />
@@ -156,9 +155,7 @@
 								</p:selectOneMenu>
 
 								<p:selectOneMenu id="sala" value="#{MBAgenda.sessao.sala}"
-									required="true" filter="true"
-									requiredMessage="É necessário selecionar uma Sala para o Atendimento"
-									converter="omnifaces.SelectItemsConverter">
+									filter="true" converter="omnifaces.SelectItemsConverter">
 									<f:selectItem itemLabel="Selecione a Sala de Atendimento"
 										noSelectionOption="true" />
 									<f:selectItems value="#{MBAgenda.salas}" var="sala"
@@ -166,9 +163,7 @@
 								</p:selectOneMenu>
 
 								<p:selectOneMenu id="aluno" value="#{MBAgenda.sessao.aluno}"
-									required="true" filter="true"
-									requiredMessage="É necessário selecionar um Aluno"
-									converter="omnifaces.SelectItemsConverter">
+									filter="true" converter="omnifaces.SelectItemsConverter">
 									<f:selectItem itemLabel="Selecione o Aluno Responsável"
 										noSelectionOption="true" />
 									<f:selectItems value="#{MBAgenda.alunos}" var="aluno"
@@ -218,7 +213,7 @@
 				<div align="center">
 					<p:commandButton style="margin: 1em auto; width:30%" value="Salvar"
 						actionListener="#{MBAgenda.salvar}"
-						update=":frmNovo :frmSchedule :growl" />
+						update=":frmSchedule :growl" />
 
 				</div>
 			</h:form>

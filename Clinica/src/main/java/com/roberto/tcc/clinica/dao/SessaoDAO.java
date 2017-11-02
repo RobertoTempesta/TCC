@@ -1,5 +1,6 @@
 package com.roberto.tcc.clinica.dao;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +38,37 @@ public class SessaoDAO extends GenericDAO<Sessao>{
 			sessao.close();
 		}
 	
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Sessao> verificaPossibilidade(Sessao s) throws RuntimeException {
+
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		try {
+			
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(s.getDataInicio());
+			calendar.set(Calendar.MINUTE, 0);
+			s.setDataInicio(calendar.getTime());
+
+			Criteria consulta = sessao.createCriteria(Sessao.class);
+//			consulta.createAlias("aluno", "a");
+//			consulta.add(Restrictions.eq("a.codigo", s.getAluno().getCodigo()));
+//			
+//			consulta.createAlias("sala", "s");
+//			consulta.add(Restrictions.eq("s.codigo", s.getSala().getCodigo()));
+			
+			consulta.add(Restrictions.ge("dataInicio", s.getDataInicio()));
+			consulta.add(Restrictions.le("dataFim",  s.getDataFim()));
+			
+			List<Sessao> resultado = consulta.list();
+			return resultado;
+
+		} catch (RuntimeException exception) {
+			throw exception;
+		} finally {
+			sessao.close();
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
