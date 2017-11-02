@@ -26,7 +26,6 @@ import com.roberto.tcc.clinica.domain.Aluno;
 import com.roberto.tcc.clinica.domain.Paciente;
 import com.roberto.tcc.clinica.domain.SalaAtendimento;
 import com.roberto.tcc.clinica.domain.Sessao;
-import com.roberto.tcc.clinica.enumeracao.Frequencia;
 import com.roberto.tcc.clinica.enumeracao.Situacao;
 import com.roberto.tcc.clinica.util.Constantes;
 
@@ -136,8 +135,7 @@ public class AgendaBean implements Serializable {
 				}
 			}
 		}
-		sessao.getPaciente().setFaltas_injustificadas(Integer.valueOf(
-				dao.buscaNumeroFaltas(sessao.getPaciente().getCodigo(), Frequencia.FALTA_INJUSTIFICADA).toString()));
+		
 		if (sessao.getPaciente().getSituacao().equals(Situacao.AGUARDANDO)) {
 			sessao.getPaciente().setSituacao(Situacao.EM_ANDAMENTO);
 		}

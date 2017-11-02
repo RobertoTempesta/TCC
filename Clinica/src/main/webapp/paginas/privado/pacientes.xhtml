@@ -40,15 +40,19 @@
 							</div>
 						</div>
 
-						<p style="color: red"></p>
-						<p style="color: blue"></p>
+						<p:tooltip id="toolTipFade" for="novo"
+							value="Adicionar um novo Paciente" position="top" />
 
-						<h:panelGrid style="margin: 1em auto">
-							<p:button id="novo" icon="ui-icon-add" styleClass="secondary"
-								value="Novo Paciente" outcome="novo_paciente" />
-							<p:tooltip id="toolTipFade" for="novo"
-								value="Adicionar um novo Paciente" position="top" />
-						</h:panelGrid>
+						<p:tooltip id="tollprint" for="print"
+							value="Imprima um relatório de Pacientes" position="top" />
+
+						<p:menuButton style="margin: 1em auto" value="Opções">
+							<p:menuitem id="novo" value="Novo Paciente" icon="ui-icon-add"
+								outcome="novo_paciente" />
+							<p:menuitem id="print" value="Imprimir"
+								icon="ui-icon-local-printshop"
+								oncomplete="PF('dlgImprimir').show();" />
+						</p:menuButton>
 
 						<p:dataTable id="tabela"
 							emptyMessage="Nenhum registro encontrado....." rows="10"
@@ -59,7 +63,8 @@
 								<h:outputText value="#{paciente.pessoa.nome}"
 									style="#{paciente.css}" />
 							</p:column>
-							<p:column headerText="Nº de Faltas" style="text-align: center">
+							<p:column headerText="Nº Faltas Não Just."
+								style="text-align: center">
 								<h:outputText value="#{paciente.faltas_injustificadas}"
 									style="#{paciente.css}" />
 							</p:column>
@@ -70,7 +75,8 @@
 									<f:convertDateTime pattern="dd/MM/yyyy" />
 								</h:outputText>
 							</p:column>
-							<p:column headerText="Situação" style="text-align: center" sortBy="#{paciente.situacao.descricao}">
+							<p:column headerText="Situação" style="text-align: center"
+								sortBy="#{paciente.situacao.descricao}">
 								<h:outputText value="#{paciente.situacao.descricao}"
 									style="#{paciente.situacao.css}" />
 							</p:column>
@@ -402,5 +408,28 @@
 
 			</h:form>
 		</p:dialog>
+
+		<!-- 	%%%%%%%%%%%%%%	DIALOG DE IMPRESSÂO %%%%%%%%%%%%%%%%%%%%% -->
+
+		<p:dialog widgetVar="dlgImprimir" header="Imprimir" closable="true"
+			draggable="false" modal="true" resizable="false" width="35%">
+
+			<h:form>
+				<div style="margin: 1em auto">
+					<p:selectManyCheckbox layout="responsive" columns="2">
+						<f:selectItem itemLabel="Aguardando na fila" itemValue="A" />
+						<f:selectItem itemLabel="Em Andamento" itemValue="E" />
+					</p:selectManyCheckbox>
+				</div>
+				<div align="center" style="margin-top: 20px">
+					<p:commandButton value="Imprimir" styleClass="secondary"
+						style="width: 200px" actionListener="#{MBPaciente.imprimir}"
+						ajax="false" onclick="this.form.target = '_blank';" />
+				</div>
+
+			</h:form>
+
+		</p:dialog>
+
 	</ui:define>
 </ui:composition>

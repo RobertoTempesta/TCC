@@ -125,6 +125,13 @@
 			<artifactId>json</artifactId>
 			<version>20170516</version>
 		</dependency>
+
+		<!-- JasperReports -->
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>6.1.1</version>
+		</dependency>
 	</dependencies>
 
 </project>

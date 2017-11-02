@@ -41,6 +41,7 @@ public class InicioBean implements Serializable {
 			calendar.setTime(periodo);
 			calendar.set(Calendar.AM_PM, Calendar.AM);
 			calendar.set(Calendar.HOUR, 1);
+			periodo = calendar.getTime();
 			
 			Calendar calendar2 = Calendar.getInstance();
 			calendar2.setTime(periodo2);

@@ -1,15 +1,23 @@
 package com.roberto.tcc.clinica.bean;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.sql.Connection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
+import org.omnifaces.util.Faces;
 import org.omnifaces.util.Messages;
 import org.primefaces.context.RequestContext;
 
@@ -25,6 +33,14 @@ import com.roberto.tcc.clinica.domain.Sessao;
 import com.roberto.tcc.clinica.enumeracao.Frequencia;
 import com.roberto.tcc.clinica.enumeracao.Situacao;
 import com.roberto.tcc.clinica.util.Constantes;
+import com.roberto.tcc.clinica.util.HibernateUtil;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
 
 @ManagedBean(name = "MBPaciente")
 @ViewScoped
@@ -128,6 +144,43 @@ public class PacienteBean implements Serializable {
 			return "";
 		}
 
+	}
+
+	public void imprimir() {
+		InputStream inputStream = null;
+		ByteArrayOutputStream relatorio = null;
+		try {
+
+			Map<String, Object> parametros = new HashMap<>();
+			parametros.put("LOGO", Faces.getRealPath("/resources/imagens/logo_pequeno.png"));
+
+			Connection conexao = HibernateUtil.getConexao();
+
+			inputStream = Faces.getResourceAsStream("/relatorios/paciente/relacao_pacientes.jasper");
+
+			relatorio = new ByteArrayOutputStream();
+
+			JasperReport jasper = (JasperReport) JRLoader.loadObject(inputStream);
+			JasperPrint print = JasperFillManager.fillReport(jasper, parametros, conexao);
+			JasperExportManager.exportReportToPdfStream(print, relatorio);
+
+			HttpServletResponse response = Faces.getResponse();
+			response.reset();
+			response.setContentType("application/pdf");
+			response.setContentLength(relatorio.size());
+			response.setHeader("Content-disposition", "inline; relacao_pacientes.pdf");
+			response.getOutputStream().write(relatorio.toByteArray());
+			response.getOutputStream().flush();
+			response.getOutputStream().close();
+
+			Faces.responseComplete();
+
+		} catch (JRException | IOException erro) {
+			LogManager.getLogger(PacienteBean.class).log(Level.ERROR, "Ocorreu um erro ao tentar gerar o relatório:",
+					erro);
+		} finally {
+
+		}
 	}
 
 	public Paciente getPaciente() {

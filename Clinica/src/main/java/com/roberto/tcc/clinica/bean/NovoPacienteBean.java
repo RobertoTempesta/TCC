@@ -71,9 +71,13 @@ public class NovoPacienteBean implements Serializable {
 		try {
 
 			PacienteDAO pacienteDAO = new PacienteDAO();
-			paciente.setFaltas_injustificadas(0);
-			paciente.setFaltas_justificadas(0);
-			paciente.setPresencas(0);
+
+			if (paciente.getCodigo() == null) {
+				paciente.setFaltas_injustificadas(0);
+				paciente.setFaltas_justificadas(0);
+				paciente.setPresencas(0);
+			}
+
 			pacienteDAO.salvarPessoa(this.paciente);
 			RequestContext.getCurrentInstance().execute("PF('dlgConfirma').show();");
 		} catch (RuntimeException erro) {

@@ -1,0 +1,19 @@
+DELIMITER $
+
+CREATE TRIGGER tr_faltaJustificadas_insert AFTER INSERT
+ON sessao
+FOR EACH ROW
+BEGIN
+	UPDATE paciente SET faltas_justificadas = (SELECT COUNT(*) FROM sessao s WHERE s.frequencia = 'FALTA_JUSTIFICADA' AND s.paciente_codigo = NEW.paciente_codigo)
+WHERE codigo = NEW.paciente_codigo;
+END$
+
+CREATE TRIGGER tr_faltaJustificadas_update AFTER UPDATE
+ON sessao
+FOR EACH ROW
+BEGIN
+	UPDATE paciente SET faltas_justificadas = (SELECT COUNT(*) FROM sessao s WHERE s.frequencia = 'FALTA_JUSTIFICADA' AND s.paciente_codigo = NEW.paciente_codigo)
+WHERE codigo = NEW.paciente_codigo;
+END$
+
+DELIMITER ;
