@@ -9,6 +9,7 @@ import org.hibernate.criterion.Restrictions;
 import com.roberto.tcc.clinica.domain.Endereco;
 import com.roberto.tcc.clinica.domain.Paciente;
 import com.roberto.tcc.clinica.domain.Pessoa;
+import com.roberto.tcc.clinica.enumeracao.Situacao;
 import com.roberto.tcc.clinica.util.HibernateUtil;
 
 @SuppressWarnings("serial")
@@ -81,6 +82,23 @@ public class PacienteDAO extends GenericDAO<Paciente>{
 		try {
 
 			Criteria consulta = sessao.createCriteria(Paciente.class);
+			resultado = (Number) consulta.setProjection(Projections.rowCount()).uniqueResult();
+			return resultado;
+
+		} catch (RuntimeException exception) {
+			throw exception;
+		} finally {
+			sessao.close();
+		}
+	}
+	
+	public Number buscaNumeroPacientesAguardando() {
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		Number resultado = 0;
+		try {
+
+			Criteria consulta = sessao.createCriteria(Paciente.class);
+			consulta.add(Restrictions.eq("situacao", Situacao.AGUARDANDO));
 			resultado = (Number) consulta.setProjection(Projections.rowCount()).uniqueResult();
 			return resultado;
 

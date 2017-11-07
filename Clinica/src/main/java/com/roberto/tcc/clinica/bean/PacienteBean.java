@@ -57,6 +57,8 @@ public class PacienteBean implements Serializable {
 	private List<Aluno> alunos = null;
 	private List<SalaAtendimento> salas = null;
 
+	private String situacao = null;
+
 	@PostConstruct
 	public void init() {
 		paciente = new Paciente();
@@ -153,10 +155,14 @@ public class PacienteBean implements Serializable {
 
 			Map<String, Object> parametros = new HashMap<>();
 			parametros.put("LOGO", Faces.getRealPath("/resources/imagens/logo_pequeno.png"));
+			if (situacao == null || situacao.equals("") || situacao.equals("TODOS")) {
+				inputStream = Faces.getResourceAsStream("/relatorios/paciente/relacao_pacientes.jasper");
+			} else {
+				parametros.put("SITUACAO", situacao);
+				inputStream = Faces.getResourceAsStream("/relatorios/paciente/relacao_pacientes_situacao.jasper");
+			}
 
 			Connection conexao = HibernateUtil.getConexao();
-
-			inputStream = Faces.getResourceAsStream("/relatorios/paciente/relacao_pacientes.jasper");
 
 			relatorio = new ByteArrayOutputStream();
 
@@ -178,9 +184,11 @@ public class PacienteBean implements Serializable {
 		} catch (JRException | IOException erro) {
 			LogManager.getLogger(PacienteBean.class).log(Level.ERROR, "Ocorreu um erro ao tentar gerar o relatório:",
 					erro);
-		} finally {
-
 		}
+	}
+	
+	public Number numeroPacientes() {
+		return new PacienteDAO().buscaNumeroPacientesAguardando();
 	}
 
 	public Paciente getPaciente() {
@@ -221,6 +229,14 @@ public class PacienteBean implements Serializable {
 
 	public void setAlunos(List<Aluno> alunos) {
 		this.alunos = alunos;
+	}
+
+	public String getSituacao() {
+		return situacao;
+	}
+
+	public void setSituacao(String situacao) {
+		this.situacao = situacao;
 	}
 
 	public List<SalaAtendimento> getSalas() {

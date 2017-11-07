@@ -4,9 +4,9 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
 
-<!-- 	<ui:define name="head"> -->
-		
-<!-- 	</ui:define> -->
+	<!-- 	<ui:define name="head"> -->
+
+	<!-- 	</ui:define> -->
 
 	<ui:define name="content">
 		<div class="ui-g">
@@ -14,13 +14,41 @@
 				<div class="card">
 
 					<h:form id="frmPrincipal">
-						
+						<p:dataTable value="#{MBHistorico.sessoes}" var="sessao" rows="15"
+							paginator="true">
+							<f:facet name="header">
+								<p:outputLabel value="Sessões" />
+							</f:facet>
+							<p:column headerText="Data/Hora">
+								<h:outputText value="#{sessao.dataInicio}">
+									<f:convertDateTime pattern="dd/MM/yy  HH:MM" />
+								</h:outputText>
+								
+								<h:outputText value=" até "/>
+								
+								<h:outputText value="#{sessao.dataFim}">
+									<f:convertDateTime pattern="HH:MM" />
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Paciente">
+								<h:outputText value="#{sessao.paciente.pessoa.nome}" />
+							</p:column>
+							<p:column headerText="Sala">
+								<h:outputText value="#{sessao.sala.descricao}" />
+							</p:column>
+							<p:column headerText="Aluno">
+								<h:outputText value="#{sessao.aluno.pessoa.nome}" />
+							</p:column>
+							<p:column headerText="Observações">
+								<h:outputText value="#{sessao.observacao}" />
+							</p:column>
+						</p:dataTable>
 					</h:form>
 
 				</div>
 			</div>
 		</div>
 
-		
+
 	</ui:define>
 </ui:composition>

@@ -19,6 +19,7 @@ import com.roberto.tcc.clinica.dao.AlunoDAO;
 import com.roberto.tcc.clinica.dao.PacienteDAO;
 import com.roberto.tcc.clinica.dao.SessaoDAO;
 import com.roberto.tcc.clinica.domain.Sessao;
+import com.roberto.tcc.clinica.enumeracao.Frequencia;
 
 @SuppressWarnings("serial")
 @ManagedBean(name = "MBInicio")
@@ -66,7 +67,7 @@ public class InicioBean implements Serializable {
 	}
 	
 	public Number numeroSessoes() {
-		return new SessaoDAO().buscaNumeroSessoes();
+		return new SessaoDAO().buscaNumeroSessoes(Frequencia.PRESENTE);
 	}
 
 	public List<Sessao> getSessoesDia() {

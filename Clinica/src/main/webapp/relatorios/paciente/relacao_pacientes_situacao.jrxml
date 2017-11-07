@@ -9,6 +9,7 @@
 	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="323"/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<parameter name="LOGO" class="java.lang.String"/>
+	<parameter name="SITUACAO" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT paciente.dataCadastro,
 	paciente.numeroCaso,
@@ -18,7 +19,7 @@
 	paciente.situacao
 FROM paciente
 	INNER JOIN pessoa ON 
-	 paciente.pessoa_codigo = pessoa.codigo 
+	 paciente.pessoa_codigo = pessoa.codigo WHERE paciente.situacao =  $P{SITUACAO}  
 ORDER BY paciente.dataCadastro DESC]]>
 	</queryString>
 	<field name="dataCadastro" class="java.sql.Date">

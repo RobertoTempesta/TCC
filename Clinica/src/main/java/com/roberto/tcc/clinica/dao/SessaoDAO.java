@@ -90,12 +90,13 @@ public class SessaoDAO extends GenericDAO<Sessao>{
 		}
 	}
 	
-	public Number buscaNumeroSessoes() {
+	public Number buscaNumeroSessoes(Frequencia frequencia) {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		Number resultado = 0;
 		try {
 
 			Criteria consulta = sessao.createCriteria(Sessao.class);
+			consulta.add(Restrictions.eq("frequencia",frequencia));
 			resultado = (Number) consulta.setProjection(Projections.rowCount()).uniqueResult();
 			return resultado;
 

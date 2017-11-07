@@ -15,12 +15,14 @@
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<parameter name="LOGO" class="java.lang.String"/>
+	<parameter name="CAMINHO_SUB_RELATORIO" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT (SELECT nome FROM pessoa, supervisor WHERE supervisor.codigo = aluno.supervisor_codigo AND pessoa.codigo = supervisor.pessoa_codigo) "supervisor",
 	aluno.dataCadastro, 
 	aluno.RA, 
 	pessoa.nome, 
-	funcao.descricao,   
+	funcao.descricao, 
+	aluno.codigo,    
     (select count(*) from sessao s where s.aluno_codigo = aluno.codigo and s.frequencia = 'PRESENTE') "nSessoes"  
 FROM aluno 
 	INNER JOIN pessoa ON 
@@ -46,6 +48,10 @@ FROM aluno
 	<field name="descricao" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.label" value="descricao"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="funcao"/>
+	</field>
+	<field name="codigo" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.label" value="codigo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="aluno"/>
 	</field>
 	<field name="nSessoes" class="java.lang.Long">
 		<property name="com.jaspersoft.studio.field.label" value="nSessoes"/>
@@ -163,7 +169,7 @@ FROM aluno
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="20" splitType="Stretch">
+		<band height="70" splitType="Stretch">
 			<rectangle>
 				<reportElement x="0" y="0" width="802" height="20" uuid="f0f2e4a6-ee39-4b49-adcb-535fb42abf46"/>
 			</rectangle>
@@ -236,6 +242,24 @@ FROM aluno
 			<line>
 				<reportElement x="650" y="0" width="1" height="20" uuid="0af4b792-e2ca-484b-9572-93ffc44e98eb"/>
 			</line>
+			<subreport>
+				<reportElement x="0" y="39" width="801" height="20" uuid="b8247ef7-9671-4781-8b89-bf1a2b9fcc2d"/>
+				<subreportParameter name="CODIGO_ALUNO">
+					<subreportParameterExpression><![CDATA[$F{codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION} ]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{CAMINHO_SUB_RELATORIO}]]></subreportExpression>
+			</subreport>
+			<rectangle>
+				<reportElement x="0" y="20" width="802" height="19" uuid="2930bd48-7097-4a51-ae73-05f65b244791"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="20" width="802" height="19" uuid="02eac7f0-067d-4927-b75a-9add5003b111"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ Pacientes: ]]></text>
+			</staticText>
 		</band>
 	</detail>
 	<pageFooter>
