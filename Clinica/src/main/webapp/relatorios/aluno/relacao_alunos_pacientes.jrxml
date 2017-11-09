@@ -27,7 +27,7 @@
 FROM aluno 
 	INNER JOIN pessoa ON 
 	 aluno.pessoa_codigo = pessoa.codigo 
-	INNER JOIN bd_teste.funcao ON 
+	INNER JOIN funcao ON 
 	 aluno.funcao_codigo = funcao.codigo ORDER BY aluno.dataCadastro DESC]]>
 	</queryString>
 	<field name="supervisor" class="java.lang.String">
@@ -247,7 +247,7 @@ FROM aluno
 				<subreportParameter name="CODIGO_ALUNO">
 					<subreportParameterExpression><![CDATA[$F{codigo}]]></subreportParameterExpression>
 				</subreportParameter>
-				<connectionExpression><![CDATA[$P{REPORT_CONNECTION} ]]></connectionExpression>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<subreportExpression><![CDATA[$P{CAMINHO_SUB_RELATORIO}]]></subreportExpression>
 			</subreport>
 			<rectangle>

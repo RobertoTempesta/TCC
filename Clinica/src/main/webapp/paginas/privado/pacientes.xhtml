@@ -4,9 +4,9 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
 
-	<!-- 	<ui:define name="head"> -->
-	<!-- 		<h:outputStylesheet library="css" name="estilo.css" /> -->
-	<!-- 	</ui:define> -->
+	<ui:define name="head">
+		<h:outputScript library="js" name="scripts.js" />
+	</ui:define>
 
 	<ui:define name="content">
 		<div class="ui-g">
@@ -16,7 +16,7 @@
 					<h:form id="frmListagem">
 
 						<div class="ui-g dashboard">
-							<div class="ui-g-12 ui-md-6">
+							<div class="ui-g-12">
 								<div class="ui-g card colorbox colorbox-1">
 									<div class="ui-g-4">
 										<i class="material-icons">mood</i>
@@ -140,9 +140,7 @@
 
 							<h:panelGroup styleClass="md-inputfield">
 								<p:inputText value="#{MBPaciente.paciente.numeroCaso}"
-									disabled="#{MBPaciente.paciente.numeroCaso != null}"
-									required="true"
-									requiredMessage="Digite um numero para este caso" />
+									disabled="#{MBPaciente.paciente.numeroCaso != null}" />
 								<label>Numero do Caso:</label>
 							</h:panelGroup>
 							<p:outputLabel value="/#{MBPaciente.anoCorrente}"
@@ -152,13 +150,16 @@
 						<h:panelGroup styleClass="md-inputfield">
 							<p:calendar value="#{MBPaciente.sessao.dataInicio}"
 								locale="pt_BR" timeZone="America/Sao_Paulo"
-								pattern="dd/MM/yyyy HH:mm" />
+								pattern="dd/MM/yyyy HH:mm" required="true"
+								requiredMessage="Selecione a Data e a Hora da Sessão" />
 							<label>Início:</label>
 						</h:panelGroup>
 
 						<h:panelGroup styleClass="md-inputfield">
 							<p:calendar value="#{MBPaciente.sessao.dataFim}" locale="pt_BR"
-								timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy HH:mm" />
+								timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy HH:mm"
+								required="true"
+								requiredMessage="Selecione a Data e a Hora da Sessão" />
 							<label>Término:</label>
 						</h:panelGroup>
 
@@ -177,7 +178,7 @@
 						<p:selectOneMenu id="sala" value="#{MBPaciente.sessao.sala}"
 							required="true"
 							requiredMessage="É necessário selecionar uma Sala para o Atendimento"
-							converter="omnifaces.SelectItemsConverter">
+							converter="omnifaces.SelectItemsConverter" filter="true">
 							<f:selectItem itemLabel="Selecione a Sala de Atendimento"
 								noSelectionOption="true" />
 							<f:selectItems value="#{MBPaciente.salas}" var="sala"
@@ -185,7 +186,7 @@
 						</p:selectOneMenu>
 
 						<p:selectOneMenu id="aluno" value="#{MBPaciente.sessao.aluno}"
-							required="true"
+							required="true" filter="true"
 							requiredMessage="É necessário selecionar um Aluno"
 							converter="omnifaces.SelectItemsConverter">
 							<f:selectItem itemLabel="Selecione o Aluno Responsável"

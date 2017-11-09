@@ -90,7 +90,7 @@ public class AgendaBean implements Serializable {
 
 			alunos = new AlunoDAO().listar();
 			salas = new SalaAtendimentoDAO().listar();
-			pacientes = new PacienteDAO().listar();
+			pacientes = new PacienteDAO().listar("dataCadastro");
 
 		} catch (RuntimeException erro) {
 			LogManager.getLogger().log(Level.ERROR, "Erro ao carregar as datas da Sessão/Alunos/Salas/Pacientes:",

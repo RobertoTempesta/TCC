@@ -30,7 +30,6 @@ import com.roberto.tcc.clinica.domain.Estado;
 import com.roberto.tcc.clinica.domain.Paciente;
 import com.roberto.tcc.clinica.domain.SalaAtendimento;
 import com.roberto.tcc.clinica.domain.Sessao;
-import com.roberto.tcc.clinica.enumeracao.Frequencia;
 import com.roberto.tcc.clinica.enumeracao.Situacao;
 import com.roberto.tcc.clinica.util.Constantes;
 import com.roberto.tcc.clinica.util.HibernateUtil;
@@ -71,7 +70,7 @@ public class PacienteBean implements Serializable {
 
 	public void carregarPacientes() {
 		try {
-			pacientes = new PacienteDAO().listar("dataCadastro");
+			pacientes = new PacienteDAO().listar("codigo");
 		} catch (RuntimeException erro) {
 			LogManager.getLogger(PacienteBean.class).log(Level.ERROR, "Erro ao listar os Pacientes", erro);
 			Messages.addGlobalError("Ocorreu um erro ao tentar carregar os pacientes.");
@@ -95,14 +94,54 @@ public class PacienteBean implements Serializable {
 
 	public void salvar() {
 		try {
-			SessaoDAO sessaoDAO = new SessaoDAO();
-			sessao.getPaciente().setFaltas_injustificadas(Integer.valueOf(sessaoDAO
-					.buscaNumeroFaltas(sessao.getPaciente().getCodigo(), Frequencia.FALTA_INJUSTIFICADA).toString()));
-			if (sessao.getPaciente().getSituacao().equals(Situacao.AGUARDANDO)) {
-				sessao.getPaciente().setSituacao(Situacao.EM_ANDAMENTO);
+			
+			if (paciente == null || paciente.getNumeroCaso().equals("")) {
+				Messages.addGlobalError("Informe o Numero do Caso");
+				return;
 			}
+
+			if (sessao.getSala() == null || sessao.getSala().equals("")) {
+				Messages.addGlobalError("É necessário selecionar uma Sala para o Atendimento");
+				return;
+			}
+
+			if (sessao.getAluno() == null || sessao.getAluno().equals("")) {
+				Messages.addGlobalError("É necessário selecionar um Aluno");
+				return;
+			}
+			
+			if (paciente.getSituacao().equals(Situacao.AGUARDANDO)) {
+				paciente.setSituacao(Situacao.EM_ANDAMENTO);
+			}
+			
+			if (paciente.getNumeroCaso() == null || paciente.getNumeroCaso().equals("")) {
+				paciente.setNumeroCaso(paciente.getNumeroCaso() + anoCorrente);
+			}
+			
+			SessaoDAO sessaoDAO = new SessaoDAO();
+			if (sessao.getCodigo() == null) {
+
+				List<Sessao> listaSessao = sessaoDAO.verificaPossibilidade(sessao);
+
+				for (Sessao s : listaSessao) {
+
+					if (s.getSala().getCodigo() == sessao.getSala().getCodigo()) {
+						Messages.addGlobalError(
+								"Não é possivel salvar essa Sessão, verifique se a Sala selecionada já não está em uso!");
+						return;
+					}
+					if (s.getAluno().getCodigo() == sessao.getAluno().getCodigo()) {
+						Messages.addGlobalError(
+								"Não é possivel salvar essa Sessão, verifique se Aluno selecionada já não está atendendo!");
+						return;
+					}
+				}
+			}
+			
 			sessao.setPaciente(paciente);
+			
 			sessaoDAO.salvarPrimeiraSessao(sessao);
+			carregarPacientes();
 			Messages.addGlobalInfo("Sessão salva com Sucesso!");
 			RequestContext.getCurrentInstance().execute("PF('dlgSessao').hide();");
 		} catch (RuntimeException erro) {

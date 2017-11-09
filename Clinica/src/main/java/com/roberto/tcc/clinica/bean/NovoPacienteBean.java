@@ -115,7 +115,7 @@ public class NovoPacienteBean implements Serializable {
 				Paciente paciente = new PacienteDAO().buscarCodigoPes(pessoa.getCodigo());
 				if (paciente != null && this.paciente.getCodigo() == null) {
 					Messages.addGlobalWarn("Essa Pessoa já é um Paciente cadastrado no Sistema!");
-					this.paciente.setPessoa(new Pessoa());
+					init();
 					return;
 				}
 				this.paciente.setPessoa(pessoa);

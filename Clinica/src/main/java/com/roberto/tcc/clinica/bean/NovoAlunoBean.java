@@ -123,7 +123,7 @@ public class NovoAlunoBean implements Serializable {
 				Aluno aluno = new AlunoDAO().buscarCodigoPes(pessoa.getCodigo());
 				if (aluno != null && this.aluno.getCodigo() == null) {
 					Messages.addGlobalWarn("Essa Pessoa já é um Aluno Cadastrado no Sistema!");
-					this.aluno.setPessoa(new Pessoa());
+					init();
 					return;
 				}
 				this.aluno.setPessoa(pessoa);

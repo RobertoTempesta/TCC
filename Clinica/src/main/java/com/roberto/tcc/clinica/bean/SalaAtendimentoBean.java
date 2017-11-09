@@ -8,8 +8,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.omnifaces.util.Messages;
 import org.primefaces.context.RequestContext;
 
@@ -20,8 +20,6 @@ import com.roberto.tcc.clinica.domain.SalaAtendimento;
 @ManagedBean(name = "MBSala")
 @ViewScoped
 public class SalaAtendimentoBean implements Serializable {
-
-	private static final Logger logger = LogManager.getLogger(SalaAtendimentoBean.class);
 
 	private SalaAtendimento sala = null;
 
@@ -41,7 +39,7 @@ public class SalaAtendimentoBean implements Serializable {
 			salas = salaDAO.listar("descricao");
 
 		} catch (RuntimeException erro) {
-			logger.error("Erro ao listar salas: " + erro);
+			LogManager.getLogger(SalaAtendimentoBean.class.getName()).log(Level.ERROR, "Erro ao listar as Salas", erro);
 			Messages.addGlobalError("Ocorreu um erro ao tentar listar as salas.");
 		}
 	}
@@ -51,13 +49,13 @@ public class SalaAtendimentoBean implements Serializable {
 		try {
 
 			salaDAO.merge(sala);
-			Messages.addGlobalInfo("A sala foi salva com sucesso.");
+			Messages.addGlobalInfo("A Sala foi salva com sucesso.");
 			listar();
 			RequestContext.getCurrentInstance().execute("PF('dlgNovo').hide();");
 
 		} catch (RuntimeException erro) {
-			logger.error("Erro ao salvar Sala: " + erro);
-			Messages.addGlobalError("Erro ao tentar salvar.");
+			LogManager.getLogger(SalaAtendimentoBean.class.getName()).log(Level.ERROR, "Erro ao tentar salvar", erro);
+			Messages.addGlobalError("Erro ao tentar salvar a Sala.");
 		}
 
 	}
@@ -71,8 +69,9 @@ public class SalaAtendimentoBean implements Serializable {
 			Messages.addGlobalInfo("Sala excluida com sucesso");
 
 		} catch (RuntimeException erro) {
-			logger.error("Erro ao excluir a sala: " + erro);
-			Messages.addGlobalError("Ocorreu um erro ao tentar excluir a sala");
+			LogManager.getLogger(SalaAtendimentoBean.class.getName()).log(Level.ERROR, "Erro ao tentar excluir a Sala",
+					erro);
+			Messages.addGlobalError("Ocorreu um erro ao tentar excluir a Sala");
 		}
 	}
 
@@ -81,7 +80,7 @@ public class SalaAtendimentoBean implements Serializable {
 		sala = (SalaAtendimento) evento.getComponent().getAttributes().get("salaSelecionada");
 
 	}
-	
+
 	public void novo() {
 		sala = new SalaAtendimento();
 	}

@@ -111,7 +111,7 @@ public class NovoSupervisorBean implements Serializable {
 				Supervisor supervisor = new SupervisorDAO().buscarCodigoPes(pessoa.getCodigo());
 				if (supervisor != null && this.supervisor.getCodigo() == null) {
 					Messages.addGlobalWarn("Essa Pessoa já é um Supervisor cadastrado no Sistema!");
-					this.supervisor.setPessoa(new Pessoa());
+					init();
 					return;
 				}
 				this.supervisor.setPessoa(pessoa);

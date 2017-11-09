@@ -3,7 +3,7 @@ package com.roberto.tcc.clinica.enumeracao;
 public enum Situacao {
 	
 	AGUARDANDO ("Aguardando", "font-weight: bold; color: green; text-align: center;"), 
-	EM_ANDAMENTO("Em Andamento", "font-weight: bold; color: #fea12c; text-align: center;"),
+	EM_ANDAMENTO("Sendo Atendido", "font-weight: bold; color: #fea12c; text-align: center;"),
 	FINALIZADO("Finalizado", "font-weight: bold; color: red; text-align: center;");
 	
 	private String descricao;

@@ -23,20 +23,22 @@
 								<h:outputText value="#{sessao.dataInicio}">
 									<f:convertDateTime pattern="dd/MM/yy  HH:MM" />
 								</h:outputText>
-								
-								<h:outputText value=" até "/>
-								
+
+								<h:outputText value=" até " />
+
 								<h:outputText value="#{sessao.dataFim}">
 									<f:convertDateTime pattern="HH:MM" />
 								</h:outputText>
 							</p:column>
-							<p:column headerText="Paciente">
+							<p:column headerText="Paciente"
+								filterBy="#{sessao.paciente.pessoa.nome}">
 								<h:outputText value="#{sessao.paciente.pessoa.nome}" />
 							</p:column>
-							<p:column headerText="Sala">
+							<p:column headerText="Sala" filterBy="#{sessao.sala.descricao}">
 								<h:outputText value="#{sessao.sala.descricao}" />
 							</p:column>
-							<p:column headerText="Aluno">
+							<p:column headerText="Aluno"
+								filterBy="#{sessao.aluno.pessoa.nome}">
 								<h:outputText value="#{sessao.aluno.pessoa.nome}" />
 							</p:column>
 							<p:column headerText="Observações">

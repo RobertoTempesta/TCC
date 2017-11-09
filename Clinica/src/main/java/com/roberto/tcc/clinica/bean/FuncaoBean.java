@@ -8,8 +8,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.omnifaces.util.Messages;
 import org.primefaces.context.RequestContext;
 
@@ -21,7 +21,6 @@ import com.roberto.tcc.clinica.domain.Funcao;
 @ViewScoped
 public class FuncaoBean implements Serializable {
 
-	private static final Logger logger = LogManager.getLogger(FuncaoBean.class);
 	private List<Funcao> funcoes = null;
 
 	private Funcao funcao = null;
@@ -42,7 +41,7 @@ public class FuncaoBean implements Serializable {
 		try {
 			funcoes = funcaoDAO.listar("descricao");
 		} catch (RuntimeException erro) {
-			logger.error("Erro ao listar as Funções" + erro);
+			LogManager.getLogger(FuncaoBean.class.getName()).log(Level.ERROR, "Erro ao listar as Funções", erro);
 			Messages.addGlobalError("Ocorreu um erro ao listar as Funções");
 		}
 	}
@@ -54,7 +53,7 @@ public class FuncaoBean implements Serializable {
 			Messages.addGlobalInfo("Função salva com Sucesso");
 			RequestContext.getCurrentInstance().execute("PF('dlgNovo').hide();");
 		} catch (RuntimeException erro) {
-			logger.error("Erro ao salvar o cargo: " + erro);
+			LogManager.getLogger(FuncaoBean.class.getName()).log(Level.ERROR, "Erro ao tentar salvar a Função", erro);
 			Messages.addGlobalError("Ocorreu um erro ao tentar salvar a Função");
 		}
 	}
@@ -72,7 +71,7 @@ public class FuncaoBean implements Serializable {
 			listar();
 			Messages.addGlobalInfo("Cargo excluido com Sucesso");
 		} catch (RuntimeException erro) {
-			logger.error("Erro ao excluir Cargo: " + erro);
+			LogManager.getLogger(FuncaoBean.class.getName()).log(Level.ERROR, "Erro ao tentar Excluir a Fução", erro);
 			Messages.addGlobalError("Ocorreu um erro ao excluir a Função selecionado");
 		}
 	}
@@ -92,7 +91,5 @@ public class FuncaoBean implements Serializable {
 	public void setFuncao(Funcao funcao) {
 		this.funcao = funcao;
 	}
-
-	
 
 }

@@ -93,7 +93,7 @@ public class AlunoBean implements Serializable {
 			} else {
 				inputStream = Faces.getResourceAsStream("/relatorios/aluno/relacao_alunos_pacientes.jasper");
 				parametros.put("CAMINHO_SUB_RELATORIO",
-						Faces.getResourceAsStream("/relatorios/aluno/pacientes.jasper"));
+						Faces.getRealPath("/relatorios/aluno/pacientes.jasper"));
 			}
 
 			Connection conexao = HibernateUtil.getConexao();
@@ -130,7 +130,7 @@ public class AlunoBean implements Serializable {
 			Map<String, Object> parametros = new HashMap<>();
 			parametros.put("LOGO", Faces.getRealPath("/resources/imagens/logo_pequeno.png"));
 			parametros.put("CODIGO_ALUNO", aluno.getCodigo());
-			parametros.put("CAMINHO_SUB_RELATORIO", Faces.getResourceAsStream("/relatorios/aluno/sub_aluno_pacientes.jasper"));
+			parametros.put("CAMINHO_SUB_RELATORIO", Faces.getRealPath("/relatorios/aluno/sub_aluno_pacientes.jasper"));
 			
 			inputStream = Faces.getResourceAsStream("/relatorios/aluno/aluno_pacientes.jasper");
 
@@ -157,6 +157,10 @@ public class AlunoBean implements Serializable {
 			LogManager.getLogger(AlunoBean.class).log(Level.ERROR, "Ocorreu um erro ao tentar gerar o relatório:",
 					erro);
 		}
+	}
+	
+	public Number numeroAlunos() {
+		return new AlunoDAO().buscaNumeroAlunos();
 	}
 
 	public String getOpcao() {

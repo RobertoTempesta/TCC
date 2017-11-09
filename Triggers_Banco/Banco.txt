@@ -1,0 +1,166 @@
+DROP TABLE IF EXISTS `estado`;
+
+CREATE TABLE `estado` (
+  `codigo` bigint(20) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(50) NOT NULL,
+  `sigla` varchar(2) NOT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+
+INSERT INTO `estado` VALUES (1,'Acre','AC'),(2,'Alagoas','AL'),(3,'Amazonas','AM'),(4,'Amapá','AP'),(5,'Bahia','BA'),(6,'Ceará','CE'),(7,'Distrito Federal','DF'),(8,'Espírito Santo','ES'),(9,'Goiás','GO'),(10,'Maranhão','MA'),(11,'Minas Gerais','MG'),(12,'Mato Grosso do Sul','MS'),(13,'Mato Grosso','MT'),(14,'Pará','PA'),(15,'Paraíba','PB'),(16,'Pernambuco','PE'),(17,'Piauí','PI'),(18,'Paraná','PR'),(19,'Rio de Janeiro','RJ'),(20,'Rio Grande do Norte','RN'),(21,'Rondônia','RO'),(22,'Roraima','RR'),(23,'Rio Grande do Sul','RS'),(24,'Santa Catarina','SC'),(25,'Sergipe','SE'),(26,'São Paulo','SP'),(27,'Tocantins','TO');
+
+DROP TABLE IF EXISTS `endereco`;
+
+CREATE TABLE `endereco` (
+  `codigo` bigint(20) NOT NULL AUTO_INCREMENT,
+  `CEP` varchar(10) NOT NULL,
+  `bairro` varchar(50) NOT NULL,
+  `cidade` varchar(50) NOT NULL,
+  `numero` varchar(10) NOT NULL,
+  `rua` varchar(50) NOT NULL,
+  `estado_codigo` bigint(20) NOT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `FK_dx8c9v0bg293f7ab514y9pfdg` (`estado_codigo`),
+  CONSTRAINT `FK_dx8c9v0bg293f7ab514y9pfdg` FOREIGN KEY (`estado_codigo`) REFERENCES `estado` (`codigo`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+
+INSERT INTO `endereco` VALUES (1,'18900-000','vila oitenta','Santa Cruz do Rio Pardo','354','jose zacura',26);
+
+DROP TABLE IF EXISTS `pessoa`;
+
+CREATE TABLE `pessoa` (
+  `codigo` bigint(20) NOT NULL AUTO_INCREMENT,
+  `CPF` varchar(14) NOT NULL,
+  `RG` varchar(12) NOT NULL,
+  `dataNascimento` date DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `escolaridade` varchar(100) NOT NULL,
+  `idade` int(11) NOT NULL,
+  `nome` varchar(50) NOT NULL,
+  `sexo` varchar(255) NOT NULL,
+  `telefone1` varchar(13) NOT NULL,
+  `telefone2` varchar(13) DEFAULT NULL,
+  `telefone3` varchar(13) DEFAULT NULL,
+  `telefone4` varchar(13) DEFAULT NULL,
+  `endereco_codigo` bigint(20) NOT NULL,
+  PRIMARY KEY (`codigo`),
+  UNIQUE KEY `UK_p7jmtim9xt2leartex386ls24` (`CPF`),
+  KEY `FK_a1qb2lpijpgp3gfc0yblwajxv` (`endereco_codigo`),
+  CONSTRAINT `FK_a1qb2lpijpgp3gfc0yblwajxv` FOREIGN KEY (`endereco_codigo`) REFERENCES `endereco` (`codigo`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+INSERT INTO `pessoa` VALUES (1,'350.036.998-75','41.461.692-3','1995-08-08','robertotempesta88@gmail.com','Superior - Completo',22,'ROBERTO JUNIOR TEMPESTA','MASCULINO','3372-1122','997903757','','',1);
+
+
+DROP TABLE IF EXISTS `usuario`;
+
+CREATE TABLE `usuario` (
+  `codigo` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ativo` bit(1) NOT NULL,
+  `salt` varchar(1024) NOT NULL,
+  `senha` varchar(1024) NOT NULL,
+  `tipoUsuario` varchar(255) NOT NULL,
+  `pessoa_codigo` bigint(20) NOT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `FK_s8lrxfgvascltkib6t418n5ef` (`pessoa_codigo`),
+  CONSTRAINT `FK_s8lrxfgvascltkib6t418n5ef` FOREIGN KEY (`pessoa_codigo`) REFERENCES `pessoa` (`codigo`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+INSERT INTO `usuario` VALUES (1,'','869ff4e3-cbf8-47fb-8a63-f9da475928c8','FF07AA78605C35A18DD8ECBB745DB71E2266DE0B0CAC50AE11C6202A62691ECF','GERENCIADOR',1);
+
+
+DROP TABLE IF EXISTS `supervisor`;
+
+CREATE TABLE `supervisor` (
+  `codigo` bigint(20) NOT NULL AUTO_INCREMENT,
+  `CRP` varchar(15) NOT NULL,
+  `dataCadastro` date NOT NULL,
+  `pessoa_codigo` bigint(20) NOT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `FK_5gy6s08xx20oemvne5e5u587f` (`pessoa_codigo`),
+  CONSTRAINT `FK_5gy6s08xx20oemvne5e5u587f` FOREIGN KEY (`pessoa_codigo`) REFERENCES `pessoa` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `salaatendimento`;
+
+CREATE TABLE `salaatendimento` (
+  `codigo` bigint(20) NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(10) NOT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `funcao`;
+
+CREATE TABLE `funcao` (
+  `codigo` bigint(20) NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(50) NOT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `aluno`;
+
+CREATE TABLE `aluno` (
+  `codigo` bigint(20) NOT NULL AUTO_INCREMENT,
+  `RA` varchar(13) NOT NULL,
+  `dataCadastro` date NOT NULL,
+  `funcao_codigo` bigint(20) NOT NULL,
+  `pessoa_codigo` bigint(20) NOT NULL,
+  `supervisor_codigo` bigint(20) NOT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `FK_8irdridcmurxovtou6o3shoaw` (`funcao_codigo`),
+  KEY `FK_5w1mg7i5sqdxo8nvtf9p9uy5f` (`pessoa_codigo`),
+  KEY `FK_5bf2cn8u8liwhcse657uoyam` (`supervisor_codigo`),
+  CONSTRAINT `FK_5bf2cn8u8liwhcse657uoyam` FOREIGN KEY (`supervisor_codigo`) REFERENCES `supervisor` (`codigo`),
+  CONSTRAINT `FK_5w1mg7i5sqdxo8nvtf9p9uy5f` FOREIGN KEY (`pessoa_codigo`) REFERENCES `pessoa` (`codigo`),
+  CONSTRAINT `FK_8irdridcmurxovtou6o3shoaw` FOREIGN KEY (`funcao_codigo`) REFERENCES `funcao` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `paciente`;
+
+CREATE TABLE `paciente` (
+  `codigo` bigint(20) NOT NULL AUTO_INCREMENT,
+  `dataCadastro` date NOT NULL,
+  `estadoCivil` varchar(255) NOT NULL,
+  `faltas_injustificadas` int(11) DEFAULT NULL,
+  `faltas_justificadas` int(11) DEFAULT NULL,
+  `medicamento` varchar(100) DEFAULT NULL,
+  `necessidadesEspeciais` varchar(100) DEFAULT NULL,
+  `nomeMae` varchar(80) NOT NULL,
+  `nomePai` varchar(80) NOT NULL,
+  `numeroCaso` varchar(50) DEFAULT NULL,
+  `observacao` varchar(500) DEFAULT NULL,
+  `ocupacao` varchar(100) NOT NULL,
+  `pessoaAutorizada` varchar(80) DEFAULT NULL,
+  `presencas` int(11) DEFAULT NULL,
+  `responsavelCel` varchar(13) DEFAULT NULL,
+  `responsavelNome` varchar(80) NOT NULL,
+  `responsavelTel` varchar(13) DEFAULT NULL,
+  `situacao` varchar(255) NOT NULL,
+  `pessoa_codigo` bigint(20) NOT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `FK_b0nn0qhyat61ijrlma94cdhha` (`pessoa_codigo`),
+  CONSTRAINT `FK_b0nn0qhyat61ijrlma94cdhha` FOREIGN KEY (`pessoa_codigo`) REFERENCES `pessoa` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `sessao`;
+
+CREATE TABLE `sessao` (
+  `codigo` bigint(20) NOT NULL AUTO_INCREMENT,
+  `dataFim` datetime NOT NULL,
+  `dataInicio` datetime NOT NULL,
+  `frequencia` varchar(255) NOT NULL,
+  `observacao` varchar(500) DEFAULT NULL,
+  `aluno_codigo` bigint(20) NOT NULL,
+  `paciente_codigo` bigint(20) NOT NULL,
+  `sala_codigo` bigint(20) NOT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `FK_3fjhxbti2qh5yq7qk6uikoe90` (`aluno_codigo`),
+  KEY `FK_2cnx3reul5ixewtkqeugsuktq` (`paciente_codigo`),
+  KEY `FK_snwediq4wls5n0b2a9yprn869` (`sala_codigo`),
+  CONSTRAINT `FK_2cnx3reul5ixewtkqeugsuktq` FOREIGN KEY (`paciente_codigo`) REFERENCES `paciente` (`codigo`),
+  CONSTRAINT `FK_3fjhxbti2qh5yq7qk6uikoe90` FOREIGN KEY (`aluno_codigo`) REFERENCES `aluno` (`codigo`),
+  CONSTRAINT `FK_snwediq4wls5n0b2a9yprn869` FOREIGN KEY (`sala_codigo`) REFERENCES `salaatendimento` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
