@@ -1,0 +1,275 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+
+	<ui:define name="content">
+		<div class="ui-g dashboard">
+			<div class="ui-g-12">
+				<div class="card card-w-title ui-fluid">
+					<h1>Histórico do Paciente</h1>
+
+					<h:form id="frmPacientes">
+						<span style="color: red;">(*) Selecione um paciente</span>
+						<p:dataTable id="lista" emptyMessage="Nenhum registro encontrado..." rows="10" paginator="true" 
+							value="#{MBHistorico.pacientes}" var="paciente" selectionMode="single" selection="#{MBHistorico.paciente}" 
+							rowKey="#{paciente.codigo}">
+							
+							<p:ajax event="rowSelect" listener="#{MBHistorico.onRowSelect}" update=":growl :pnAgenda"/>
+
+							<p:column headerText="Nome" filterBy="#{paciente.pessoa.nome}">
+								<h:outputText value="#{paciente.pessoa.nome}" />
+							</p:column>
+							
+							<p:column headerText="Nº do Caso" width="15%" style="text-align: center" filterBy="#{paciente.numeroCaso}">
+								<h:outputText value="#{paciente.numeroCaso}" />
+							</p:column>
+							
+							<p:column headerText="Situação" width="15%" style="text-align: center">
+								<h:outputText value="#{paciente.situacao.descricao}" />
+							</p:column>
+							
+							<p:column headerText="Data do Cadastro" width="15%" style="text-align: center" sortBy="#{paciente.dataCadastro}">
+								<h:outputText value="#{paciente.dataCadastro}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+
+						</p:dataTable>
+					</h:form>		
+				</div>
+			</div>
+			
+			<p:outputPanel id="pnAgenda">
+					<h:panelGroup layout="block" rendered="#{MBHistorico.paciente != null}">
+
+					<div class="ui-g-12 ui-md-12">
+						<div class="card timeline ui-fluid">
+							<p:tabView>
+								<p:tab title="Dados Gerais">
+
+									<p:panelGrid style="width:100%" styleClass="nba-grid">
+										<p:row>
+											<p:column style="font-weight: bold;">Nome:</p:column>
+											<p:column colspan="3">
+												<h:outputText value="#{MBHistorico.paciente.pessoa.nome}" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="font-weight: bold;">CPF:</p:column>
+											<p:column>
+												<h:outputText value="#{MBHistorico.paciente.pessoa.cpf}" />
+											</p:column>
+											<p:column style="font-weight: bold;">RG:</p:column>
+											<p:column>
+												<h:outputText value="#{MBHistorico.paciente.pessoa.rg}" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="font-weight: bold;">Sexo:</p:column>
+											<p:column>
+												<h:outputText value="#{MBHistorico.paciente.pessoa.sexo.descricao}" />
+											</p:column>
+											<p:column style="font-weight: bold;">Idade:</p:column>
+											<p:column>
+												<h:outputText value="#{MBHistorico.paciente.pessoa.idade}" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="font-weight: bold;">Estado Civil:</p:column>
+											<p:column colspan="3">
+												<h:outputText value="#{MBHistorico.paciente.estadoCivil.descricao}" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="font-weight: bold;">Nome da Mãe:</p:column>
+											<p:column colspan="3">
+												<h:outputText value="#{MBHistorico.paciente.nomeMae}" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="font-weight: bold;">Nome da Pai:</p:column>
+											<p:column colspan="3">
+												<h:outputText value="#{MBHistorico.paciente.nomePai}" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="font-weight: bold;">Ocupação:</p:column>
+											<p:column colspan="3">
+												<h:outputText value="#{MBHistorico.paciente.ocupacao}" />
+											</p:column>
+										</p:row>
+									</p:panelGrid>
+								</p:tab>
+
+								<p:tab title="Dados Paciente">
+									<p:panelGrid style="width:100%" styleClass="nba-grid">
+										<p:row>
+											<p:column style="font-weight: bold;">Data do Cadastro:</p:column>
+											<p:column colspan="3">
+												<h:outputText value="#{MBHistorico.paciente.dataCadastro}">
+													<f:convertDateTime pattern="dd/MM/yyyy" />
+												</h:outputText>
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="font-weight: bold;">Uso de Medicamentos:</p:column>
+											<p:column colspan="3">
+												<h:outputText value="#{MBHistorico.paciente.medicamento}" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="font-weight: bold;">Necessidades Especiais:</p:column>
+											<p:column colspan="3">
+												<h:outputText
+													value="#{MBHistorico.paciente.necessidadesEspeciais}" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="font-weight: bold;">Numero do caso:</p:column>
+											<p:column colspan="3">
+												<h:outputText value="#{MBHistorico.paciente.numeroCaso}" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="font-weight: bold;">Observações:</p:column>
+											<p:column colspan="3">
+												<h:outputText value="#{MBHistorico.paciente.observacao}" />
+											</p:column>
+										</p:row>
+									</p:panelGrid>
+								</p:tab>
+								<p:tab title="Contato">
+									<p:panelGrid style="width:100%" styleClass="nba-grid">
+
+										<p:row>
+											<p:column style="font-weight: bold;">Email:</p:column>
+											<p:column colspan="3">
+												<h:outputText value="#{MBHistorico.paciente.pessoa.email}" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="font-weight: bold;">Telefone:</p:column>
+											<p:column colspan="3">
+												
+											</p:column>
+										</p:row>
+										
+										<p:row>
+											<p:column style="font-weight: bold;">Endereço:</p:column>
+											<p:column colspan="3">
+												<h:outputText
+													value="#{MBHistorico.paciente.pessoa.endereco.rua}, nº #{MBHistorico.paciente.pessoa.endereco.numero}" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="font-weight: bold;">Bairro:</p:column>
+											<p:column colspan="3">
+												<h:outputText
+													value="#{MBHistorico.paciente.pessoa.endereco.bairro}" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="font-weight: bold;">Cidade:</p:column>
+											<p:column colspan="3">
+												<h:outputText
+													value="#{MBHistorico.paciente.pessoa.endereco.cidade} - #{MBHistorico.paciente.pessoa.endereco.estado.sigla} " />
+											</p:column>
+										</p:row>
+									</p:panelGrid>
+								</p:tab>
+								<p:tab title="Responsavel">
+									<p:panelGrid style="width:100%" styleClass="nba-grid">
+										<p:row>
+											<p:column style="font-weight: bold;">Responsavel:</p:column>
+											<p:column colspan="3">
+												<h:outputText value="#{MBHistorico.paciente.responsavelNome}" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="font-weight: bold;">Telefone:</p:column>
+											<p:column colspan="3">
+												
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="font-weight: bold;">Celular:</p:column>
+											<p:column colspan="3">
+												
+											</p:column>
+										</p:row>
+									</p:panelGrid>
+								</p:tab>
+							</p:tabView>
+						</div>
+					</div>
+
+					<div class="ui-g-12 ui-md-9">
+						<h:form>
+							<div class="card">
+								<p:dataTable var="sessao" value="#{MBHistorico.litSessao}" reflow="true" style="margin-bottom:20px">
+									<f:facet name="header">Sessões</f:facet>
+									<p:column headerText="Data" >
+										<h:outputText value="#{sessao.dataInicio}">
+											<f:convertDateTime pattern="dd/MM/yy" />
+										</h:outputText>
+									</p:column>
+	
+									<p:column headerText="Aluno">
+										<h:outputText value="#{sessao.aluno.pessoa.nome}" />
+									</p:column>
+	
+									<p:column headerText="Supervisor">
+										<h:outputText value="#{sessao.aluno.pessoa.nome}" />
+									</p:column>
+	
+									<p:column headerText="Observação">
+										<h:outputText value="#{sessao.observacao}" />
+									</p:column>
+								</p:dataTable>
+							</div>
+						</h:form>
+					</div>
+					
+					<div class="ui-g-12 ui-md-3">
+						<div class="ui-g card colorbox colorbox-1">
+							<div class="ui-g-12">
+								<span class="colorbox-name">Presenças</span> 
+									<span class="colorbox-count">
+										<h:outputText value="#{MBHistorico.presencas}" />
+									</span>
+							</div>
+						</div>
+					</div>
+					
+					<div class="ui-g-12 ui-md-3">
+						<div class="ui-g card colorbox colorbox-2">
+							<div class="ui-g-12">
+								<span class="colorbox-name">Faltas Justificadas</span>
+								<span class="colorbox-count">
+									<h:outputText value="#{MBHistorico.faltasJ}" />
+								</span>
+							</div>
+						</div>
+					</div>
+					
+					<div class="ui-g-12 ui-md-3">
+						<div class="ui-g card colorbox colorbox-3">
+							<div class="ui-g-12">
+								<span class="colorbox-name">Faltas não Justificadas</span> 
+								<span class="colorbox-count">
+									<h:outputText value="#{MBHistorico.faltasNJ}" />
+								</span>
+							</div>
+						</div>
+					</div>
+
+				</h:panelGroup>
+			</p:outputPanel>
+			
+		</div>
+	</ui:define>
+
+</ui:composition>

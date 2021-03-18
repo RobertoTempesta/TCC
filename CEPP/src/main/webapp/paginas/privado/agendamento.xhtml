@@ -1,0 +1,121 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+
+	<ui:define name="head">
+
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="ui-g">
+			<div class="ui-g-12">
+				<div class="card card-w-title ui-fluid">
+					<h1>Agendamento de sessão</h1>
+
+					<h:form id="frmPacientes">
+						<p:selectOneRadio id="console" value="#{MBAgendamento.aguardando}" unselectable="true">
+							<f:selectItem itemLabel="Aguardando" itemValue="true" />
+							<f:selectItem itemLabel="Todos" itemValue="false" />
+							<p:ajax listener="#{MBAgendamento.listarPacientes}" update=":frmPacientes:lista" />
+						</p:selectOneRadio>
+
+						<br/>
+
+						<span style="color: red;">(*) Selecione um paciente</span>
+						<p:dataTable id="lista" emptyMessage="Nenhum registro encontrado..." rows="10" paginator="true" 
+							value="#{MBAgendamento.pacientes}" var="paciente" selectionMode="single" selection="#{MBAgendamento.sessao.paciente}" 
+							rowKey="#{paciente.codigo}">
+							
+							<p:ajax event="rowSelect" listener="#{MBAgendamento.onRowSelect}" update=":growl :pnAgenda"/>
+
+							<p:column headerText="Nome" filterBy="#{paciente.pessoa.nome}">
+								<h:outputText value="#{paciente.pessoa.nome}" />
+							</p:column>
+							
+							<p:column headerText="Nº do Caso" width="15%" style="text-align: center" filterBy="#{paciente.numeroCaso}">
+								<h:outputText value="#{paciente.numeroCaso}" />
+							</p:column>
+							
+							<p:column headerText="Situação" width="15%" style="text-align: center">
+								<h:outputText value="#{paciente.situacao.descricao}" />
+							</p:column>
+							
+							<p:column headerText="Data do Cadastro" width="15%" style="text-align: center" sortBy="#{paciente.dataCadastro}">
+								<h:outputText value="#{paciente.dataCadastro}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+
+						</p:dataTable>
+					</h:form>		
+				</div>
+				
+				<p:outputPanel id="pnAgenda">
+					<h:panelGroup layout="block" rendered="#{MBAgendamento.sessao.paciente != null}">
+				
+						<div class="card card-w-title ui-fluid">
+							<h:form id="frmNovo">
+								<p:panelGrid id="pg1" layout="grid" columns="3" styleClass="ui-panelgrid-blank form-group"
+									columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4">
+									<h:panelGroup styleClass="md-inputfield">
+										<p:calendar value="#{MBAgendamento.sessao.dataInicio}" locale="pt" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy HH:mm" />
+										<label>Início:</label>
+									</h:panelGroup>
+					
+									<h:panelGroup styleClass="md-inputfield">
+										<p:calendar value="#{MBAgendamento.sessao.dataFim}" locale="pt" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy HH:mm" />
+										<label>Término:</label>
+									</h:panelGroup>
+		
+									<p:selectOneMenu id="sala" value="#{MBAgendamento.sessao.salaAtendimento}" filter="true" converter="omnifaces.SelectItemsConverter">
+										<f:selectItem itemLabel="Selecione a Sala de Atendimento" noSelectionOption="true" />
+										<f:selectItems value="#{MBAgendamento.salasAtendimento}" var="sala" itemValue="#{sala}" itemLabel="#{sala.descricao}" />
+									</p:selectOneMenu>
+		
+								</p:panelGrid>
+								
+								<p:panelGrid id="pg2" layout="grid" columns="2" styleClass="ui-panelgrid-blank form-group"
+									columnClasses="ui-grid-col-6,ui-grid-col-6">
+								
+									<p:selectOneMenu id="aluno" filter="true" converter="omnifaces.SelectItemsConverter" value="#{MBAgendamento.sessao.aluno}" >
+										<f:selectItem itemLabel="Selecione o Aluno Responsável" noSelectionOption="true" />
+										<f:selectItems value="#{MBAgendamento.alunos}" var="aluno" itemValue="#{aluno}" itemLabel="#{aluno.pessoa.nome}" />
+										<p:ajax update=":frmNovo:pg2,supervisor" />
+									</p:selectOneMenu>
+									
+									<p:panelGrid columns="2">
+										<p:outputLabel value="Supervisor:" />
+										<h:outputText id="supervisor" rendered="#{MBAgendamento.sessao.aluno != null}"
+											value="#{MBAgendamento.sessao.aluno.supervisor.pessoa.nome}"/>
+									</p:panelGrid>
+									
+								</p:panelGrid>
+								
+								<p:panelGrid id="pg3" layout="grid" columns="1" styleClass="ui-panelgrid-blank form-group"
+									columnClasses="ui-grid-col-12">
+								
+									<h:panelGroup styleClass="md-inputfield">
+										<p:inputTextarea rows="5" cols="50" maxlength="500" value="#{MBAgendamento.sessao.observacao}" queryDelay="750"
+											minQueryLength="4" />
+										<label>Observações:</label>
+									</h:panelGroup>
+								
+								</p:panelGrid>
+		
+								<div align="right">
+									<h:panelGrid columns="2">
+										<p:commandButton value="Salvar" update=":growl :frmPacientes :pnAgenda" 
+											actionListener="#{MBAgendamento.salvar}" />
+									</h:panelGrid>
+								</div>
+							</h:form>
+						</div>
+					</h:panelGroup>
+				</p:outputPanel>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

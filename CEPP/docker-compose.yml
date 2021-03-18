@@ -1,0 +1,41 @@
+version: '3'
+services: 
+    mysqldb: 
+        image: mysql:5.6
+        container_name: mysqldb
+        environment:
+            MYSQL_ROOT_PASSWORD: q1w2e3r4
+            MYSQL_PASSWORD: 1234
+            MYSQL_USER: cepp
+            MYSQL_DATABASE: bd_cepp
+        networks: 
+            - production-network 
+        ports: 
+            - "3306:3306"
+    maven: 
+        build:
+            dockerfile: maven.dockerfile
+            context: dockerfiles
+        volumes:
+            - ~/.m2:/root/.m2
+            - .:/usr/src/mymaven
+        volumes_from:
+            - tomcat
+        networks: 
+            - production-network
+        depends_on: 
+            - mysqldb
+    tomcat:
+        build:
+            context: dockerfiles
+            dockerfile: tomcat.dockerfile
+        ports:
+            - "8000:8080"
+        networks: 
+            - production-network 
+        depends_on: 
+            - mysqldb
+
+networks: 
+    production-network:
+        driver: bridge

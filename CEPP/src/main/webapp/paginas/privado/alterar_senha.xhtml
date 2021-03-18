@@ -1,0 +1,95 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+
+	<ui:define name="content">
+		<div class="ui-g">
+			<div class="ui-g-12">
+				<div class="card">
+					<h:form id="frmPrincipal">
+						<p:panelGrid styleClass="nba-grid"
+							style="margin: 1em auto; width: 90%">
+							<f:facet name="header">
+								<p:row>
+									<p:column colspan="4">
+										<p:outputLabel style="font-weight: bold;"
+											value="Dados Cadastrais" />
+									</p:column>
+								</p:row>
+							</f:facet>
+
+							<p:row>
+								<p:column>
+									<p:outputLabel style="font-weight: bold;" value="Nome:" />
+								</p:column>
+								<p:column colspan="3">
+									<h:outputText value="#{MBAlteraSenha.usuario.pessoa.nome}" />
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<p:outputLabel style="font-weight: bold;" value="CPF:" />
+								</p:column>
+								<p:column>
+									<h:outputText value="#{MBAlteraSenha.usuario.pessoa.CPF}" />
+								</p:column>
+
+								<p:column>
+									<p:outputLabel style="font-weight: bold;" value="RG:" />
+								</p:column>
+								<p:column>
+									<h:outputText value="#{MBAlteraSenha.usuario.pessoa.RG}" />
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column colspan="1">
+									<p:outputLabel style="font-weight: bold;"
+										value="Tipo de Usuário" />
+								</p:column>
+								<p:column colspan="3">
+									<h:outputText value="#{MBAlteraSenha.usuario.tipoUsuario}" />
+								</p:column>
+							</p:row>
+
+						</p:panelGrid>
+
+						<div align="center" class="ui-fluid">
+							<p:panel style="margin-top: 20px; width:80%">
+								<p:panelGrid columns="1" id="novaSenha"
+									styleClass="ui-panelgrid-blank form-group"
+									style="margin: 1em auto">
+
+									<h:panelGroup styleClass="md-inputfield">
+										<p:password id="pwd1" value="#{MBAlteraSenha.usuario.senha}"
+											match="pwd2" label="Senha de login" required="true" size="50"
+											requiredMessage="É necessario disgitar a senha"
+											feedback="true" />
+										<label>Senha</label>
+									</h:panelGroup>
+
+									<h:panelGroup styleClass="md-inputfield">
+										<p:password id="pwd2" value="#{MBAlteraSenha.usuario.senha}"
+											size="50" required="true"
+											requiredMessage="É necessario disgitar a senha novamente"
+											feedback="true" />
+										<label>Senha Novamente</label>
+									</h:panelGroup>
+								</p:panelGrid>
+
+								<p:commandButton value="Salvar Nova Senha" style="width:200px"
+									actionListener="#{MBAlteraSenha.salvar}" update=":growl :frmPrincipal" />
+
+							</p:panel>
+						</div>
+					</h:form>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+</ui:composition>

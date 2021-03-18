@@ -1,0 +1,149 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+	
+	<ui:define name="head">
+		<h:outputScript name="schedule.js" library="js" />
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="ui-g dashboard">
+			<div class="ui-g-12 ui-md-6 ui-lg-3">
+                <div class="ui-g card colorbox colorbox-1">
+                    <div class="ui-g-4">
+                        <i class="material-icons">face</i>
+                    </div>
+                    <div class="ui-g-8">
+                        <span class="colorbox-name">Pacientes</span>
+                        <span class="colorbox-count">
+                        	<h:outputText value="#{MBInicio.NPacientes}"/>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-lg-3">
+                <div class="ui-g card colorbox colorbox-2">
+                    <div class="ui-g-4">
+                        <i class="material-icons">school</i>
+                    </div>
+                    <div class="ui-g-8">
+                        <span class="colorbox-name">Alunos</span>
+                        <span class="colorbox-count">
+							<h:outputText value="#{MBInicio.NAlunos}"/>
+						</span>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-lg-3">
+                <div class="ui-g card colorbox colorbox-3">
+                    <div class="ui-g-4">
+                        <i class="material-icons">check</i>
+                    </div>
+                    <div class="ui-g-8">
+                        <span class="colorbox-name">Sessões</span>
+                        <span class="colorbox-count">
+                        	<h:outputText value="#{MBInicio.NSessoes}"/>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-lg-3">
+                <div class="ui-g card colorbox colorbox-4">
+                    <div class="ui-g-4">
+                        <i class="material-icons">timer</i>
+                    </div>
+                    <div class="ui-g-8">
+                        <span class="colorbox-name">Em espera</span>
+                        <span class="colorbox-count">
+                        	<h:outputText value="#{MBInicio.NEmEspera}"/>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+			<div class="ui-g-12 ui-md-12">
+				<p:panel header="Agenda" style="height:100%">
+					<p:schedule value="#{MBInicio.scheduleSessoes}" locale="pt"	timeZone="America/Sao_Paulo">
+						
+						<p:ajax event="eventSelect" listener="#{MBInicio.eventSelect}" update=":frmAgendamento :growl" oncomplete="PF('dlgSessao').show();">
+							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:ajax>
+						
+					</p:schedule>
+				</p:panel>
+			</div>
+
+		</div>
+		
+		<p:dialog header="Detalhes do Agendamento" closable="true" draggable="false" modal="true" resizable="false" widgetVar="dlgSessao">
+			<h:form id="frmAgendamento">
+			
+				<p:panelGrid id="pgSessao" layout="grid" columns="2" styleClass="ui-panelgrid-blank form-group" columnClasses="ui-grid-col-6,ui-grid-col-6">
+					<h:panelGroup styleClass="md-inputfield">
+						<p:calendar value="#{MBInicio.sessao.dataInicio}" locale="pt" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy HH:mm" />
+						<label>Início:</label>
+					</h:panelGroup>
+	
+					<h:panelGroup styleClass="md-inputfield">
+						<p:calendar value="#{MBInicio.sessao.dataFim}" locale="pt" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy HH:mm" />
+						<label>Término:</label>
+					</h:panelGroup>
+	
+					<p:selectOneMenu id="frequencia" value="#{MBInicio.sessao.presencaStatus}" autoWidth="false">
+						<f:selectItems value="#{MBInicio.listPresenStatus}" var="status" itemLabel="#{status.descricao}" itemValue="{status}" />
+					</p:selectOneMenu>
+	
+					<p:selectOneMenu id="sala" value="#{MBInicio.sessao.salaAtendimento}" filter="true" converter="omnifaces.SelectItemsConverter" autoWidth="false" disabled="true">
+						<f:selectItems value="#{MBInicio.salasAtendimento}" var="sala" itemValue="#{sala}" itemLabel="#{sala.descricao}" />
+					</p:selectOneMenu>
+	
+					<p:selectOneMenu id="aluno" value="#{MBInicio.sessao.aluno}" filter="true" converter="omnifaces.SelectItemsConverter" autoWidth="false" disabled="true">
+						<f:selectItem itemLabel="Selecione o Aluno Responsável" noSelectionOption="true" />
+						<f:selectItems value="#{MBInicio.alunos}" var="aluno" itemValue="#{aluno}" itemLabel="#{aluno.pessoa.nome}" />
+					</p:selectOneMenu>
+					
+					<h:panelGroup styleClass="md-inputfield">
+						<p:inputText value="#{MBInicio.sessao.aluno.supervisor.pessoa.nome}" disabled="true"/>
+						<label>Supervisor</label>
+					</h:panelGroup>
+					
+				</p:panelGrid>
+				
+				<p:panelGrid layout="grid" columns="2" styleClass="ui-panelgrid-blank form-group" columnClasses="ui-grid-col-6,ui-grid-col-6">
+					
+					<h:panelGroup styleClass="md-inputfield">
+						<p:inputText value="#{MBInicio.sessao.paciente.pessoa.nome}" disabled="true"/>
+						<label>Paciente</label>
+					</h:panelGroup>
+					
+					<h:panelGroup styleClass="md-inputfield">
+						<p:inputText value="#{MBInicio.sessao.paciente.numeroCaso}" disabled="true"/>
+						<label>Numero do Caso</label>
+					</h:panelGroup>
+											
+				</p:panelGrid>
+				
+				<p:panelGrid layout="grid" columns="1" styleClass="ui-panelgrid-blank form-group" columnClasses="ui-grid-col-12">
+				
+					<h:panelGroup styleClass="md-inputfield">
+						<p:inputTextarea rows="5" cols="50" maxlength="500" value="#{MBInicio.sessao.observacao}" queryDelay="750" minQueryLength="4" />
+						<label>Observações:</label>
+					</h:panelGroup>
+				</p:panelGrid>
+				
+				<div align="right">
+					<h:panelGrid columns="2">
+						<p:commandButton value="Cancelar" styleClass="red-btn" oncomplete="PF('dlgSessao').hide();"/>
+						<p:commandButton value="Salvar" actionListener="#{MBInicio.salvar}" update=":frmAgendamento :growl" />
+					</h:panelGrid>
+				</div>
+				
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+
+</ui:composition>

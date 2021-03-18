@@ -1,0 +1,59 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pu="http://primefaces.org/ultima">
+    
+    <h:form id="menuform"> 
+        <div class="layout-menu #{guestPreferences.menuClass}">
+            <div class="nano">
+                <div class="nano-content menu-scroll-content">
+                    <ui:fragment rendered="#{guestPreferences.profileMode == 'inline' and guestPreferences.menuLayout != 'menu-layout-static menu-layout-horizontal'}">
+                        <div class="profile">
+                            <div class="profile-image"></div>
+                            <a id="profile-options" href="#">
+                                <span class="profile-name">
+									#{seguranca.nomeUsuario}
+								</span>
+                                <i class="material-icons">&#xE313;</i>
+                            </a>
+                        </div>
+                    
+                        <ul id="profile-menu" class="ultima-menu">
+                            <li role="menuitem">
+                                <a href="#" class="ripplelink">
+                                    <i class="material-icons">&#xE8B9;</i>
+                                    <span>Alterar Senha</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="j_spring_security_logout" class="ripplelink">
+                                    <i class="material-icons">&#xE8AC;</i>
+                                    <span>Sair</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </ui:fragment>
+                    <h:form>
+                    	<pu:menu widgetVar="me">
+                        	<p:menuitem id="inicio" value="Início" icon="&#xE88A;" outcome="/paginas/privado/inicio" />
+							<p:submenu label="Manutenção" icon="&#xE8B8;">
+								<p:menuitem id="aluno" value="Alunos" icon="school" outcome="/paginas/privado/alunos" />
+								<p:menuitem id="cargo" value="Cargos/Funções" icon="work" outcome="/paginas/privado/cargos" />
+								<p:menuitem id="paciente" value="Pacientes" icon="&#xE0BA;" outcome="/paginas/privado/pacientes"/>
+								<p:menuitem id="sala" value="Salas de Atendimento" icon="weekend" outcome="/paginas/privado/sala_atendimento"/>
+								<p:menuitem id="supervisor" value="Supervisores" icon="group" outcome="/paginas/privado/supervisores" />
+								<p:menuitem id="usuario" value="Usuários" icon="&#xE55A;" outcome="/paginas/privado/usuarios" />
+							</p:submenu>
+							<p:menuitem id="agenda" value="Agendamento" icon="event" outcome="/paginas/privado/agendamento"/>
+							<p:menuitem id="relatórios" value="Relatórios" icon="&#xE14D;" />
+							<p:menuitem id="historico" value="Hitórico de Sessões" icon="history" outcome="/paginas/privado/historico"/>                       
+                    	</pu:menu>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </h:form>
+</ui:composition>

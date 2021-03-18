@@ -1,0 +1,257 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+	
+	<ui:define name="head">
+		<h:outputScript name="calendar.js" library="js" />
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="ui-g">
+			<div class="ui-g-12">
+				<div class="card card-w-title">
+					<h1>Novo Paciente</h1>
+					<h:form id="frmNovo">
+
+						<div class="ui-g-12 ui-fluid">
+
+							<p:panelGrid id="pgDados1" layout="grid" columns="2"
+								styleClass="ui-panelgrid-blank form-group"
+								columnClasses="ui-grid-col-8,ui-grid-col-4">
+
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputText id="nome" value="#{MBNovoPaciente.paciente.pessoa.nome}"/>
+									<label>Nome</label>
+								</h:panelGroup>
+
+								<h:panelGroup styleClass="md-inputfield">
+									<p:calendar id="data" pattern="dd/MM/yyyy" mask="true" value="#{MBNovoPaciente.paciente.pessoa.dataNascimento}" converterMessage="Digite uma data Válida">
+										<p:ajax event="blur" listener="#{MBNovoPaciente.calculaIdade}" update=":frmNovo:idade  :growl" />
+									</p:calendar>
+									<label>Data de Nascimento</label>
+								</h:panelGroup>
+							</p:panelGrid>
+
+							<p:panelGrid id="pgDados2" layout="grid" columns="3"
+								styleClass="ui-panelgrid-blank form-group"
+								columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-6">
+
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputText id="idade" value="#{MBNovoPaciente.paciente.pessoa.idade}" disabled="true" />
+									<label>Idade</label>
+								</h:panelGroup>
+
+								<p:selectOneMenu id="sexo" layout="responsive" value="#{MBNovoPaciente.paciente.pessoa.sexo}" autoWidth="false">
+									<f:selectItem itemLabel="Gênero" noSelectionOption="true" />
+									<f:selectItems value="#{MBNovoPaciente.sexos}" var="sexo" itemValue="#{sexo}" itemLabel="#{sexo.descricao}" />
+								</p:selectOneMenu>
+
+								<p:selectOneMenu id="escol" value="#{MBNovoPaciente.paciente.pessoa.formacaoAcademica}"
+									autoWidth="false" converter="omnifaces.SelectItemsConverter">
+									<f:selectItem itemLabel="Selecione a Escolaridade" noSelectionOption="true" />
+									<f:selectItems value="#{MBNovoPaciente.listFormacaoAcademica}" var="formacaoAca" itemValue="#{formacaoAca}"	itemLabel="#{formacaoAca.descricao}" />
+								</p:selectOneMenu>
+							</p:panelGrid>
+
+							<p:panelGrid id="pgDados3" layout="grid" columns="3"
+								styleClass="ui-panelgrid-blank form-group"
+								columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4">
+
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputMask id="cpf" value="#{MBNovoPaciente.paciente.pessoa.cpf}"	mask="999.999.999-99" />
+									<label>CPF</label>
+								</h:panelGroup>
+
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputMask id="rg" mask="99.999.999-9" size="10"	value="#{MBNovoPaciente.paciente.pessoa.rg}" />
+									<label>RG</label>
+								</h:panelGroup>
+
+							</p:panelGrid>
+
+							<p:panelGrid id="pgDados4" layout="grid" columns="4"
+								styleClass="ui-panelgrid-blank form-group"
+								columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
+
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputMask id="cep" mask="99999-999" value="#{MBNovoPaciente.paciente.pessoa.endereco.cep}">
+										<p:ajax event="blur" listener="#{MBNovoPaciente.carregarCEP}" update=":frmNovo:rua,bairro,num,cidade,estado :growl" />
+									</p:inputMask>
+									<label>CEP</label>
+								</h:panelGroup>
+
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputText id="rua" value="#{MBNovoPaciente.paciente.pessoa.endereco.rua}" />
+									<label>Lougradouro</label>
+								</h:panelGroup>
+
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputText id="num" value="#{MBNovoPaciente.paciente.pessoa.endereco.numero}"	maxlength="6" />
+									<label>Numero</label>
+								</h:panelGroup>
+
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputText id="bairro" maxlength="30" value="#{MBNovoPaciente.paciente.pessoa.endereco.bairro}" />
+									<label>Bairro</label>
+								</h:panelGroup>
+
+							</p:panelGrid>
+
+							<p:panelGrid id="pgDados5" layout="grid" columns="2"
+								styleClass="ui-panelgrid-blank form-group"
+								columnClasses="ui-grid-col-8,ui-grid-col-4">
+
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputText id="cidade" value="#{MBNovoPaciente.paciente.pessoa.endereco.cidade}" />
+									<label>Cidade</label>
+								</h:panelGroup>
+
+								<p:selectOneMenu id="estado" value="#{MBNovoPaciente.paciente.pessoa.endereco.estado}" converter="omnifaces.SelectItemsConverter" autoWidth="false">
+									<f:selectItem itemLabel="Selecione o Estado" noSelectionOption="true" />
+									<f:selectItems value="#{MBNovoPaciente.estados}" var="estado" itemValue="#{estado}" itemLabel="#{estado.nome} - #{estado.sigla}" />
+								</p:selectOneMenu>
+
+							</p:panelGrid>
+
+							<p:panelGrid id="pgDados6" layout="grid" columns="2" styleClass="ui-panelgrid-blank form-group" columnClasses="ui-grid-col-8,ui-grid-col-2">
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputText id="email" value="#{MBNovoPaciente.paciente.pessoa.email}" />
+									<label>Email</label>
+								</h:panelGroup>
+							</p:panelGrid>
+
+							<p:panelGrid id="pgDados7" layout="grid" columns="1" styleClass="ui-panelgrid-blank form-group"	columnClasses="ui-grid-col-4">
+
+								<p:commandButton icon="ui-icon-add" value="Telefone" styleClass="secondary" style="width:80%"
+									oncomplete="PF('dlgTelefone').show();" />
+
+								<p:dataTable id="dtTelef" value="#{MBNovoPaciente.telefones}" var="telefone" emptyMessage="Nenhum telefone registrado...">
+									<p:column headerText="Número">
+										<h:outputText value="#{telefone.numero}" />
+									</p:column>
+
+									<p:column width="25%">
+										<p:commandButton styleClass="red-btn" icon="ui-icon-remove" update=":frmNovo:pgDados7 :growl" partialSubmit="true"
+											process="dtTelef" actionListener="#{MBNovoPaciente.removerTelefone}">
+											<f:attribute name="telefoneSelecionado" value="#{telefone}" />
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+
+							</p:panelGrid>
+
+							<h3>Dados Clinicos</h3>
+							<p:panelGrid id="pgDadosPaciente" layout="grid" columns="2"
+								styleClass="ui-panelgrid-blank form-group" columnClasses="ui-grid-col-6,ui-grid-col-6">
+
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputText id="ocupa" value="#{MBNovoPaciente.paciente.ocupacao}" maxlength="100">
+										<p:ajax event="blur" update=":frmNovo:ocupa" />
+									</p:inputText>
+									<label>Ocupação</label>
+								</h:panelGroup>
+
+								<p:selectOneMenu id="estadoCivil" layout="responsive" value="#{MBNovoPaciente.paciente.estadoCivil}" autoWidth="false">
+									<f:selectItem itemLabel="Selecione o Estado Civil" noSelectionOption="true" />
+									<f:selectItems value="#{MBNovoPaciente.estadoCivil}" var="estadoCivil" itemValue="#{estadoCivil}" itemLabel="#{estadoCivil.descricao}" />
+								</p:selectOneMenu>
+
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputText id="mae" value="#{MBNovoPaciente.paciente.nomeMae}" maxlength="80"/>
+									<label>Nome da Mãe</label>
+								</h:panelGroup>
+
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputText id="pai" value="#{MBNovoPaciente.paciente.nomePai}" maxlength="80"/>
+									<label>Nome do Pai</label>
+								</h:panelGroup>
+							</p:panelGrid>
+
+							<p:panelGrid id="pgDadosPaciente2" layout="grid" columns="3" styleClass="ui-panelgrid-blank form-group"
+								columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4">
+
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputTextarea id="medica" rows="5" cols="50" maxlength="100" value="#{MBNovoPaciente.paciente.medicamento}" queryDelay="750" minQueryLength="4"/>
+									<label>Uso continuo de medicamentos?</label>
+								</h:panelGroup>
+
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputTextarea id="esp" rows="5" cols="50" maxlength="100" value="#{MBNovoPaciente.paciente.necessidadesEspeciais}"/>
+									<label>Necessidades Especiais?</label>
+								</h:panelGroup>
+
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputTextarea id="obs" rows="5" cols="50" maxlength="500" value="#{MBNovoPaciente.paciente.observacao}" queryDelay="750" minQueryLength="4"/>
+									<label>Observações</label>
+								</h:panelGroup>
+							</p:panelGrid>
+
+							<br />
+
+							<h3>Responsavel</h3>
+
+							<br />
+
+							<p:panelGrid id="pgResponsavel" layout="grid" columns="3"
+								styleClass="ui-panelgrid-blank form-group"
+								columnClasses="ui-grid-col-8,ui-grid-col-2,ui-grid-col-2">
+
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputText id="nomeResp" value="#{MBNovoPaciente.paciente.responsavelNome}" maxlength="50"/>
+									<label>Nome do Responsavel</label>
+								</h:panelGroup>
+
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputMask mask="(99)99999999" value="#{MBNovoPaciente.paciente.responsavelTelefone}" maxlength="13" />
+									<label>Telefone</label>
+								</h:panelGroup>
+
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputMask mask="(99)999999999" value="#{MBNovoPaciente.paciente.responsavelCel}" maxlength="13" />
+									<label>Celular</label>
+								</h:panelGroup>
+
+								<h:panelGroup styleClass="md-inputfield">
+									<p:inputText value="#{MBNovoPaciente.paciente.pessoaAutorizada}" maxlength="50"/>
+									<label>Pessoa Autorizada</label>
+								</h:panelGroup>
+
+							</p:panelGrid>
+
+						</div>
+
+						<div align="right">
+							<h:panelGrid columns="2">
+								<p:button value="Cancelar" styleClass="red-btn" outcome="pacientes" />
+								<p:commandButton value="Salvar" update=":frmNovo :growl" actionListener="#{MBNovoPaciente.salvar}"  />
+							</h:panelGrid>
+						</div>
+
+					</h:form>
+				</div>
+			</div>
+		</div>
+		
+		<p:dialog widgetVar="dlgTelefone" resizable="false" onShow="true"
+			header="ADD - Telefone" width="400" draggable="false"
+			modal="true">
+
+			<h:form id="frmNovoTelefone">
+				<p:panelGrid columns="2" layout="grid" style="width: 100%"
+					styleClass="ui-panelgrid-blank form-group"
+					columnClasses="ui-grid-col-3,ui-grid-col-6">
+					<p:outputLabel for="telefone" value="Telefone:" />
+					
+					<p:inputText id="telefone" value="#{MBNovoPaciente.telefone.numero}"/>
+
+					<p:commandButton value="Pronto" actionListener="#{MBNovoPaciente.adicionaTelefone}" 
+						update=":frmNovoTelefone :frmNovo:pgDados7"/>
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,258 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+	
+	<ui:define name="head">
+		<h:outputScript name="calendar.js" library="js" />
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="ui-g">
+			<div class="ui-g-12">
+				<div class="card card-w-title">
+					<h1>Novo Aluno</h1>
+					<h:form id="frmNovo">
+
+						<div class="ui-fluid">
+
+							<div class="ui-g-12 ui-fluid">
+
+								<p:panelGrid id="pgDados1" layout="grid" columns="2"
+									styleClass="ui-panelgrid-blank form-group"
+									columnClasses="ui-grid-col-8,ui-grid-col-4">
+
+									<h:panelGroup styleClass="md-inputfield">
+										<p:inputText id="nome"
+											value="#{MBNovoAluno.aluno.pessoa.nome}">
+											<p:ajax event="blur" update=":frmNovo:nome" />
+										</p:inputText>
+										<label>Nome</label>
+									</h:panelGroup>
+
+									<h:panelGroup styleClass="md-inputfield">
+										<p:calendar id="data" pattern="dd/MM/yyyy" mask="true"
+											value="#{MBNovoAluno.aluno.pessoa.dataNascimento}"
+											converterMessage="Digite uma data Válida">
+											<p:ajax event="blur"
+												listener="#{MBNovoAluno.calculaIdade}"
+												update=":frmNovo:idade  :growl" />
+										</p:calendar>
+										<label>Data de Nascimento</label>
+									</h:panelGroup>
+								</p:panelGrid>
+
+								<p:panelGrid id="pgDados2" layout="grid" columns="3"
+									styleClass="ui-panelgrid-blank form-group"
+									columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-6">
+
+									<h:panelGroup styleClass="md-inputfield">
+										<p:inputText id="idade"
+											value="#{MBNovoAluno.aluno.pessoa.idade}"
+											disabled="true" />
+										<label>Idade</label>
+									</h:panelGroup>
+
+									<p:selectOneMenu id="sexo" layout="responsive" columns="2"
+										value="#{MBNovoAluno.aluno.pessoa.sexo}">
+										<f:selectItem itemLabel="Gênero" noSelectionOption="true" />
+										<f:selectItems value="#{MBNovoAluno.sexos}" var="sexo"
+											itemValue="#{sexo}" itemLabel="#{sexo.descricao}" />
+									</p:selectOneMenu>
+
+									<p:selectOneMenu id="escol"
+										value="#{MBNovoAluno.aluno.pessoa.formacaoAcademica}"
+										autoWidth="false" converter="omnifaces.SelectItemsConverter">
+										<f:selectItem itemLabel="Selecione a Escolaridade"
+											noSelectionOption="true" />
+										<f:selectItems
+											value="#{MBNovoAluno.listFormacaoAcademica}"
+											var="formacaoAca" itemValue="#{formacaoAca}"
+											itemLabel="#{formacaoAca.descricao}" />
+									</p:selectOneMenu>
+								</p:panelGrid>
+
+								<p:panelGrid id="pgDados3" layout="grid" columns="3"
+									styleClass="ui-panelgrid-blank form-group"
+									columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4">
+
+									<h:panelGroup styleClass="md-inputfield">
+										<p:inputMask id="cpf"
+											value="#{MBNovoAluno.aluno.pessoa.cpf}"
+											mask="999.999.999-99" />
+										<label>CPF</label>
+									</h:panelGroup>
+
+									<h:panelGroup styleClass="md-inputfield">
+										<p:inputMask id="rg" mask="99.999.999-9" size="10"
+											value="#{MBNovoAluno.aluno.pessoa.rg}" />
+										<label>RG</label>
+									</h:panelGroup>
+
+									<h:panelGroup styleClass="md-inputfield">
+									<p:inputText id="ra" value="#{MBNovoAluno.aluno.ra}" maxlength="14" />
+									<label>RA</label>
+								</h:panelGroup>
+
+								</p:panelGrid>
+
+								<p:panelGrid id="pgDados4" layout="grid" columns="4"
+									styleClass="ui-panelgrid-blank form-group"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
+
+									<h:panelGroup styleClass="md-inputfield">
+										<p:inputMask id="cep" mask="99999-999"
+											value="#{MBNovoAluno.aluno.pessoa.endereco.cep}">
+											<p:ajax event="blur"
+												listener="#{MBNovoAluno.carregarCEP}"
+												update=":frmNovo:rua,bairro,num,cidade,estado  :growl" />
+										</p:inputMask>
+										<label>CEP</label>
+									</h:panelGroup>
+
+									<h:panelGroup styleClass="md-inputfield">
+										<p:inputText id="rua"
+											value="#{MBNovoAluno.aluno.pessoa.endereco.rua}" />
+										<label>Lougradouro</label>
+									</h:panelGroup>
+
+									<h:panelGroup styleClass="md-inputfield">
+										<p:inputText id="num"
+											value="#{MBNovoAluno.aluno.pessoa.endereco.numero}"
+											maxlength="6" />
+										<label>Numero</label>
+									</h:panelGroup>
+
+									<h:panelGroup styleClass="md-inputfield">
+										<p:inputText id="bairro" maxlength="30"
+											value="#{MBNovoAluno.aluno.pessoa.endereco.bairro}" />
+										<label>Bairro</label>
+									</h:panelGroup>
+
+								</p:panelGrid>
+
+								<p:panelGrid id="pgDados5" layout="grid" columns="2"
+									styleClass="ui-panelgrid-blank form-group"
+									columnClasses="ui-grid-col-8,ui-grid-col-4">
+
+									<h:panelGroup styleClass="md-inputfield">
+										<p:inputText id="cidade"
+											value="#{MBNovoAluno.aluno.pessoa.endereco.cidade}" />
+										<label>Cidade</label>
+									</h:panelGroup>
+
+									<p:selectOneMenu id="estado"
+										value="#{MBNovoAluno.aluno.pessoa.endereco.estado}"
+										converter="omnifaces.SelectItemsConverter">
+										<f:selectItem itemLabel="Selecione o Estado"
+											noSelectionOption="true" />
+										<f:selectItems value="#{MBNovoAluno.estados}"
+											var="estado" itemValue="#{estado}"
+											itemLabel="#{estado.nome} - #{estado.sigla}" />
+									</p:selectOneMenu>
+
+								</p:panelGrid>
+
+								<p:panelGrid id="pgDados6" layout="grid" columns="2"
+									styleClass="ui-panelgrid-blank form-group"
+									columnClasses="ui-grid-col-8,ui-grid-col-2">
+
+									<h:panelGroup styleClass="md-inputfield">
+										<p:inputText id="email"
+											value="#{MBNovoAluno.aluno.pessoa.email}" />
+										<label>Email</label>
+									</h:panelGroup>
+
+								</p:panelGrid>
+								
+								<p:panelGrid id="pgDados7" layout="grid" columns="2"
+									styleClass="ui-panelgrid-blank form-group"
+									columnClasses="ui-grid-col-6,ui-grid-col-6">
+
+									<p:selectOneMenu id="cargo"
+										converter="omnifaces.SelectItemsConverter"
+										value="#{MBNovoAluno.aluno.funcao}">
+										<f:selectItem itemLabel="Selecione a Função"
+											noSelectionOption="true" />
+										<f:selectItems value="#{MBNovoAluno.funcoes}" var="funcao"
+											itemLabel="#{funcao.descricao}" itemValue="#{funcao}" />
+									</p:selectOneMenu>
+
+
+									<p:selectOneMenu id="super"
+										converter="omnifaces.SelectItemsConverter"
+										value="#{MBNovoAluno.aluno.supervisor}" >
+										<f:selectItem itemLabel="Selecione o Supervisor"
+											noSelectionOption="true" />
+										<f:selectItems value="#{MBNovoAluno.supervisores}"
+											var="superv" itemLabel="#{superv.pessoa.nome}"
+											itemValue="#{superv}" />
+									</p:selectOneMenu>
+
+								</p:panelGrid>
+
+								<p:panelGrid id="pgDados8" layout="grid" columns="1"
+									styleClass="ui-panelgrid-blank form-group"
+									columnClasses="ui-grid-col-4">
+
+									<p:commandButton icon="ui-icon-add" value="Telefone"
+										styleClass="secondary" style="width:80%"
+										oncomplete="PF('dlgTelefone').show();" />
+
+									<p:dataTable id="dtTelef" value="#{MBNovoAluno.telefones}"
+										var="telefone" emptyMessage="Nenhum telefone registrado...">
+										<p:column headerText="Número">
+											<h:outputText value="#{telefone.numero}" />
+										</p:column>
+
+										<p:column width="25%">
+											<p:commandButton styleClass="red-btn" icon="ui-icon-remove"
+												update=":frmNovo:pgDados8 :growl" partialSubmit="true"
+												process="dtTelef"
+												actionListener="#{MBNovoAluno.removerTelefone}">
+												<f:attribute name="telefoneSelecionado" value="#{telefone}" />
+											</p:commandButton>
+										</p:column>
+									</p:dataTable>
+
+								</p:panelGrid>
+
+							</div>
+
+							<div align="right">
+								<h:panelGrid columns="2">
+									<p:button value="Cancelar" styleClass="red-btn"
+										outcome="alunos" />
+									<p:commandButton value="Salvar" update=":frmNovo :growl"
+										actionListener="#{MBNovoAluno.salvar}" />
+								</h:panelGrid>
+							</div>
+
+						</div>
+					</h:form>
+				</div>
+			</div>
+		</div>
+		
+		<p:dialog widgetVar="dlgTelefone" resizable="false" onShow="true"
+			header="ADD - Telefone" width="400" draggable="false"
+			modal="true">
+
+			<h:form id="frmNovoTelefone">
+				<p:panelGrid columns="2" layout="grid" style="width: 100%"
+					styleClass="ui-panelgrid-blank form-group"
+					columnClasses="ui-grid-col-3,ui-grid-col-6">
+					<p:outputLabel for="telefone" value="Telefone:" />
+					
+					<p:inputText id="telefone" value="#{MBNovoAluno.telefone.numero}"/>
+
+					<p:commandButton value="Pronto" actionListener="#{MBNovoAluno.adicionaTelefone}" 
+						update=":frmNovoTelefone :frmNovo:pgDados8"/>
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+		
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+	<session-factory>
+
+		<!-- Configurações de Conexão com o Banco de Dados -->
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/bd_cepp?useTimezone=true&amp;serverTimezone=UTC</property>
+		<property name="hibernate.connection.username">cepp</property>
+		<property name="hibernate.connection.password">1234</property>
+
+		<!-- Pool de Conexões -->
+		<property name="connection.pool_size">1</property>
+
+		<!-- SQL dialect -->
+		<property name="dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
+
+		<!-- Gerenciamento do Contexto das Sessões -->
+		<property name="current_session_context_class">thread</property>
+
+		<!-- Cache de Segundo Nível -->
+		<property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
+
+		<!-- Mostra as SQLs Geradas -->
+		<property name="show_sql">true</property>
+
+		<!-- Cria as tabelas do banco de dados -->
+		<property name="hbm2ddl.auto">validate</property>
+
+		<!-- Mapeamento das entidades -->
+		<mapping class="br.com.fio.cepp.domain.Estado" />
+		<mapping class="br.com.fio.cepp.domain.Pessoa" />
+		<mapping class="br.com.fio.cepp.domain.Funcao" />
+		<mapping class="br.com.fio.cepp.domain.SalaAtendimento" />
+		<mapping class="br.com.fio.cepp.domain.Supervisor" />
+		<mapping class="br.com.fio.cepp.domain.Aluno" />
+		<mapping class="br.com.fio.cepp.domain.Paciente" />
+		<mapping class="br.com.fio.cepp.domain.FormacaoAcademica" />
+		<mapping class="br.com.fio.cepp.domain.Telefone" />
+		<mapping class="br.com.fio.cepp.domain.Sessao" />
+		<mapping class="br.com.fio.cepp.domain.Usuario" />
+		
+	</session-factory>
+
+</hibernate-configuration>

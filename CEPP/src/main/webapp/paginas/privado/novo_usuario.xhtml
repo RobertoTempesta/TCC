@@ -1,0 +1,71 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template/template.xhtml">
+
+	<ui:define name="head">
+		<h:outputScript name="calendar.js" library="js" />
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="ui-g">
+			<div class="ui-g-12">
+				<div class="card card-w-title ui-fluid">
+					<h1>Novo Usuário</h1>
+					
+					<h:form id="frmNovo">
+					
+						<p:panelGrid id="pgDados1" layout="grid" columns="2" styleClass="ui-panelgrid-blank form-group"
+							columnClasses="ui-grid-col-8,ui-grid-col-4">
+	
+							<h:panelGroup styleClass="md-inputfield">
+								<p:inputText id="nome" value=""/>
+								<label>Nome</label>
+							</h:panelGroup>
+							
+							<h:panelGroup styleClass="md-inputfield">
+								<p:inputText id="cpf" value=""/>
+								<label>CPF</label>
+							</h:panelGroup>		
+						</p:panelGrid>
+						
+						<p:panelGrid id="pgDados2" layout="grid" columns="2" styleClass="ui-panelgrid-blank form-group"
+							columnClasses="ui-grid-col-4,ui-grid-col-4">
+						
+							<h:panelGroup styleClass="md-inputfield">
+								<p:password id="pwd1" value="" match="pwd2" label="Senha de login" />
+								<label>Senha</label>
+							</h:panelGroup>
+
+							<h:panelGroup styleClass="md-inputfield">
+								<p:password id="pwd2" value="" />
+								<label>Senha Novamente</label>
+							</h:panelGroup>
+						</p:panelGrid>
+						
+						<p:panelGrid id="pgDados3" layout="grid" columns="1" styleClass="ui-panelgrid-blank form-group"
+							columnClasses="ui-grid-col-8">
+							<p:selectOneMenu id="tipo" layout="responsive" columns="2"
+									value="" required="true"
+									requiredMessage="É necessário selecionar o tipo de Usuário">
+									<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+									<f:selectItem itemLabel="Gerênciador" itemValue="GERENCIADOR" />
+									<f:selectItem itemLabel="Usuário" itemValue="USUARIO" />
+								</p:selectOneMenu>
+						</p:panelGrid>
+						
+						<div align="right">
+							<h:panelGrid columns="2">
+								<p:button value="Cancelar" styleClass="red-btn" outcome="usuarios" />
+								<p:commandButton value="Salvar" update=":frmNovo :growl" actionListener="#{MBNovoSupervisor.salvar}" />
+							</h:panelGrid>
+						</div>
+							
+					</h:form>
+					
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>
