@@ -67,12 +67,12 @@
 
 	<dependencies>
 
-		<!-- Hibernate Core -->
+		<!-- Hibernate Core 
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>4.3.11.Final</version>
-		</dependency>
+		</dependency>-->
 
 		<!-- Hibernate Validator -->
 		<dependency>
@@ -81,12 +81,12 @@
 			<version>5.4.2.Final</version>
 		</dependency>
 
-		<!-- MySQL Connector -->
+		<!-- MySQL Connector 
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.16</version>
-		</dependency>
+		</dependency>-->
 
 		<!-- Servlet -->
 		<dependency>
